@@ -9,6 +9,13 @@ public class Veiculo {
     protected Boolean disponivel;
     protected BigDecimal valorDiaria;
 
+    public Veiculo(String placa, String modelo, String marca, Boolean disponivel, BigDecimal valorDiaria) {
+        this.placa = placa;
+        this.modelo = modelo;
+        this.marca = marca;
+        this.disponivel = disponivel;
+        this.valorDiaria = valorDiaria;
+    }
 
     public String getPlaca() {return placa;}
     public void setPlaca(String placa) {this.placa = placa;}
