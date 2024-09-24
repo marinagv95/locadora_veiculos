@@ -8,6 +8,13 @@ public class Pessoa {
     protected String telefone;
     protected String email;
     protected Endereco endereco;
+    public Pessoa(String nomePessoa, String telefone, String email, Endereco endereco) {
+        this.nomePessoa = nomePessoa;
+        this.telefone = telefone;
+        this.email = email;
+        this.endereco = endereco;
+    }
+
 
     public String getNomePessoa() {return nomePessoa;}
     public void setNomePessoa(String nomePessoa) {this.nomePessoa = nomePessoa;}

@@ -13,4 +13,5 @@ public abstract class VeiculoRepositorio<T extends Veiculo> {
     public abstract T alterarVeiculo(T veiculo);
     public abstract Optional<T> buscarPorPlaca(String placa);
     public abstract T removerVeiculo(String placa) throws VeiculoNaoExistenteException;
+    public abstract boolean estaDisponivel(String placa);
 }

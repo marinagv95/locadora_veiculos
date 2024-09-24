@@ -64,4 +64,14 @@ public class VeiculoRepositorioImplementacao<T extends Veiculo> extends VeiculoR
         }
         throw new VeiculoNaoExistenteException("Veículo com placa " + placa + " não encontrado.");
     }
+
+    @Override
+    public boolean estaDisponivel(String placa) {
+        for (T veiculo : bancoDados) {
+            if (veiculo.getPlaca().equalsIgnoreCase(placa)) {
+                return veiculo.getDisponivel();
+            }
+        }
+        return false;
+    }
 }

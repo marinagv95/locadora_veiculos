@@ -7,7 +7,6 @@ import modelo.veiculo.Veiculo;
 import java.util.List;
 import java.util.Optional;
 
-//contrato
 public interface VeiculoServico <T extends Veiculo> {
     public T cadastrarVeiculo(T veiculo) throws PlacaDuplicadaException;
     public T alterarVeiculo(T veiculo);
@@ -15,4 +14,5 @@ public interface VeiculoServico <T extends Veiculo> {
 
     public Optional<T> buscarVeiculoPorPlaca(String Placa);
     List<T> listarVeiculos();
+    boolean estaDisponivel(String placa);
 }

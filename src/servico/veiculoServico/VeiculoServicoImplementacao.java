@@ -4,7 +4,6 @@ import exception.veiculoException.PlacaDuplicadaException;
 import exception.veiculoException.VeiculoNaoExistenteException;
 import modelo.veiculo.Veiculo;
 import repositorio.veiculoRepositorio.VeiculoRepositorio;
-import repositorio.veiculoRepositorio.VeiculoRepositorioImplementacao;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,8 +12,8 @@ public class VeiculoServicoImplementacao<T extends Veiculo> implements VeiculoSe
 
     private VeiculoRepositorio<T> veiculoRepositorio;
 
-    public VeiculoServicoImplementacao() {
-        this.veiculoRepositorio = new VeiculoRepositorioImplementacao<>();
+    public VeiculoServicoImplementacao(VeiculoRepositorio<T> veiculoRepositorio) {
+        this.veiculoRepositorio = veiculoRepositorio;
     }
 
     @Override
@@ -48,5 +47,10 @@ public class VeiculoServicoImplementacao<T extends Veiculo> implements VeiculoSe
     @Override
     public List<T> listarVeiculos() {
         return this.veiculoRepositorio.listarVeiculos();
+    }
+
+    @Override
+    public boolean estaDisponivel(String placa) {
+        return veiculoRepositorio.estaDisponivel(placa);
     }
 }
