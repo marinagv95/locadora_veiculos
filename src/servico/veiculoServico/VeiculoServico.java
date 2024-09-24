@@ -1,15 +1,18 @@
 package servico.veiculoServico;
 
+import exception.veiculoException.PlacaDuplicadaException;
+import exception.veiculoException.VeiculoNaoExistenteException;
 import modelo.veiculo.Veiculo;
 
 import java.util.List;
+import java.util.Optional;
 
 //contrato
 public interface VeiculoServico <T extends Veiculo> {
-    public T cadastrarVeiculo(T veiculo);
+    public T cadastrarVeiculo(T veiculo) throws PlacaDuplicadaException;
     public T alterarVeiculo(T veiculo);
-    public void removerVeiculo(T veiculo);
+    public void removerVeiculo(String placao) throws VeiculoNaoExistenteException;
 
-    public T buscarVeiculoPorNome(String nome);
+    public Optional<T> buscarVeiculoPorPlaca(String Placa);
     List<T> listarVeiculos();
 }

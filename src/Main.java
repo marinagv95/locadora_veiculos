@@ -1,21 +1,17 @@
-import modelo.veiculo.Carro;
-import modelo.veiculo.Moto;
-import servico.veiculoServico.VeiculoServico;
+
+import modelo.veiculo.Veiculo;
+import principal.principalVeiculo.PrincipalVeiculo;
 import servico.veiculoServico.VeiculoServicoImplementacao;
+
 
 public class Main {
     public static void main(String[] args) throws Exception{
-        VeiculoServico<Carro> carroServico = new VeiculoServicoImplementacao();
-        VeiculoServico<Moto> motoServico = new VeiculoServicoImplementacao();
+        VeiculoServicoImplementacao<Veiculo> veiculoServico = new VeiculoServicoImplementacao<>();
+        PrincipalVeiculo principalVeiculo = new PrincipalVeiculo(veiculoServico);
 
-        //Carro ferrari= new Carro("placa", "modelo", "marca",true);
-        //carroServico.cadastrarVeiculo(ferrari);
+        principalVeiculo.exibirMenu();
 
-        carroServico.listarVeiculos().stream().forEach(System.out::println); //fazer toString
 
-//        ferrari.setDisponivel(true);
-//        ferrari.setModelo("mopdelo");
-//        carroServico.alterarVeiculo(ferrari);
 
     }
 }
