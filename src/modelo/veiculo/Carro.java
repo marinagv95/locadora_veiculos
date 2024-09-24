@@ -6,8 +6,8 @@ public class Carro extends Veiculo {
     private int numeroPortas;
     private String tipoCombustivel;
 
-    public Carro(String placa, String modelo, String marca, Boolean disponivel, int numeroPortas, String tipoCombustivel) {
-        super(placa, modelo, marca, disponivel);
+    public Carro(String placa, String modelo, String marca, Boolean disponivel, int numeroPortas,BigDecimal valorDiaria, String tipoCombustivel) {
+        super(placa, modelo, marca, disponivel, valorDiaria);
         setNumeroPortas(numeroPortas);
         setTipoCombustivel(tipoCombustivel);
     }
@@ -33,6 +33,7 @@ public class Carro extends Veiculo {
     }
 
 
+
     @Override
     public String toString() {
         return "Carro{" +
@@ -42,6 +43,7 @@ public class Carro extends Veiculo {
                 ", modelo='" + modelo + '\'' +
                 ", marca='" + marca + '\'' +
                 ", disponivel=" + disponivel +
+                ", valorDiaria=" + valorDiaria +
                 '}';
     }
 }

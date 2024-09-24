@@ -5,8 +5,8 @@ import java.math.BigDecimal;
 public class Caminhao extends Veiculo{
     private String capacidadeCarga;
 
-    public Caminhao(String placa, String modelo, String marca, Boolean disponivel,String capacidadeCarga ) {
-        super(placa, modelo, marca, disponivel);
+    public Caminhao(String placa, String modelo, String marca, Boolean disponivel, BigDecimal valorDiaria, String capacidadeCarga) {
+        super(placa, modelo, marca, disponivel,valorDiaria);
         this.capacidadeCarga = capacidadeCarga;
     }
 
@@ -17,11 +17,12 @@ public class Caminhao extends Veiculo{
     @Override
     public String toString() {
         return "Caminhao{" +
-                "placa='" + placa + '\'' +
-                ", capacidadeCarga='" + capacidadeCarga + '\'' +
+                "capacidadeCarga='" + capacidadeCarga + '\'' +
+                ", placa='" + placa + '\'' +
                 ", modelo='" + modelo + '\'' +
                 ", marca='" + marca + '\'' +
                 ", disponivel=" + disponivel +
+                ", valorDiaria=" + valorDiaria +
                 '}';
     }
 }

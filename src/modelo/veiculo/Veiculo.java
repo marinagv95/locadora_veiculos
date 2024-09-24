@@ -9,11 +9,12 @@ public class Veiculo {
     protected Boolean disponivel;
     protected BigDecimal valorDiaria;
 
-    public Veiculo(String placa, String modelo, String marca, Boolean disponivel) {
+    public Veiculo(String placa, String modelo, String marca, Boolean disponivel, BigDecimal valorDiaria) {
         this.placa = placa;
         this.modelo = modelo;
         this.marca = marca;
-        this.disponivel = disponivel;
+        this.disponivel = true;
+        this.valorDiaria = valorDiaria;
     }
 
     public String getPlaca() {return placa;}
@@ -30,4 +31,16 @@ public class Veiculo {
 
     public BigDecimal getValorDiaria() {return valorDiaria;}
     public void setValorDiaria(BigDecimal valorDiaria) {this.valorDiaria = valorDiaria;}
+
+
+    @Override
+    public String toString() {
+        return "Veiculo{" +
+                "placa='" + placa + '\'' +
+                ", modelo='" + modelo + '\'' +
+                ", marca='" + marca + '\'' +
+                ", disponivel=" + disponivel +
+                ", valorDiaria=" + valorDiaria +
+                '}';
+    }
 }

@@ -7,6 +7,7 @@ import modelo.veiculo.Moto;
 import modelo.veiculo.Veiculo;
 import servico.veiculoServico.VeiculoServico;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -67,35 +68,41 @@ public class PrincipalVeiculo {
 
         System.out.print("Informe a placa do veículo: ");
         String placa = leitura.nextLine();
+        Optional<Veiculo> veiculoExistente = veiculoServico.buscarVeiculoPorPlaca(placa);
+        if (veiculoExistente.isPresent()) {
+            System.out.println("❌ Erro: A placa " + placa + " já está cadastrada.");
+            return;
+        }
+
         System.out.print("Informe a marca do veículo: ");
         String marca = leitura.nextLine();
         System.out.print("Informe o modelo do veículo: ");
         String modelo = leitura.nextLine();
         System.out.print("O veículo está disponível? (true/false): ");
         boolean disponivel = leitura.nextBoolean();
+        System.out.print("Informe o valor da diária (em R$): ");
+        BigDecimal valorDiaria = leitura.nextBigDecimal();
         leitura.nextLine();
 
         switch (tipoVeiculo) {
             case 1:
                 System.out.print("Informe a capacidade de carga (em toneladas): ");
                 String capacidadeCarga = leitura.nextLine();
-                leitura.nextLine();
-                veiculo = new Caminhao(placa, marca, modelo, disponivel, capacidadeCarga);
+                veiculo = new Caminhao(placa, modelo, marca, disponivel, valorDiaria, capacidadeCarga);
                 break;
             case 2:
                 System.out.print("Informe o número de portas: ");
                 int numeroPortas = leitura.nextInt();
                 leitura.nextLine();
-                System.out.print("Informe o tipo de combustivel: ");
+                System.out.print("Informe o tipo de combustível: ");
                 String tipoCombustivel = leitura.nextLine();
                 leitura.nextLine();
-                veiculo = new Carro(placa, modelo, marca, disponivel, numeroPortas, tipoCombustivel);
+                veiculo = new Carro(placa, modelo, marca, disponivel, numeroPortas, valorDiaria, tipoCombustivel);
                 break;
             case 3:
                 System.out.print("Informe a cilindrada da moto: ");
                 String cilindrada = leitura.nextLine();
-                leitura.nextLine();
-                veiculo = new Moto(placa, marca, modelo, disponivel, cilindrada);
+                veiculo = new Moto(placa, marca, modelo, disponivel, valorDiaria, cilindrada);
                 break;
             default:
                 System.out.println("❌ Tipo de veículo inválido.");
@@ -151,5 +158,4 @@ public class PrincipalVeiculo {
             System.out.println("🚫 Remoção cancelada.");
         }
     }
-
 }
