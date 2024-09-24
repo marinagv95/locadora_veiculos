@@ -25,9 +25,9 @@ public class PessoaServicoImplementacao<T extends Pessoa> implements PessoaServi
     }
 
     @Override
-    public T buscarPorNome(String nome) throws Exception {
-        return pessoaRepositorio.buscarPorNome(nome)
-                .orElseThrow(() -> new PessoaNaoEncontradaException("Pessoa com nome " + nome + " não encontrada."));
+    public T buscarPorIdenficador(String identificador) throws Exception {
+        return pessoaRepositorio.buscarPorIdentificador(identificador)
+                .orElseThrow(() -> new PessoaNaoEncontradaException());
     }
 
     @Override
