@@ -12,4 +12,14 @@ public class PessoaFisica extends Pessoa {
 
     public String getCpf() {return cpf;}
     public void setCpf(String cpf) {this.cpf = cpf;}
+
+    @Override
+    public String toString() {
+        return "===== Detalhes da Pessoa Física =====\n" +
+                "Nome: " + nomePessoa + "\n" +
+                "Telefone: " + telefone + "\n" +
+                "Email: " + email + "\n" +
+                "CPF: " + cpf + "\n" +
+                "======================================";
+    }
 }

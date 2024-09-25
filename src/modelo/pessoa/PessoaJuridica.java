@@ -11,6 +11,21 @@ public class PessoaJuridica extends Pessoa {
     }
 
 
-    public String getCnpj() {return cnpj;}
-    public void setCnpj(String cnpj) {this.cnpj = cnpj;}
+    public String getCnpj() {
+        return cnpj;
+    }
+
+    public void setCnpj(String cnpj) {
+        this.cnpj = cnpj;
+    }
+
+    @Override
+    public String toString() {
+        return "===== Detalhes da Pessoa Jurídica =====\n" +
+                "Nome: " + nomePessoa + "\n" +
+                "Telefone: " + telefone + "\n" +
+                "Email: " + email + "\n" +
+                "CNPJ: " + cnpj + "\n" +
+                "========================================";
+    }
 }

@@ -27,4 +27,12 @@ public class Pessoa {
 
     public Endereco getEndereco() {return endereco;}
     public void setEndereco(Endereco endereco) {this.endereco = endereco;}
+
+    @Override
+    public String toString() {
+        return "Nome: " + nomePessoa + "\n" +
+                "Telefone: " + telefone + "\n" +
+                "Email: " + email + "\n" +
+                "====================================";
+    }
 }
