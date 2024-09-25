@@ -16,13 +16,13 @@ public class Moto extends Veiculo{
 
     @Override
     public String toString() {
-        return "Moto{" +
-                "cilindrada='" + cilindrada + '\'' +
-                ", placa='" + placa + '\'' +
-                ", modelo='" + modelo + '\'' +
-                ", marca='" + marca + '\'' +
-                ", disponivel=" + disponivel +
-                ", valorDiaria=" + valorDiaria +
-                '}';
+        return "===== Detalhes da Moto =====\n" +
+                "Placa: " + getPlaca() + "\n" +
+                "Modelo: " + getModelo() + "\n" +
+                "Marca: " + getMarca() + "\n" +
+                "Disponível: " + (getDisponivel() ? "Sim" : "Não") + "\n" +
+                "Valor da Diária: R$ " + getValorDiaria() + "\n" +
+                "Cilindrada: " + cilindrada + " cc\n" +
+                "===============================";
     }
 }

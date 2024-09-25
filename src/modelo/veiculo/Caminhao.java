@@ -16,13 +16,13 @@ public class Caminhao extends Veiculo{
 
     @Override
     public String toString() {
-        return "Caminhao{" +
-                "capacidadeCarga='" + capacidadeCarga + '\'' +
-                ", placa='" + placa + '\'' +
-                ", modelo='" + modelo + '\'' +
-                ", marca='" + marca + '\'' +
-                ", disponivel=" + disponivel +
-                ", valorDiaria=" + valorDiaria +
-                '}';
+        return "===== Detalhes do Caminhão =====\n" +
+                "Placa: " + getPlaca() + "\n" +
+                "Modelo: " + getModelo() + "\n" +
+                "Marca: " + getMarca() + "\n" +
+                "Disponível: " + (getDisponivel() ? "Sim" : "Não") + "\n" +
+                "Valor da Diária: R$ " + getValorDiaria() + "\n" +
+                "Capacidade de Carga: " + capacidadeCarga + " toneladas\n" +
+                "===============================";
     }
 }
