@@ -7,6 +7,12 @@ public class Agencia {
     private String nomeAgencia;
     private Endereco endereco;
 
+    public Agencia(long idAgencia, String nomeAgencia, Endereco endereco) {
+        this.idAgencia = idAgencia;
+        this.nomeAgencia = nomeAgencia;
+        this.endereco = endereco;
+    }
+
     public String getNomeAgencia() {return nomeAgencia;}
     public void setNomeAgencia(String nomeAgencia) {this.nomeAgencia = nomeAgencia;}
 
@@ -15,4 +21,14 @@ public class Agencia {
 
     public Long getIdAgencia() {return idAgencia;}
     public void setIdAgencia(Long idAgencia) {this.idAgencia = idAgencia;}
+
+    @Override
+    public String toString() {
+        return "===== Detalhes da Agência =====\n" +
+                "ID da Agência: " + idAgencia + "\n" +
+                "Nome da Agência: " + nomeAgencia + "\n" +
+                "Endereço: \n" + endereco + "\n" +
+                "=================================";
+    }
+
 }

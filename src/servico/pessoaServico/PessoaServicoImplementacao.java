@@ -24,13 +24,16 @@ public class PessoaServicoImplementacao<T extends Pessoa> implements PessoaServi
     @Override
     public void remover(T pessoa) throws Exception {
         if (pessoa instanceof PessoaFisica) {
-            pessoaRepositorio.removerPessoa(((PessoaFisica) pessoa).getCpf());
+            String cpf = ((PessoaFisica) pessoa).getCpf();
+            pessoaRepositorio.removerPessoa(cpf);
         } else if (pessoa instanceof PessoaJuridica) {
-            pessoaRepositorio.removerPessoa(((PessoaJuridica) pessoa).getCnpj());
+            String cnpj = ((PessoaJuridica) pessoa).getCnpj();
+            pessoaRepositorio.removerPessoa(cnpj);
         } else {
-            throw new Exception("Tipo de pessoa desconhecido.");
+            throw new Exception("Pessoa não identificada.");
         }
     }
+
     @Override
     public T buscarPorIdenficador(String identificador) throws Exception {
         return pessoaRepositorio.buscarPorIdentificador(identificador)

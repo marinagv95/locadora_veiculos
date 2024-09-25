@@ -1,5 +1,10 @@
 package principal.principalPessoa;
 
+
+import exception.pessoaException.CNPJInvalidoException;
+import exception.pessoaException.CPFInvalidoException;
+import exception.pessoaException.EmailInvalidoException;
+
 import modelo.pessoa.Pessoa;
 import modelo.pessoa.PessoaFisica;
 import modelo.pessoa.PessoaJuridica;
@@ -17,7 +22,9 @@ public class PrincipalPessoa {
         this.leitura = new Scanner(System.in);
     }
 
-    public void exibirMenuPessoa() {
+
+    public void exibirMenuPessoa() throws CPFInvalidoException, CNPJInvalidoException, EmailInvalidoException {
+
         int opcao = 0;
         while (opcao != 5) {
             System.out.println("\n╔═══════════════════════════════👥═══════ PESSOAS ═══════👥════════════════════════════════╗");
@@ -59,7 +66,9 @@ public class PrincipalPessoa {
         }
     }
 
-    private void cadastrarPessoa() {
+
+    private void cadastrarPessoa() throws CPFInvalidoException, CNPJInvalidoException, EmailInvalidoException {
+
         System.out.println("\n==== Escolha o tipo de Pessoa ====");
         System.out.println("1. Pessoa Física");
         System.out.println("2. Pessoa Jurídica");
@@ -150,6 +159,4 @@ public class PrincipalPessoa {
             System.out.println("❌ Erro ao remover pessoa: " + e.getMessage());
         }
     }
-
-
 }
