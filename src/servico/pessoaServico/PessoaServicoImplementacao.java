@@ -2,6 +2,8 @@ package servico.pessoaServico;
 
 import exception.pessoaException.PessoaNaoEncontradaException;
 import modelo.pessoa.Pessoa;
+import modelo.pessoa.PessoaFisica;
+import modelo.pessoa.PessoaJuridica;
 import repositorio.pessoaRepositorio.PessoaRepositorio;
 
 import java.util.List;
@@ -21,7 +23,15 @@ public class PessoaServicoImplementacao<T extends Pessoa> implements PessoaServi
 
     @Override
     public void remover(T pessoa) throws Exception {
-        pessoaRepositorio.removerPessoa(pessoa.getNomePessoa());
+        if (pessoa instanceof PessoaFisica) {
+            String cpf = ((PessoaFisica) pessoa).getCpf();
+            pessoaRepositorio.removerPessoa(cpf);
+        } else if (pessoa instanceof PessoaJuridica) {
+            String cnpj = ((PessoaJuridica) pessoa).getCnpj();
+            pessoaRepositorio.removerPessoa(cnpj);
+        } else {
+            throw new Exception("Pessoa não identificada.");
+        }
     }
 
     @Override

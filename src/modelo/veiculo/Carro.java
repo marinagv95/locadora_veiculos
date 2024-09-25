@@ -36,14 +36,14 @@ public class Carro extends Veiculo {
 
     @Override
     public String toString() {
-        return "Carro{" +
-                "numeroPortas=" + numeroPortas +
-                ", tipoCombustivel='" + tipoCombustivel + '\'' +
-                ", placa='" + placa + '\'' +
-                ", modelo='" + modelo + '\'' +
-                ", marca='" + marca + '\'' +
-                ", disponivel=" + disponivel +
-                ", valorDiaria=" + valorDiaria +
-                '}';
+        return "===== Detalhes do Carro =====\n" +
+                "Placa: " + getPlaca() + "\n" +
+                "Modelo: " + getModelo() + "\n" +
+                "Marca: " + getMarca() + "\n" +
+                "Disponível: " + (getDisponivel() ? "Sim" : "Não") + "\n" +
+                "Valor da Diária: R$ " + getValorDiaria() + "\n" +
+                "Número de Portas: " + numeroPortas + "\n" +
+                "Tipo de Combustível: " + tipoCombustivel + "\n" +
+                "===============================";
     }
 }
