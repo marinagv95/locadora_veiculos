@@ -16,13 +16,17 @@ public class Moto extends Veiculo{
 
     @Override
     public String toString() {
-        return "===== Detalhes da Moto =====\n" +
-                "Placa: " + getPlaca() + "\n" +
-                "Modelo: " + getModelo() + "\n" +
-                "Marca: " + getMarca() + "\n" +
-                "Disponível: " + (getDisponivel() ? "Sim" : "Não") + "\n" +
-                "Valor da Diária: R$ " + getValorDiaria() + "\n" +
-                "Cilindrada: " + cilindrada + " cc\n" +
-                "===============================";
+        return "╔══════════════════════════════════════════════╗\n" +
+                "║                D E T A L H E S               ║\n" +
+                "║                   D A   M O T O              ║\n" +
+                "╠══════════════════════════════════════════════╣\n" +
+                "  Placa:                " + getPlaca() + "\n" +
+                "  Modelo:               " + getModelo() + "\n" +
+                "  Marca:                " + getMarca() + "\n" +
+                "  Disponível:           " + (getDisponivel() ? "Sim" : "Não") + "\n" +
+                "  Valor da Diária:      R$ " + String.format("%.2f", getValorDiaria()) + "\n" +
+                "  Cilindrada:           " + cilindrada + " cc\n" +
+                "╚══════════════════════════════════════════════╝";
     }
+
 }

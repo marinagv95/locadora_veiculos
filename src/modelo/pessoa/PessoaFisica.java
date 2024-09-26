@@ -23,11 +23,25 @@ public class PessoaFisica extends Pessoa {
 
     @Override
     public String toString() {
-        return "===== Detalhes da Pessoa Física =====\n" +
-                "Nome: " + nomePessoa + "\n" +
-                "Telefone: " + telefone + "\n" +
-                "Email: " + email + "\n" +
-                "CPF: " + cpf + "\n" +
-                "======================================";
+        return "╔══════════════════════════════════════════════╗\n" +
+                "║            P E S S O A   F Í S I C A         ║\n" +
+                "╠══════════════════════════════════════════════╣\n" +
+                "  Nome:         " + nomePessoa + "\n" +
+                "  Telefone:     " + telefone + "\n" +
+                "  Email:        " + email + "\n" +
+                "  CPF:          " + cpf + "\n" +
+                "╠══════════════════════════════════════════════╣\n" +
+                "║                  E N D E R E Ç O             ║\n" +
+                "╠══════════════════════════════════════════════╣\n" +
+                " Logradouro:       " + endereco.getLogradouro() + "\n" +
+                " Número:           " + (endereco.getNumero() != null ? endereco.getNumero() : "Não informado") + "\n" +
+                " CEP:              " + endereco.getCEP() + "\n" +
+                " Bairro:           " + endereco.getBairro() + "\n" +
+                " Cidade:           " + endereco.getCidade() + "\n" +
+                " Estado:           " + endereco.getEstado() + "\n" +
+                "╚══════════════════════════════════════════════╝";
     }
+
+
+
 }

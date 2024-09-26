@@ -30,10 +30,23 @@ public class Agencia {
 
     @Override
     public String toString() {
-        return "Agencia{" +
-                "idAgencia=" + idAgencia +
-                ", nomeAgencia='" + nomeAgencia + '\'' +
-                ", endereco=" + endereco +
-                '}';
+        return "╔══════════════════════════════════════════╗\n" +
+                "║             A G E N C I A                ║\n" +
+                "╠══════════════════════════════════════════╣\n" +
+                "║ ID da Agência:    " + idAgencia + "\n" +
+                "║ Nome da Agência:  " + nomeAgencia + "\n" +
+                "╠══════════════════════════════════════════╣\n" +
+                "║             E N D E R E Ç O              ║\n" +
+                "╠══════════════════════════════════════════╣\n" +
+                "  Logradouro:       " + endereco.getLogradouro() + "\n" +
+                "  Número:           " + (endereco.getNumero() != null ? endereco.getNumero() : "Não informado") + "\n" +
+                "  CEP:              " + endereco.getCEP() + "\n" +
+                "  Bairro:           " + endereco.getBairro() + "\n" +
+                "  Cidade:           " + endereco.getCidade() + "\n" +
+                "  Estado:           " + endereco.getEstado() + "\n" +
+                "╚══════════════════════════════════════════╝";
     }
+
+
+
 }

@@ -12,4 +12,5 @@ public abstract class AgenciaRepositorio<T extends Agencia> {
     public abstract void remover(T agencia);
     public abstract List<T> listar();
     public abstract T buscarPorEndereco(Endereco endereco);
+    public abstract T buscarPorId(Long idAgencia);
 }

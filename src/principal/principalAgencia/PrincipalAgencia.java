@@ -4,11 +4,13 @@ import exception.enderecoException.CEPInvalidoException;
 import modelo.agencia.Agencia;
 import modelo.endereco.Endereco;
 import servico.agenciaServico.AgenciaServico;
+import visual.MenuAgencia;
 
 import java.util.List;
 import java.util.Scanner;
 
 public class PrincipalAgencia {
+    MenuAgencia menuAgencia = new MenuAgencia();
     private AgenciaServico<Agencia> agenciaServico;
     private Scanner leitura;
 
@@ -20,19 +22,7 @@ public class PrincipalAgencia {
     public void exibirMenuAgencia() {
         int opcao = 0;
         while (opcao != 5) {
-            System.out.println("\n╔══════════════════════🏢═══════ AGÊNCIAS ═══════🏢══════════════════════╗");
-            System.out.println("║                                                                           ║");
-            System.out.println("║   1. ➕ Cadastrar Agência                                                 ║");
-            System.out.println("║                                                                           ║");
-            System.out.println("║   2. ✏️  Alterar Agência                                                  ║");
-            System.out.println("║                                                                           ║");
-            System.out.println("║   3. 🔍 Buscar Agência por nome ou logradouro                             ║");
-            System.out.println("║                                                                           ║");
-            System.out.println("║   4. 🗑️  Remover Agência por ID                                           ║");
-            System.out.println("║                                                                           ║");
-            System.out.println("║   5. 🔙 Voltar ao Menu Principal                                          ║");
-            System.out.println("║                                                                           ║");
-            System.out.println("╚═══════════════════════════════════════════════════════════════════════════╝");
+            menuAgencia.exibirMenuAgencia();
             System.out.print("🎬 Escolha uma opção: ");
             opcao = leitura.nextInt();
             leitura.nextLine();
@@ -59,7 +49,6 @@ public class PrincipalAgencia {
         }
     }
 
-    // Função de cadastro de agência
     private void cadastrarAgencia() {
         System.out.println("\n==== Cadastro de Agência ====");
         System.out.print("Informe o nome da agência: ");
@@ -80,7 +69,7 @@ public class PrincipalAgencia {
 
         try {
             Endereco endereco = new Endereco(logradouro, numero, cep, bairro, cidade, estado);
-            Agencia agencia = new Agencia(nome, endereco); // ID será gerado automaticamente
+            Agencia agencia = new Agencia(nome, endereco);
 
             agenciaServico.cadastrar(agencia);
             System.out.println("✅ Agência cadastrada com sucesso!");
