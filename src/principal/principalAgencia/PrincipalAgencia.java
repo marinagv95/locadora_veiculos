@@ -4,8 +4,10 @@ import exception.enderecoException.CEPInvalidoException;
 import modelo.agencia.Agencia;
 import modelo.endereco.Endereco;
 import servico.agenciaServico.AgenciaServico;
+import util.leitura.Leitor;
 import visual.MenuAgencia;
 
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -50,23 +52,14 @@ public class PrincipalAgencia {
     }
 
     private void cadastrarAgencia() {
-        System.out.println("\n==== Cadastro de Agência ====");
-        System.out.print("Informe o nome da agência: ");
-        String nome = leitura.nextLine();
-
-        System.out.print("Informe o logradouro da agência: ");
-        String logradouro = leitura.nextLine();
-        System.out.print("Informe o número da agência: ");
-        String numero = leitura.nextLine();
-        System.out.print("Informe o bairro da agência: ");
-        String bairro = leitura.nextLine();
-        System.out.print("Informe a cidade da agência: ");
-        String cidade = leitura.nextLine();
-        System.out.print("Informe o estado da agência: ");
-        String estado = leitura.nextLine();
-        System.out.print("Informe o CEP da agência: ");
-        String cep = leitura.nextLine();
-
+        Leitor.escrever("\n==== Cadastro de Agência ====");
+        String nome = Leitor.ler(leitura, "Informe o nome da agência: ");
+        String logradouro = Leitor.ler(leitura, "Informe o logradouro da agência: ");
+        String numero = Leitor.ler(leitura, "Informe o número da agência: ");
+        String bairro = Leitor.ler(leitura, "Informe o bairro da agência: ");
+        String cidade = Leitor.ler(leitura, "Informe a cidade da agência: ");
+        String estado = Leitor.ler(leitura, "Informe o estado da agência: ");
+        String cep = Leitor.ler(leitura, "Informe o CEP da agência: ");
         try {
             Endereco endereco = new Endereco(logradouro, numero, cep, bairro, cidade, estado);
             Agencia agencia = new Agencia(nome, endereco);
@@ -78,56 +71,54 @@ public class PrincipalAgencia {
         } catch (Exception e) {
             System.out.println("❌ Erro ao cadastrar agência: " + e.getMessage());
         }
+        finally {
+            Leitor.aguardarContinuacao(leitura);
+        }
     }
 
     private void alterarAgencia() {
-        System.out.print("Informe o CEP da agência que deseja alterar: ");
-        String cep = leitura.nextLine();
+        String cep = Leitor.ler(leitura, "Informe o CEP da agência que deseja alterar: ");
 
         try {
             Endereco enderecoBusca = new Endereco("", "", cep, "", "", "");
             Agencia agencia = agenciaServico.buscarPorEndereco(enderecoBusca);
             if (agencia == null) {
-                System.out.println("❌ Agência com CEP " + cep + " não encontrada.");
+                Leitor.erro("❌ Agência com CEP " + cep + " não encontrada.");
+                Leitor.aguardarContinuacao(leitura);
                 return;
             }
 
-            System.out.println("Agência atual:");
-            System.out.println(agencia);
+            Leitor.escrever("Agência atual:");
+            Leitor.escrever(agencia.toString());
 
-            System.out.print("Informe o novo nome da agência: ");
-            String novoNome = leitura.nextLine();
-
-            System.out.print("Informe o novo logradouro da agência: ");
-            String logradouro = leitura.nextLine();
-            System.out.print("Informe o novo número da agência: ");
-            String numero = leitura.nextLine();
-            System.out.print("Informe o novo bairro da agência: ");
-            String bairro = leitura.nextLine();
-            System.out.print("Informe a nova cidade da agência: ");
-            String cidade = leitura.nextLine();
-            System.out.print("Informe o novo estado da agência: ");
-            String estado = leitura.nextLine();
-            System.out.print("Informe o novo CEP da agência: ");
-            String novoCEP = leitura.nextLine();
+            String novoNome = Leitor.ler(leitura, "Informe o novo nome da agência: ");
+            String logradouro = Leitor.ler(leitura, "Informe o novo logradouro da agência: ");
+            String numero = Leitor.ler(leitura, "Informe o novo número da agência: ");
+            String bairro = Leitor.ler(leitura, "Informe o novo bairro da agência: ");
+            String cidade = Leitor.ler(leitura, "Informe a nova cidade da agência: ");
+            String estado = Leitor.ler(leitura, "Informe o novo estado da agência: ");
+            String novoCEP = Leitor.ler(leitura, "Informe o novo CEP da agência: ");
 
             Endereco novoEndereco = new Endereco(logradouro, numero, novoCEP, bairro, cidade, estado);
             agencia.setNomeAgencia(novoNome);
             agencia.setEndereco(novoEndereco);
 
             agenciaServico.atualizar(agencia);
-            System.out.println("✅ Agência alterada com sucesso!");
+            Leitor.escrever("✅ Agência alterada com sucesso!");
         } catch (CEPInvalidoException e) {
-            System.out.println("❌ Erro ao alterar agência: CEP inválido.");
+            Leitor.erro("❌ Erro ao alterar agência: CEP inválido.");
         } catch (Exception e) {
-            System.out.println("❌ Erro ao alterar agência: " + e.getMessage());
+            Leitor.erro("❌ Erro ao alterar agência: " + e.getMessage());
+        } finally {
+            Leitor.aguardarContinuacao(leitura);
         }
     }
 
 
+
     private void buscarAgenciaPorNomeOuLogradouro() {
-        System.out.print("Informe parte do nome ou logradouro da agência que deseja buscar: ");
-        String termoBusca = leitura.nextLine().toLowerCase();
+        try {
+        String termoBusca = Leitor.ler(leitura, "Informe parte do nome ou logradouro da agência que deseja buscar: ").toLowerCase();
 
         List<Agencia> agenciasEncontradas = agenciaServico.buscarTodos().stream()
                 .filter(agencia -> agencia.getNomeAgencia().toLowerCase().contains(termoBusca) ||
@@ -135,40 +126,47 @@ public class PrincipalAgencia {
                 .toList();
 
         if (agenciasEncontradas.isEmpty()) {
-            System.out.println("❌ Nenhuma agência encontrada com o critério de busca.");
+            Leitor.erro("❌ Nenhuma agência encontrada com o critério de busca.");
         } else {
-            System.out.println("✅ Agências encontradas:");
-            agenciasEncontradas.forEach(System.out::println);
+            Leitor.escrever("✅ Agências encontradas:");
+            agenciasEncontradas.forEach(agencia -> Leitor.escrever(agencia.toString()));
+        }
+        } catch (Exception e) {
+            System.out.println("❌ Erro ao buscar agências: " + e.getMessage());
+        } finally {
+            Leitor.aguardarContinuacao(leitura);
         }
     }
 
 
     private void removerAgenciaPorID() {
-        System.out.print("Informe o ID da agência que deseja remover: ");
-        Long id = leitura.nextLong();
-        leitura.nextLine();
+        Long id = Long.parseLong(Leitor.ler(leitura, "Informe o ID da agência que deseja remover: "));
 
         try {
             Agencia agencia = agenciaServico.buscarPorId(id);
             if (agencia == null) {
-                System.out.println("❌ Agência com ID " + id + " não encontrada.");
+                Leitor.erro("❌ Agência com ID " + id + " não encontrada.");
                 return;
             }
 
-            System.out.println("Agência encontrada:");
-            System.out.println(agencia);
+            Leitor.escrever("Agência encontrada:");
+            Leitor.escrever(agencia.toString());
 
-            System.out.print("Tem certeza que deseja remover esta agência? (S/N): ");
-            String confirmacao = leitura.nextLine();
+            String confirmacao = Leitor.ler(leitura, "Tem certeza que deseja remover esta agência? (S/N): ");
 
             if (confirmacao.equalsIgnoreCase("S")) {
                 agenciaServico.remover(agencia);
-                System.out.println("✅ Agência removida com sucesso!");
+                Leitor.escrever("✅ Agência removida com sucesso!");
             } else {
-                System.out.println("❌ Operação de remoção cancelada.");
+                Leitor.escrever("❌ Operação de remoção cancelada.");
             }
+        } catch (InputMismatchException e) {
+            System.out.println("❌ Erro: Entrada inválida. Por favor, insira um número válido.");
+            leitura.nextLine();
         } catch (Exception e) {
             System.out.println("❌ Erro ao remover agência: " + e.getMessage());
+        } finally {
+            Leitor.aguardarContinuacao(leitura);
         }
     }
 }

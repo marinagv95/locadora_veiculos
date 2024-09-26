@@ -6,9 +6,11 @@ import modelo.veiculo.Carro;
 import modelo.veiculo.Moto;
 import modelo.veiculo.Veiculo;
 import servico.veiculoServico.VeiculoServico;
+import util.leitura.Leitor;
 import visual.MenuVeiculos;
 
 import java.math.BigDecimal;
+import java.util.InputMismatchException;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -16,7 +18,7 @@ public class PrincipalVeiculo {
     MenuVeiculos menuVeiculos = new MenuVeiculos();
     private VeiculoServico<Veiculo> veiculoServico;
 
-    private Scanner leitura = new Scanner(System.in);
+    private Scanner leitura;
 
     public PrincipalVeiculo(VeiculoServico<Veiculo> veiculoServico) {
         this.veiculoServico = veiculoServico;
@@ -26,9 +28,7 @@ public class PrincipalVeiculo {
         int opcao = 0;
         while (opcao != 5) {
             menuVeiculos.exibirMenuVeiculos();
-            System.out.print("🎬 Escolha uma opção: ");
-            opcao = leitura.nextInt();
-            leitura.nextLine();
+            opcao = Integer.parseInt(Leitor.ler(leitura, "🎬 Escolha uma opção: "));
 
             switch (opcao) {
                 case 1:
@@ -58,69 +58,62 @@ public class PrincipalVeiculo {
         System.out.println("2. Carro");
         System.out.println("3. Moto");
         System.out.print("Opção: ");
-        int tipoVeiculo = leitura.nextInt();
-        leitura.nextLine();
+        int tipoVeiculo = Integer.parseInt(Leitor.ler(leitura, "Opção: "));
 
         Veiculo veiculo = null;
 
-        System.out.print("Informe a placa do veículo: ");
-        String placa = leitura.nextLine();
+        String placa = Leitor.ler(leitura, "Informe a placa do veículo: ");
         Optional<Veiculo> veiculoExistente = veiculoServico.buscarVeiculoPorPlaca(placa);
         if (veiculoExistente.isPresent()) {
-            System.out.println("❌ Erro: A placa " + placa + " já está cadastrada.");
+            Leitor.erro("❌ Erro: A placa " + placa + " já está cadastrada.");
             return;
         }
 
-        System.out.print("Informe a marca do veículo: ");
-        String marca = leitura.nextLine();
-        System.out.print("Informe o modelo do veículo: ");
-        String modelo = leitura.nextLine();
-        System.out.print("O veículo está disponível? (true/false): ");
-        boolean disponivel = leitura.nextBoolean();
-        leitura.nextLine();
-        System.out.print("Informe o valor da diária (em R$): ");
-        BigDecimal valorDiaria = leitura.nextBigDecimal();
-        leitura.nextLine();
+        String marca = Leitor.ler(leitura, "Informe a marca do veículo: ");
+        String modelo = Leitor.ler(leitura, "Informe o modelo do veículo: ");
+        boolean disponivel = Boolean.parseBoolean(Leitor.ler(leitura, "O veículo está disponível? (true/false): "));
+        BigDecimal valorDiaria = new BigDecimal(Leitor.ler(leitura, "Informe o valor da diária (em R$): "));
 
         switch (tipoVeiculo) {
             case 1:
-                System.out.print("Informe a capacidade de carga (em toneladas): ");
-                String capacidadeCarga = leitura.nextLine();
+                String capacidadeCarga = Leitor.ler(leitura, "Informe a capacidade de carga (em toneladas): ");
                 veiculo = new Caminhao(placa, modelo, marca, disponivel, valorDiaria, capacidadeCarga);
                 break;
             case 2:
-                System.out.print("Informe o número de portas: ");
-                int numeroPortas = leitura.nextInt();
-                leitura.nextLine();
-                System.out.print("Informe o tipo de combustível: ");
-                String tipoCombustivel = leitura.nextLine();
+                int numeroPortas = Integer.parseInt(Leitor.ler(leitura, "Informe o número de portas: "));
+                String tipoCombustivel = Leitor.ler(leitura, "Informe o tipo de combustível: ");
                 veiculo = new Carro(placa, modelo, marca, disponivel, numeroPortas, valorDiaria, tipoCombustivel);
                 break;
             case 3:
-                System.out.print("Informe a cilindrada da moto: ");
-                String cilindrada = leitura.nextLine();
+                String cilindrada = Leitor.ler(leitura, "Informe a cilindrada da moto: ");
                 veiculo = new Moto(placa, modelo, marca, disponivel, valorDiaria, cilindrada);
                 break;
             default:
-                System.out.println("❌ Tipo de veículo inválido.");
+                Leitor.erro("❌ Tipo de veículo inválido.");
                 return;
         }
         try {
             veiculoServico.cadastrarVeiculo(veiculo);
-            System.out.println("✅ Veículo cadastrado com sucesso!");
+            Leitor.escrever("✅ Veículo cadastrado com sucesso!");
+        } catch (InputMismatchException e) {
+            System.out.println("❌ Erro: Tipo de dado incorreto. Tente novamente.");
+            leitura.nextLine();
         } catch (PlacaDuplicadaException e) {
             System.out.println("❌ Erro: " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            System.out.println("❌ Erro: " + e.getMessage());
+        } finally {
+            Leitor.aguardarContinuacao(leitura);
         }
     }
 
     private void alterarVeiculo() {
-        System.out.print("Informe a placa do veículo que deseja alterar: ");
-        String placa = leitura.nextLine();
+        String placa = Leitor.ler(leitura, "Informe a placa do veículo que deseja alterar: ");
 
         Optional<Veiculo> veiculoExistente = veiculoServico.buscarVeiculoPorPlaca(placa);
 
         if (!veiculoExistente.isPresent()) {
-            System.out.println("❌ Veículo não encontrado com a placa: " + placa);
+            Leitor.erro("❌ Veículo não encontrado com a placa: " + placa);
             return;
         }
 
@@ -137,36 +130,26 @@ public class PrincipalVeiculo {
         System.out.printf(" ║ Valor da diária: R$ %.2f%n", veiculo.getValorDiaria());
         System.out.println("╚═══════════════════════════════════════╝");
 
-
         if (veiculo instanceof Carro) {
             Carro carro = (Carro) veiculo;
-            System.out.println("Número de portas: " + carro.getNumeroPortas());
-            System.out.println("Tipo de combustível: " + carro.getTipoCombustivel());
+            Leitor.escrever("Número de portas: " + carro.getNumeroPortas());
+            Leitor.escrever("Tipo de combustível: " + carro.getTipoCombustivel());
         } else if (veiculo instanceof Caminhao) {
             Caminhao caminhao = (Caminhao) veiculo;
-            System.out.println("Capacidade de carga: " + caminhao.getCapacidadeCarga() + " toneladas");
+            Leitor.escrever("Capacidade de carga: " + caminhao.getCapacidadeCarga() + " toneladas");
         } else if (veiculo instanceof Moto) {
             Moto moto = (Moto) veiculo;
-            System.out.println("Cilindrada: " + moto.getCilindrada() + " cc");
+            Leitor.escrever("Cilindrada: " + moto.getCilindrada() + " cc");
         }
-        System.out.println("==========================\n");
 
 
         boolean dadosValidos = false;
         while (!dadosValidos) {
             try {
-
-                System.out.print("Informe a nova marca do veículo: ");
-                String marca = leitura.nextLine();
-                System.out.print("Informe o novo modelo do veículo: ");
-                String modelo = leitura.nextLine();
-                System.out.print("O veículo está disponível? (true/false): ");
-                boolean disponivel = leitura.nextBoolean();
-                leitura.nextLine();
-                System.out.print("Informe o novo valor da diária (em R$): ");
-                BigDecimal valorDiaria = leitura.nextBigDecimal();
-                leitura.nextLine();
-
+                String marca = Leitor.ler(leitura, "Informe a nova marca do veículo: ");
+                String modelo = Leitor.ler(leitura, "Informe o novo modelo do veículo: ");
+                boolean disponivel = Boolean.parseBoolean(Leitor.ler(leitura, "O veículo está disponível? (true/false): "));
+                BigDecimal valorDiaria = new BigDecimal(Leitor.ler(leitura, "Informe o novo valor da diária (em R$): "));
 
                 veiculo.setMarca(marca);
                 veiculo.setModelo(modelo);
@@ -175,78 +158,70 @@ public class PrincipalVeiculo {
 
 
                 if (veiculo instanceof Carro) {
-                    System.out.print("Informe o novo número de portas (2 ou 4): ");
-                    int numeroPortas = leitura.nextInt();
-                    leitura.nextLine();
-                    System.out.print("Informe o novo tipo de combustível (gasolina, álcool ou flex): ");
-                    String tipoCombustivel = leitura.nextLine();
+                    int numeroPortas = Integer.parseInt(Leitor.ler(leitura, "Informe o novo número de portas (2 ou 4): "));
+                    String tipoCombustivel = Leitor.ler(leitura, "Informe o novo tipo de combustível (gasolina, álcool ou flex): ");
                     ((Carro) veiculo).setNumeroPortas(numeroPortas);
                     ((Carro) veiculo).setTipoCombustivel(tipoCombustivel);
                 } else if (veiculo instanceof Caminhao) {
-                    System.out.print("Informe a nova capacidade de carga (em toneladas): ");
-                    String capacidadeCarga = leitura.nextLine();
+                    String capacidadeCarga = Leitor.ler(leitura, "Informe a nova capacidade de carga (em toneladas): ");
                     ((Caminhao) veiculo).setCapacidadeCarga(capacidadeCarga);
                 } else if (veiculo instanceof Moto) {
-                    System.out.print("Informe a nova cilindrada da moto: ");
-                    String cilindrada = leitura.nextLine();
+                    String cilindrada = Leitor.ler(leitura, "Informe a nova cilindrada da moto: ");
                     ((Moto) veiculo).setCilindrada(cilindrada);
                 }
-
-
                 dadosValidos = true;
 
-            } catch (Exception e) {
-
-                System.out.println("❌ Erro: Entrada inválida, por favor, tente novamente.");
+            } catch (InputMismatchException e) {
+                System.out.println("❌ Entrada inválida. Por favor, insira os dados corretamente.");
                 leitura.nextLine();
+            } catch (IllegalArgumentException e) {
+                System.out.println("❌ Erro: " + e.getMessage());
             }
         }
-
-
         veiculoServico.alterarVeiculo(veiculo);
-        System.out.println("✅ Veículo alterado com sucesso!");
+        Leitor.escrever("✅ Veículo alterado com sucesso!");
+        Leitor.aguardarContinuacao(leitura);
     }
 
     private void buscarVeiculoPorPlaca() {
-        System.out.print("Informe a placa do veículo que deseja buscar: ");
-        String placa = leitura.nextLine();
+        String placa = Leitor.ler(leitura, "Informe a placa do veículo que deseja buscar: ");
 
         Optional<Veiculo> veiculo = veiculoServico.buscarVeiculoPorPlaca(placa);
 
         if (veiculo.isPresent()) {
-            System.out.println("Veículo encontrado:");
-            System.out.println(veiculo.get());
+            Leitor.escrever("Veículo encontrado:");
+            Leitor.escrever(veiculo.get().toString());
         } else {
-            System.out.println("❌ Veículo não encontrado com a placa: " + placa);
+            Leitor.erro("❌ Veículo não encontrado com a placa: " + placa);
         }
+        Leitor.aguardarContinuacao(leitura);
     }
 
     public void removerVeiculoPorPlaca() {
-        System.out.print("Informe a placa do veículo que deseja remover: ");
-        String placa = leitura.nextLine();
+        String placa = Leitor.ler(leitura, "Informe a placa do veículo que deseja remover: ");
 
         Optional<Veiculo> veiculoOpt = veiculoServico.buscarVeiculoPorPlaca(placa);
 
         if (!veiculoOpt.isPresent()) {
-            System.out.println("❌ Veículo não encontrado com a placa informada.");
+            Leitor.erro("❌ Veículo não encontrado com a placa informada.");
             return;
         }
 
         Veiculo veiculo = veiculoOpt.get();
-        System.out.println("Dados do veículo a ser removido: " + veiculo);
+        Leitor.escrever("Dados do veículo a ser removido: " + veiculo);
 
-        System.out.print("Tem certeza que deseja remover este veículo? (digite 's' para sim): ");
-        String confirmacao = leitura.nextLine();
+        String confirmacao = Leitor.ler(leitura, "Tem certeza que deseja remover este veículo? (digite 's' para sim): ");
 
         if (confirmacao.equalsIgnoreCase("s")) {
             try {
                 veiculoServico.removerVeiculo(placa);
-                System.out.println("✅ Veículo removido com sucesso!");
+                Leitor.escrever("✅ Veículo removido com sucesso!");
             } catch (Exception e) {
-                System.out.println("❌ Erro ao remover veículo: " + e.getMessage());
+                Leitor.erro("❌ Erro ao remover veículo: " + e.getMessage());
             }
         } else {
-            System.out.println("🚫 Remoção cancelada.");
+            Leitor.escrever("🚫 Remoção cancelada.");
         }
+        Leitor.aguardarContinuacao(leitura);
     }
 }
