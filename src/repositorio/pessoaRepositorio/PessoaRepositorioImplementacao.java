@@ -28,7 +28,6 @@ public class PessoaRepositorioImplementacao extends PessoaRepositorio<Pessoa> {
                 throw new PessoaDuplicadaException("Pessoa jurídica com CNPJ " + ((PessoaJuridica) pessoa).getCnpj() + " já cadastrada.");
             }
         }
-
         bancoDados.add(pessoa);
         return pessoa;
     }

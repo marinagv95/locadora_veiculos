@@ -6,12 +6,15 @@ import modelo.veiculo.Carro;
 import modelo.veiculo.Moto;
 import modelo.veiculo.Veiculo;
 import servico.veiculoServico.VeiculoServico;
+import visual.MenuVeiculos;
 
 import java.math.BigDecimal;
+import java.util.InputMismatchException;
 import java.util.Optional;
 import java.util.Scanner;
 
 public class PrincipalVeiculo {
+    MenuVeiculos menuVeiculos = new MenuVeiculos();
     private VeiculoServico<Veiculo> veiculoServico;
     private Scanner leitura = new Scanner(System.in);
 
@@ -22,102 +25,106 @@ public class PrincipalVeiculo {
     public void exibirMenu() {
         int opcao = 0;
         while (opcao != 5) {
-            System.out.println("\n╔═════════════════════════════🚗═══════ VEÍCULOS ═══════🚗═════════════════════════════╗");
-            System.out.println("║                                                                                       ║");
-            System.out.println("║   1. ➕ Cadastrar Veículo                                                             ║");
-            System.out.println("║                                                                                       ║");
-            System.out.println("║   2. ✏️  Alterar Veículo                                                              ║");
-            System.out.println("║                                                                                       ║");
-            System.out.println("║   3. 🔍 Buscar Veículo por placa                                                      ║");
-            System.out.println("║                                                                                       ║");
-            System.out.println("║   4. 🗑️  Remover Veículo por placa                                                    ║");
-            System.out.println("║                                                                                       ║");
-            System.out.println("║   5. 🔙 Voltar ao Menu Principal                                                      ║");
-            System.out.println("║                                                                                       ║");
-            System.out.println("╚═══════════════════════════════════════════════════════════════════════════════════════╝");
-            System.out.print("🎬 Escolha uma opção: ");
-            opcao = leitura.nextInt();
-            leitura.nextLine();
 
-            switch (opcao) {
-                case 1:
-                    cadastrarVeiculo();
-                    break;
-                case 2:
-                    alterarVeiculo();
-                    break;
-                case 3:
-                    buscarVeiculoPorPlaca();
-                    break;
-                case 4:
-                    removerVeiculoPorPlaca();
-                    break;
-                case 5:
-                    System.out.println("🔙 Voltando ao menu principal...");
-                    break;
-                default:
-                    System.out.println("❌ Opção inválida, tente novamente.");
+            menuVeiculos.exibirMenuVeiculos();
+
+            try {
+                System.out.print("🎬 Escolha uma opção: ");
+                opcao = leitura.nextInt();
+                leitura.nextLine();
+
+                switch (opcao) {
+                    case 1:
+                        cadastrarVeiculo();
+                        break;
+                    case 2:
+                        alterarVeiculo();
+                        break;
+                    case 3:
+                        buscarVeiculoPorPlaca();
+                        break;
+                    case 4:
+                        removerVeiculoPorPlaca();
+                        break;
+                    case 5:
+                        System.out.println("🔙 Voltando ao menu principal...");
+                        break;
+                    default:
+                        System.out.println("❌ Opção inválida, tente novamente.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("❌ Entrada inválida. Por favor, insira um número.");
+                leitura.nextLine();
             }
         }
     }
 
     private void cadastrarVeiculo() {
-        System.out.println("\n==== Escolha o tipo de veículo ====");
-        System.out.println("1. Caminhão");
-        System.out.println("2. Carro");
-        System.out.println("3. Moto");
-        System.out.print("Opção: ");
-        int tipoVeiculo = leitura.nextInt();
-        leitura.nextLine();
-
-        Veiculo veiculo = null;
-
-        System.out.print("Informe a placa do veículo: ");
-        String placa = leitura.nextLine();
-        Optional<Veiculo> veiculoExistente = veiculoServico.buscarVeiculoPorPlaca(placa);
-        if (veiculoExistente.isPresent()) {
-            System.out.println("❌ Erro: A placa " + placa + " já está cadastrada.");
-            return;
-        }
-
-        System.out.print("Informe a marca do veículo: ");
-        String marca = leitura.nextLine();
-        System.out.print("Informe o modelo do veículo: ");
-        String modelo = leitura.nextLine();
-        System.out.print("O veículo está disponível? (true/false): ");
-        boolean disponivel = leitura.nextBoolean();
-        leitura.nextLine();
-        System.out.print("Informe o valor da diária (em R$): ");
-        BigDecimal valorDiaria = leitura.nextBigDecimal();
-        leitura.nextLine();
-
-        switch (tipoVeiculo) {
-            case 1:
-                System.out.print("Informe a capacidade de carga (em toneladas): ");
-                String capacidadeCarga = leitura.nextLine();
-                veiculo = new Caminhao(placa, modelo, marca, disponivel, valorDiaria, capacidadeCarga);
-                break;
-            case 2:
-                System.out.print("Informe o número de portas: ");
-                int numeroPortas = leitura.nextInt();
-                leitura.nextLine();
-                System.out.print("Informe o tipo de combustível: ");
-                String tipoCombustivel = leitura.nextLine();
-                veiculo = new Carro(placa, modelo, marca, disponivel, numeroPortas, valorDiaria, tipoCombustivel);
-                break;
-            case 3:
-                System.out.print("Informe a cilindrada da moto: ");
-                String cilindrada = leitura.nextLine();
-                veiculo = new Moto(placa, modelo, marca, disponivel, valorDiaria, cilindrada);
-                break;
-            default:
-                System.out.println("❌ Tipo de veículo inválido.");
-                return;
-        }
         try {
+            System.out.println("\n==== Escolha o tipo de veículo ====");
+            System.out.println("1. Caminhão");
+            System.out.println("2. Carro");
+            System.out.println("3. Moto");
+            System.out.print("Opção: ");
+            int tipoVeiculo = leitura.nextInt();
+            leitura.nextLine();
+
+            Veiculo veiculo = null;
+
+            System.out.print("Informe a placa do veículo: ");
+            String placa = leitura.nextLine();
+            Optional<Veiculo> veiculoExistente = veiculoServico.buscarVeiculoPorPlaca(placa);
+            if (veiculoExistente.isPresent()) {
+                System.out.println("❌ Erro: A placa " + placa + " já está cadastrada.");
+                return;
+            }
+
+            System.out.print("Informe a marca do veículo: ");
+            String marca = leitura.nextLine();
+            System.out.print("Informe o modelo do veículo: ");
+            String modelo = leitura.nextLine();
+            System.out.print("O veículo está disponível? (true/false): ");
+            boolean disponivel = leitura.nextBoolean();
+            leitura.nextLine();
+            System.out.print("Informe o valor da diária (em R$): ");
+            BigDecimal valorDiaria = leitura.nextBigDecimal();
+            leitura.nextLine();
+
+            switch (tipoVeiculo) {
+                case 1:
+                    System.out.print("Informe a capacidade de carga (em toneladas): ");
+                    String capacidadeCarga = leitura.nextLine();
+                    veiculo = new Caminhao(placa, modelo, marca, disponivel, valorDiaria, capacidadeCarga);
+                    break;
+                case 2:
+                    System.out.print("Informe o número de portas (2 ou 4): ");
+                    int numeroPortas = leitura.nextInt();
+                    if (numeroPortas != 2 && numeroPortas != 4) {
+                        throw new IllegalArgumentException("O número de portas deve ser 2 ou 4.");
+                    }
+                    leitura.nextLine();
+                    System.out.print("Informe o tipo de combustível (gasolina, álcool ou flex): ");
+                    String tipoCombustivel = leitura.nextLine();
+                    veiculo = new Carro(placa, modelo, marca, disponivel, numeroPortas, valorDiaria, tipoCombustivel);
+                    break;
+                case 3:
+                    System.out.print("Informe a cilindrada da moto: ");
+                    String cilindrada = leitura.nextLine();
+                    veiculo = new Moto(placa, modelo, marca, disponivel, valorDiaria, cilindrada);
+                    break;
+                default:
+                    System.out.println("❌ Tipo de veículo inválido.");
+                    return;
+            }
+
             veiculoServico.cadastrarVeiculo(veiculo);
             System.out.println("✅ Veículo cadastrado com sucesso!");
+        } catch (InputMismatchException e) {
+            System.out.println("❌ Erro: Tipo de dado incorreto. Tente novamente.");
+            leitura.nextLine(); // Limpa o buffer
         } catch (PlacaDuplicadaException e) {
+            System.out.println("❌ Erro: " + e.getMessage());
+        } catch (IllegalArgumentException e) {
             System.out.println("❌ Erro: " + e.getMessage());
         }
     }
@@ -134,33 +141,20 @@ public class PrincipalVeiculo {
         }
 
         Veiculo veiculo = veiculoExistente.get();
-
-
-        System.out.println("\n===== Veículo Atual =====");
-        System.out.println("Placa: " + veiculo.getPlaca());
-        System.out.println("Marca: " + veiculo.getMarca());
-        System.out.println("Modelo: " + veiculo.getModelo());
-        System.out.println("Disponível: " + (veiculo.getDisponivel() ? "Sim" : "Não"));
-        System.out.println("Valor da diária: R$" + veiculo.getValorDiaria());
-
-        if (veiculo instanceof Carro) {
-            Carro carro = (Carro) veiculo;
-            System.out.println("Número de portas: " + carro.getNumeroPortas());
-            System.out.println("Tipo de combustível: " + carro.getTipoCombustivel());
-        } else if (veiculo instanceof Caminhao) {
-            Caminhao caminhao = (Caminhao) veiculo;
-            System.out.println("Capacidade de carga: " + caminhao.getCapacidadeCarga() + " toneladas");
-        } else if (veiculo instanceof Moto) {
-            Moto moto = (Moto) veiculo;
-            System.out.println("Cilindrada: " + moto.getCilindrada() + " cc");
-        }
-        System.out.println("==========================\n");
+        System.out.println("\n╔═══════════════════════════════════════╗");
+        System.out.println("║             VEÍCULO ATUAL             ║");
+        System.out.println("╠═══════════════════════════════════════╣");
+        System.out.printf(" ║ Placa:          %s%n", veiculo.getPlaca());
+        System.out.printf(" ║ Marca:          %s%n", veiculo.getMarca());
+        System.out.printf(" ║ Modelo:         %s%n", veiculo.getModelo());
+        System.out.printf(" ║ Disponível:      %s%n", (veiculo.getDisponivel() ? "Sim" : "Não"));
+        System.out.printf(" ║ Valor da diária: R$ %.2f%n", veiculo.getValorDiaria());
+        System.out.println("╚═══════════════════════════════════════╝");
 
 
         boolean dadosValidos = false;
         while (!dadosValidos) {
             try {
-
                 System.out.print("Informe a nova marca do veículo: ");
                 String marca = leitura.nextLine();
                 System.out.print("Informe o novo modelo do veículo: ");
@@ -172,16 +166,17 @@ public class PrincipalVeiculo {
                 BigDecimal valorDiaria = leitura.nextBigDecimal();
                 leitura.nextLine();
 
-
                 veiculo.setMarca(marca);
                 veiculo.setModelo(modelo);
                 veiculo.setDisponivel(disponivel);
                 veiculo.setValorDiaria(valorDiaria);
 
-
                 if (veiculo instanceof Carro) {
                     System.out.print("Informe o novo número de portas (2 ou 4): ");
                     int numeroPortas = leitura.nextInt();
+                    if (numeroPortas != 2 && numeroPortas != 4) {
+                        throw new IllegalArgumentException("O número de portas deve ser 2 ou 4.");
+                    }
                     leitura.nextLine();
                     System.out.print("Informe o novo tipo de combustível (gasolina, álcool ou flex): ");
                     String tipoCombustivel = leitura.nextLine();
@@ -197,21 +192,19 @@ public class PrincipalVeiculo {
                     ((Moto) veiculo).setCilindrada(cilindrada);
                 }
 
-
                 dadosValidos = true;
 
-            } catch (Exception e) {
-
-                System.out.println("❌ Erro: Entrada inválida, por favor, tente novamente.");
+            } catch (InputMismatchException e) {
+                System.out.println("❌ Entrada inválida. Por favor, insira os dados corretamente.");
                 leitura.nextLine();
+            } catch (IllegalArgumentException e) {
+                System.out.println("❌ Erro: " + e.getMessage());
             }
         }
-
 
         veiculoServico.alterarVeiculo(veiculo);
         System.out.println("✅ Veículo alterado com sucesso!");
     }
-
 
     private void buscarVeiculoPorPlaca() {
         System.out.print("Informe a placa do veículo que deseja buscar: ");
@@ -221,7 +214,7 @@ public class PrincipalVeiculo {
 
         if (veiculo.isPresent()) {
             System.out.println("Veículo encontrado:");
-            System.out.println(veiculo.get());  // Não é necessário chamar toString(), é automático
+            System.out.println(veiculo.get());
         } else {
             System.out.println("❌ Veículo não encontrado com a placa: " + placa);
         }

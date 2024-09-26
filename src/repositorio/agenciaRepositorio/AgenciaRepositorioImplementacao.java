@@ -38,16 +38,9 @@ public class AgenciaRepositorioImplementacao<T extends Agencia> extends AgenciaR
     @Override
     public void remover(T agencia) {
         bancoDados.remove(agencia);
+
     }
 
-    public T buscarPorId(Long idAgencia) {
-        for (T agencia : bancoDados) {
-            if (agencia.getIdAgencia().equals(idAgencia)) {
-                return agencia;
-            }
-        }
-        return null;
-    }
 
     @Override
     public List<T> listar() {
@@ -58,6 +51,16 @@ public class AgenciaRepositorioImplementacao<T extends Agencia> extends AgenciaR
     public T buscarPorEndereco(Endereco endereco) {
         for (T agencia : bancoDados) {
             if (agencia.getEndereco().getCEP().equals(endereco.getCEP())) {
+                return agencia;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public T buscarPorId(Long idAgencia) {
+        for (T agencia : bancoDados) {
+            if (agencia.getIdAgencia().equals(idAgencia)) {
                 return agencia;
             }
         }

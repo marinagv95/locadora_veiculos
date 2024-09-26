@@ -9,11 +9,13 @@ import modelo.pessoa.Pessoa;
 import modelo.pessoa.PessoaFisica;
 import modelo.pessoa.PessoaJuridica;
 import servico.pessoaServico.PessoaServico;
+import visual.MenuPessoa;
 
 
 import java.util.Scanner;
 
 public class PrincipalPessoa {
+    MenuPessoa menuPessoa = new MenuPessoa();
     private PessoaServico<Pessoa> pessoaServico;
     private Scanner leitura;
 
@@ -27,19 +29,7 @@ public class PrincipalPessoa {
 
         int opcao = 0;
         while (opcao != 5) {
-            System.out.println("\n╔═══════════════════════════════👥═══════ PESSOAS ═══════👥════════════════════════════════╗");
-            System.out.println("║                                                                                           ║");
-            System.out.println("║   1. ➕ Cadastrar Pessoa                                                                  ║");
-            System.out.println("║                                                                                           ║");
-            System.out.println("║   2. ✏️  Alterar Pessoa                                                                   ║");
-            System.out.println("║                                                                                           ║");
-            System.out.println("║   3. 🔍 Buscar Pessoa por CPF/CNPJ                                                        ║");
-            System.out.println("║                                                                                           ║");
-            System.out.println("║   4. 🗑️  Remover Pessoa                                                                   ║");
-            System.out.println("║                                                                                           ║");
-            System.out.println("║   5. 🔙 Voltar ao Menu Principal                                                          ║");
-            System.out.println("║                                                                                           ║");
-            System.out.println("╚═══════════════════════════════════════════════════════════════════════════════════════════╝");
+            menuPessoa.exibirMenuPessoa();
             System.out.print("🎬 Escolha uma opção: ");
             opcao = leitura.nextInt();
             leitura.nextLine();
@@ -159,4 +149,6 @@ public class PrincipalPessoa {
             System.out.println("❌ Erro ao remover pessoa: " + e.getMessage());
         }
     }
+
 }
+

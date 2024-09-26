@@ -16,13 +16,17 @@ public class Caminhao extends Veiculo{
 
     @Override
     public String toString() {
-        return "===== Detalhes do Caminhão =====\n" +
-                "Placa: " + getPlaca() + "\n" +
-                "Modelo: " + getModelo() + "\n" +
-                "Marca: " + getMarca() + "\n" +
-                "Disponível: " + (getDisponivel() ? "Sim" : "Não") + "\n" +
-                "Valor da Diária: R$ " + getValorDiaria() + "\n" +
-                "Capacidade de Carga: " + capacidadeCarga + " toneladas\n" +
-                "===============================";
+        return "╔══════════════════════════════════════════════╗\n" +
+                "║              D E T A L H E S   D O           ║\n" +
+                "║                 C A M I N H Ã O              ║\n" +
+                "╠══════════════════════════════════════════════╣\n" +
+                "  Placa:                " + getPlaca() + "\n" +
+                "  Modelo:               " + getModelo() + "\n" +
+                "  Marca:                " + getMarca() + "\n" +
+                "  Disponível:           " + (getDisponivel() ? "Sim" : "Não") + "\n" +
+                "  Valor da Diária:      R$ " + String.format("%.2f", getValorDiaria()) + "\n" +
+                "  Capacidade de Carga:  " + capacidadeCarga + " toneladas\n" +
+                "╚══════════════════════════════════════════════╝";
     }
+
 }

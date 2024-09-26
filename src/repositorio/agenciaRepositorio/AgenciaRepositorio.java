@@ -18,5 +18,4 @@ public abstract class AgenciaRepositorio<T extends Agencia> {
     public abstract T buscarPorEndereco(Endereco endereco);
 
     public abstract T buscarPorId(Long idAgencia);
-
 }
