@@ -17,6 +17,21 @@ public class Veiculo {
         this.valorDiaria = valorDiaria;
     }
 
+    public void alugarVeiculo() {
+        if (!disponivel) {
+            throw new IllegalStateException("Veículo não está disponível para aluguel.");
+        }
+        this.disponivel = false;
+    }
+
+    public void devolverVeiculo() {
+        this.disponivel = true;
+    }
+
+    public boolean estaDisponivel() {
+        return disponivel;
+    }
+
     public String getPlaca() {return placa;}
     public void setPlaca(String placa) {this.placa = placa;}
 
