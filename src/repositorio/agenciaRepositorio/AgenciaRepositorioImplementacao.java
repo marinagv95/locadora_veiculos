@@ -19,9 +19,6 @@ public class AgenciaRepositorioImplementacao<T extends Agencia> extends AgenciaR
     @Override
     public T cadastrar(T agencia) throws AgenciaDuplicadaException {
         for (T a : bancoDados) {
-            if (a.getIdAgencia().equals(agencia.getIdAgencia())) {
-                throw new AgenciaDuplicadaException("Agência com ID " + agencia.getIdAgencia() + " já existe.");
-            }
             if (a.getNomeAgencia().equalsIgnoreCase(agencia.getNomeAgencia())) {
                 throw new AgenciaDuplicadaException("Agência com nome " + agencia.getNomeAgencia() + " já existe.");
             }
