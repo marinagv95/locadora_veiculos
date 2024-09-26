@@ -20,19 +20,19 @@ public class PrincipalAgencia {
     public void exibirMenuAgencia() {
         int opcao = 0;
         while (opcao != 5) {
-            System.out.println("\n╔═════════════════════════════🏢═══════ AGÊNCIAS ═══════🏢═════════════════════════════╗");
-            System.out.println("║                                                                                     ║");
-            System.out.println("║   1. ➕ Cadastrar Agência                                                            ║");
-            System.out.println("║                                                                                     ║");
-            System.out.println("║   2. ✏️  Alterar Agência                                                             ║");
-            System.out.println("║                                                                                     ║");
-            System.out.println("║   3. 🔍 Buscar Agência por nome ou logradouro                                                      ║");
-            System.out.println("║                                                                                     ║");
-            System.out.println("║   4. 🗑️  Remover Agência por CEP                                                     ║");
-            System.out.println("║                                                                                     ║");
-            System.out.println("║   5. 🔙 Voltar ao Menu Principal                                                    ║");
-            System.out.println("║                                                                                     ║");
-            System.out.println("╚═════════════════════════════════════════════════════════════════════════════════════╝");
+            System.out.println("\n╔══════════════════════🏢═══════ AGÊNCIAS ═══════🏢══════════════════════╗");
+            System.out.println("║                                                                           ║");
+            System.out.println("║   1. ➕ Cadastrar Agência                                                 ║");
+            System.out.println("║                                                                           ║");
+            System.out.println("║   2. ✏️  Alterar Agência                                                  ║");
+            System.out.println("║                                                                           ║");
+            System.out.println("║   3. 🔍 Buscar Agência por nome ou logradouro                             ║");
+            System.out.println("║                                                                           ║");
+            System.out.println("║   4. 🗑️  Remover Agência por ID                                           ║");
+            System.out.println("║                                                                           ║");
+            System.out.println("║   5. 🔙 Voltar ao Menu Principal                                          ║");
+            System.out.println("║                                                                           ║");
+            System.out.println("╚═══════════════════════════════════════════════════════════════════════════╝");
             System.out.print("🎬 Escolha uma opção: ");
             opcao = leitura.nextInt();
             leitura.nextLine();
@@ -48,7 +48,7 @@ public class PrincipalAgencia {
                     buscarAgenciaPorNomeOuLogradouro();
                     break;
                 case 4:
-                    //removerAgenciaPorCEP();
+                    removerAgenciaPorID();
                     break;
                 case 5:
                     System.out.println("🔙 Voltando ao menu principal...");
@@ -63,19 +63,6 @@ public class PrincipalAgencia {
         System.out.println("\n==== Cadastro de Agência ====");
         System.out.print("Informe o nome da agência: ");
         String nome = leitura.nextLine();
-
-        Long id;
-        while (true) {
-            try {
-                System.out.print("Informe o ID da agência (número inteiro): ");
-                id = leitura.nextLong();
-                leitura.nextLine();
-                break;
-            } catch (Exception e) {
-                System.out.println("❌ ID inválido. Informe um número inteiro.");
-                leitura.nextLine();
-            }
-        }
 
         System.out.print("Informe o logradouro da agência: ");
         String logradouro = leitura.nextLine();
@@ -92,7 +79,7 @@ public class PrincipalAgencia {
 
         try {
             Endereco endereco = new Endereco(logradouro, numero, cep, bairro, cidade, estado);
-            Agencia agencia = new Agencia(id, nome, endereco);
+            Agencia agencia = new Agencia(nome, endereco);
 
             agenciaServico.cadastrar(agencia);
             System.out.println("✅ Agência cadastrada com sucesso!");
@@ -147,24 +134,52 @@ public class PrincipalAgencia {
         }
     }
 
+
     private void buscarAgenciaPorNomeOuLogradouro() {
         System.out.print("Informe parte do nome ou logradouro da agência que deseja buscar: ");
         String termoBusca = leitura.nextLine().toLowerCase();
+
         List<Agencia> agenciasEncontradas = agenciaServico.buscarTodos().stream()
                 .filter(agencia -> agencia.getNomeAgencia().toLowerCase().contains(termoBusca) ||
                         agencia.getEndereco().getLogradouro().toLowerCase().contains(termoBusca))
                 .toList();
 
-
         if (agenciasEncontradas.isEmpty()) {
             System.out.println("❌ Nenhuma agência encontrada com o critério de busca.");
         } else {
             System.out.println("✅ Agências encontradas:");
-            agenciasEncontradas.forEach(agencia -> {
-                System.out.println(agencia);
-            });
+            agenciasEncontradas.forEach(System.out::println);
         }
     }
 
+
+    private void removerAgenciaPorID() {
+        System.out.print("Informe o ID da agência que deseja remover: ");
+        Long id = leitura.nextLong();
+        leitura.nextLine();
+
+        try {
+            Agencia agencia = agenciaServico.buscarPorId(id);
+            if (agencia == null) {
+                System.out.println("❌ Agência com ID " + id + " não encontrada.");
+                return;
+            }
+
+            System.out.println("Agência encontrada:");
+            System.out.println(agencia);
+
+            System.out.print("Tem certeza que deseja remover esta agência? (S/N): ");
+            String confirmacao = leitura.nextLine();
+
+            if (confirmacao.equalsIgnoreCase("S")) {
+                agenciaServico.remover(agencia);
+                System.out.println("✅ Agência removida com sucesso!");
+            } else {
+                System.out.println("❌ Operação de remoção cancelada.");
+            }
+        } catch (Exception e) {
+            System.out.println("❌ Erro ao remover agência: " + e.getMessage());
+        }
+    }
 
 }

@@ -6,42 +6,66 @@ import modelo.endereco.Endereco;
 import repositorio.agenciaRepositorio.AgenciaRepositorio;
 
 import java.util.List;
+import java.util.Optional;
 
-public class AgenciaServicoImplementacao <T extends Agencia> implements AgenciaServico<T> {
+public class AgenciaServicoImplementacao implements AgenciaServico<Agencia> {
+    private AgenciaRepositorio<Agencia> agenciaRepositorio;
 
-    private AgenciaRepositorio<T> agenciaRepositorio;
-
-    public AgenciaServicoImplementacao(AgenciaRepositorio<T> agenciaRepositorio) {
+    public AgenciaServicoImplementacao(AgenciaRepositorio<Agencia> agenciaRepositorio) {
         this.agenciaRepositorio = agenciaRepositorio;
     }
 
+
     @Override
-    public T cadastrar(T agencia) throws AgenciaDuplicadaException {
+    public Agencia cadastrar(Agencia agencia) throws AgenciaDuplicadaException {
+        if (agenciaRepositorio.listar().stream()
+                .anyMatch(a -> a.getEndereco().equals(agencia.getEndereco()))) {
+            throw new AgenciaDuplicadaException("Agência já cadastrada para este endereço.");
+        }
         return agenciaRepositorio.cadastrar(agencia);
     }
 
     @Override
-    public T atualizar(T agencia) {
-        return null;
+    public Agencia atualizar(Agencia agencia) {
+        Optional<Agencia> agenciaExistente = agenciaRepositorio.listar().stream()
+                .filter(a -> a.getIdAgencia().equals(agencia.getIdAgencia()))
+                .findFirst();
+
+        if (agenciaExistente.isPresent()) {
+            return agenciaRepositorio.atualizar(agencia);
+        } else {
+            throw new IllegalArgumentException("Agência não encontrada para atualização.");
+        }
     }
 
     @Override
-    public void remover(T agencia) {
+    public void remover(Agencia agencia) {
+        Optional<Agencia> agenciaExistente = agenciaRepositorio.listar().stream()
+                .filter(a -> a.getIdAgencia().equals(agencia.getIdAgencia()))
+                .findFirst();
 
+        if (agenciaExistente.isPresent()) {
+            agenciaRepositorio.remover(agencia);
+        } else {
+            throw new IllegalArgumentException("Agência não encontrada para remoção.");
+        }
     }
 
     @Override
-    public T buscar(T agencia) {
-        return null;
+    public Agencia buscarPorId(Long id) {
+        return agenciaRepositorio.listar().stream()
+                .filter(a -> a.getIdAgencia().equals(id))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Agência não encontrada."));
     }
 
     @Override
-    public List<T> buscarTodos() {
+    public List<Agencia> buscarTodos() {
         return agenciaRepositorio.listar();
     }
 
     @Override
-    public T buscarPorEndereco(Endereco endereco) {
+    public Agencia buscarPorEndereco(Endereco endereco) {
         return agenciaRepositorio.buscarPorEndereco(endereco);
     }
 }

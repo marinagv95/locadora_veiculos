@@ -13,6 +13,7 @@ public class Endereco {
 
     public Endereco(String logradouro, String numero, String cep, String bairro, String cidade, String estado) throws CEPInvalidoException {
         this.logradouro = logradouro;
+        this.numero = numero;
         setCEP(cep);
         this.bairro = bairro;
         this.cidade = cidade;
@@ -44,13 +45,13 @@ public class Endereco {
 
     @Override
     public String toString() {
-        return "Endereço: " + logradouro + "\n" +
+        return "Logradouro: " + logradouro + "\n" +
                 "Número: " + (numero != null ? numero : "Não informado") + "\n" +
                 "CEP: " + cep + "\n" +
                 "Bairro: " + bairro + "\n" +
                 "Cidade: " + cidade + "\n" +
-                "Estado: " + estado + "\n" +
-                "====================================";
+                "Estado: " + estado;
     }
+
 
 }
