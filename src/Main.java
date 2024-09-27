@@ -1,10 +1,14 @@
 import principal.principalAgencia.PrincipalAgencia;
+import principal.principalAluguel.PrincipalAluguel;
+import principal.principalAluguel.PrincipalConsultaAluguel;
 import principal.principalPessoa.PrincipalPessoa;
 import principal.principalVeiculo.PrincipalVeiculo;
 import repositorio.agenciaRepositorio.AgenciaRepositorioImplementacao;
+import repositorio.aluguelRepositorio.AluguelRepositorioImplementacao;
 import repositorio.pessoaRepositorio.PessoaRepositorioImplementacao;
 import repositorio.veiculoRepositorio.VeiculoRepositorioImplementacao;
 import servico.agenciaServico.AgenciaServicoImplementacao;
+import servico.aluguelServico.AluguelServicoImplementacao;
 import servico.pessoaServico.PessoaServicoImplementacao;
 import servico.veiculoServico.VeiculoServicoImplementacao;
 import visual.MenuPrincipal;
@@ -26,6 +30,11 @@ public class Main {
         AgenciaRepositorioImplementacao agenciaRepositorio = new AgenciaRepositorioImplementacao();
         AgenciaServicoImplementacao agenciaServico = new AgenciaServicoImplementacao(agenciaRepositorio);
         PrincipalAgencia principalAgencia = new PrincipalAgencia(agenciaServico);
+
+        AluguelRepositorioImplementacao aluguelRepositorio = new AluguelRepositorioImplementacao();
+        AluguelServicoImplementacao aluguelServico = new AluguelServicoImplementacao(aluguelRepositorio);
+        PrincipalAluguel principalAluguel = new PrincipalAluguel(aluguelServico, veiculoServico, pessoaServico);
+        PrincipalConsultaAluguel principalConsultaAluguel = new PrincipalConsultaAluguel(aluguelServico, veiculoServico);
 
         int opcao = 0;
         try {
@@ -51,6 +60,14 @@ public class Main {
                                 break;
                             case 3:
                                 principalAgencia.exibirMenuAgencia();
+                                opcaoInvalida = false;
+                                break;
+                            case 4:
+                                principalAluguel.exibirMenuAluguel();
+                                opcaoInvalida = false;
+                                break;
+                            case 5:
+                                principalConsultaAluguel.exibirMenuConsultaAluguel();
                                 opcaoInvalida = false;
                                 break;
                             case 0:

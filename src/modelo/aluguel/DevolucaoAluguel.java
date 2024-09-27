@@ -4,6 +4,7 @@ import modelo.agencia.Agencia;
 import modelo.pessoa.Pessoa;
 import modelo.pessoa.PessoaFisica;
 import modelo.pessoa.PessoaJuridica;
+import modelo.veiculo.Veiculo;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -12,6 +13,7 @@ import java.time.temporal.ChronoUnit;
 
 public class DevolucaoAluguel {
     private Aluguel aluguel;
+    private Veiculo veiculo;
     private Agencia agenciaDevolucao;
     private LocalDate dataFim;
     private LocalTime horaFim;
@@ -41,6 +43,62 @@ public class DevolucaoAluguel {
             total = total.multiply(BigDecimal.valueOf(0.90)); // 10% de desconto
         }
         return total;
+    }
+
+    public Aluguel getAluguel() {
+        return aluguel;
+    }
+
+    public void setAluguel(Aluguel aluguel) {
+        this.aluguel = aluguel;
+    }
+
+    public Veiculo getVeiculo() {
+        return veiculo;
+    }
+
+    public void setVeiculo(Veiculo veiculo) {
+        this.veiculo = veiculo;
+    }
+
+    public Agencia getAgenciaDevolucao() {
+        return agenciaDevolucao;
+    }
+
+    public void setAgenciaDevolucao(Agencia agenciaDevolucao) {
+        this.agenciaDevolucao = agenciaDevolucao;
+    }
+
+    public LocalDate getDataFim() {
+        return dataFim;
+    }
+
+    public void setDataFim(LocalDate dataFim) {
+        this.dataFim = dataFim;
+    }
+
+    public LocalTime getHoraFim() {
+        return horaFim;
+    }
+
+    public void setHoraFim(LocalTime horaFim) {
+        this.horaFim = horaFim;
+    }
+
+    public int getQuantidadeDias() {
+        return quantidadeDias;
+    }
+
+    public void setQuantidadeDias(int quantidadeDias) {
+        this.quantidadeDias = quantidadeDias;
+    }
+
+    public BigDecimal getValorFinal() {
+        return valorFinal;
+    }
+
+    public void setValorFinal(BigDecimal valorFinal) {
+        this.valorFinal = valorFinal;
     }
 
     public String gerarComprovante() {

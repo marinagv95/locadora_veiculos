@@ -1,7 +1,10 @@
 package repositorio.aluguelRepositorio;
 
-import exception.aluguelException.AluguelNaoEncontradoException;
 import modelo.aluguel.Aluguel;
+import modelo.pessoa.Pessoa;
+import modelo.pessoa.PessoaFisica;
+import modelo.pessoa.PessoaJuridica;
+import modelo.veiculo.Veiculo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,10 +19,49 @@ public class AluguelRepositorioImplementacao <T extends Aluguel> extends Aluguel
 
 
     @Override
-    public T salvar(T aluguel) {
+    public void adicionarAluguel(T aluguel) {
         bancoDados.add(aluguel);
-        return aluguel;
     }
+
+    @Override
+    public void removerAluguel(T aluguel) {
+        bancoDados.remove(aluguel);
+    }
+
+    @Override
+    public List<Aluguel> buscarAluguelPorVeiculo(Veiculo veiculo) {
+        List<Aluguel> result = new ArrayList<>();
+        for (Aluguel aluguel : bancoDados) {
+            if (aluguel.getVeiculo().equals(veiculo)) {
+                result.add(aluguel);
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public List<Aluguel> buscarAluguelPorPessoa(String identificador) {
+        List<Aluguel> result = new ArrayList<>();
+        for (Aluguel aluguel : bancoDados) {
+            Pessoa pessoaAluguel = aluguel.getPessoa();
+
+            if (pessoaAluguel instanceof PessoaFisica) {
+                String cpf = ((PessoaFisica) pessoaAluguel).getCpf();
+                if (cpf.equals(identificador)) {
+                    result.add(aluguel);
+                }
+            }
+
+            else if (pessoaAluguel instanceof PessoaJuridica) {
+                String cnpj = ((PessoaJuridica) pessoaAluguel).getCnpj();
+                if (cnpj.equals(identificador)) {
+                    result.add(aluguel);
+                }
+            }
+        }
+        return result;
+    }
+
 
     @Override
     public List<T> listarAlugueis() {
@@ -27,41 +69,7 @@ public class AluguelRepositorioImplementacao <T extends Aluguel> extends Aluguel
     }
 
     @Override
-    public T alterarAluguel(T aluguel) throws AluguelNaoEncontradoException {
-        for (int i = 0; i < bancoDados.size(); i++) {
-            if (bancoDados.get(i).getVeiculo().getPlaca().equals(aluguel.getVeiculo().getPlaca())) {
-                bancoDados.set(i, aluguel);
-                return aluguel;
-            }
-        }
-        throw new AluguelNaoEncontradoException();
-    }
+    public void alterarAluguel(T aluguel) {
 
-    @Override
-    public T cancelarAluguel(String placa) {
-        T aluguelRemovido = null;
-        for (int i = 0; i < bancoDados.size(); i++) {
-            if (bancoDados.get(i).getVeiculo().getPlaca().equals(placa)) {
-                aluguelRemovido = bancoDados.remove(i);
-                break;
-            }
-        }
-        return aluguelRemovido;
-    }
-
-    @Override
-    public boolean existeAluguel(String placa) {
-        return bancoDados.stream()
-                .anyMatch(aluguel -> aluguel.getVeiculo().getPlaca().equals(placa));
-    }
-
-    @Override
-    public T buscarAluguel(String placa) throws AluguelNaoEncontradoException {
-        for (T aluguel : bancoDados) {
-            if (aluguel.getVeiculo().getPlaca().equals(placa)) {
-                return aluguel;
-            }
-        }
-        throw new AluguelNaoEncontradoException();
     }
 }

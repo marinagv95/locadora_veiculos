@@ -34,7 +34,10 @@ public class Aluguel {
     public int getDiasAlugados() {return diasAlugados;}
 
 
-
+    public void registrarDevolucao(LocalDate dataDevolucao) {
+        this.diasAlugados = (int) ChronoUnit.DAYS.between(this.dataInicio, dataDevolucao);
+        // Aqui você pode calcular o valor total, se necessário
+    }
 
     @Override
     public String toString() {

@@ -3,88 +3,81 @@ package servico.aluguelServico;
 import exception.aluguelException.AluguelNaoEncontradoException;
 import exception.veiculoException.VeiculoNaoExistenteException;
 import modelo.aluguel.Aluguel;
-import modelo.pessoa.Pessoa;
-import modelo.pessoa.PessoaFisica;
-import modelo.pessoa.PessoaJuridica;
+import modelo.aluguel.DevolucaoAluguel;
 import modelo.veiculo.Veiculo;
 import repositorio.aluguelRepositorio.AluguelRepositorio;
 import servico.veiculoServico.VeiculoServico;
 
-import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
-public class AluguelServicoImplementacao <T extends Aluguel> implements AluguelServico<T> {
+public class AluguelServicoImplementacao <T extends Aluguel> implements AluguelServico<Aluguel> {
 
-    private AluguelRepositorio<T> aluguelRepositorio;
+    private AluguelRepositorio<Aluguel> aluguelRepositorio;
     private VeiculoServico<Veiculo> veiculoServico;
 
-    public AluguelServicoImplementacao(AluguelRepositorio<T> aluguelRepositorio, VeiculoServico<Veiculo> veiculoServico) {
+    public AluguelServicoImplementacao(AluguelRepositorio<Aluguel> aluguelRepositorio) {
         this.aluguelRepositorio = aluguelRepositorio;
         this.veiculoServico = veiculoServico;
     }
 
 
     @Override
-    public void salvar(T aluguel) {
-        aluguelRepositorio.salvar(aluguel);
-    }
-
-    @Override
-    public void excluir(T aluguel) {
-        if (aluguelRepositorio.existeAluguel(aluguel.getVeiculo().getPlaca())) {
-            aluguelRepositorio.cancelarAluguel(aluguel.getVeiculo().getPlaca());
-        }
-    }
-
-    @Override
-    public void editar(T aluguel) throws AluguelNaoEncontradoException {
-        aluguelRepositorio.alterarAluguel(aluguel);
-        BigDecimal total = calcularTotalAluguel(aluguel);
-        System.out.println("Total do aluguel após edição: " + total);
-    }
-
-    private BigDecimal calcularTotalAluguel(T aluguel) {
+    public void alugarVeiculo(Aluguel aluguel) throws VeiculoNaoExistenteException {
         Veiculo veiculo = aluguel.getVeiculo();
-        if (veiculo == null || veiculo.getValorDiaria() == null || aluguel.getDiasAlugados() < 0) {
-            throw new IllegalArgumentException("Veículo ou valor da diária não pode ser nulo, e dias alugados não podem ser negativos.");
+        if (!veiculoServico.estaDisponivel(String.valueOf(veiculo))) {
+            throw new VeiculoNaoExistenteException("Veículo não disponível para aluguel.");
         }
-        return veiculo.getValorDiaria().multiply(BigDecimal.valueOf(aluguel.getDiasAlugados()));
-    }
-
-
-    @Override
-    public T buscarPorPlaca(String placa) throws AluguelNaoEncontradoException, VeiculoNaoExistenteException {
-        Optional<Veiculo> veiculoOpt = veiculoServico.buscarVeiculoPorPlaca(placa);
-        if (!veiculoOpt.isPresent()) {
-            throw new VeiculoNaoExistenteException("Veículo com placa " + placa + " não encontrado.");
-        }
-        Veiculo veiculo = veiculoOpt.get();
-        if (!veiculoServico.estaDisponivel(placa)) {
-            throw new VeiculoNaoExistenteException("Veículo com placa " + placa + " não está disponível para aluguel.");
-        }
-        T aluguel = aluguelRepositorio.buscarAluguel(placa);
-        if (aluguel == null) {
-            throw new AluguelNaoEncontradoException("Aluguel não encontrado para a placa " + placa);
-        }
-        return aluguel;
+        aluguelRepositorio.adicionarAluguel(aluguel);
     }
 
     @Override
-    public T buscarPorPessoa(T identificador) throws AluguelNaoEncontradoException {
-        for (T aluguel : aluguelRepositorio.listarAlugueis()) {
-            Pessoa pessoa = aluguel.getPessoa();
-
-            if (pessoa instanceof PessoaFisica) {
-                if (((PessoaFisica) pessoa).getCpf().equals(identificador)) {
-                    return aluguel;
-                }
-            }
-            else if (pessoa instanceof PessoaJuridica) {
-                if (((PessoaJuridica) pessoa).getCnpj().equals(identificador)) {
-                    return aluguel;
-                }
-            }
+    public void retiradaVeiculo(Aluguel aluguel) throws AluguelNaoEncontradoException {
+        Optional<Aluguel> aluguelExistente = aluguelRepositorio.buscarAluguelPorVeiculo(aluguel.getVeiculo()).stream().findFirst();
+        if (!aluguelExistente.isPresent()) {
+            throw new AluguelNaoEncontradoException("Aluguel não encontrado para retirada.");
         }
-        throw new AluguelNaoEncontradoException("Aluguel não encontrado para a pessoa com identificador: " + identificador);
+    }
+
+    @Override
+    public void devolverVeiculo(DevolucaoAluguel devolucaoAluguel) throws AluguelNaoEncontradoException {
+        Optional<Aluguel> aluguelOptional = aluguelRepositorio.buscarAluguelPorVeiculo(devolucaoAluguel.getVeiculo()).stream().findFirst();
+        if (!aluguelOptional.isPresent()) {
+            throw new AluguelNaoEncontradoException("Aluguel não encontrado para devolução.");
+        }
+        aluguelRepositorio.removerAluguel(aluguelOptional.get());
+    }
+
+    @Override
+    public Aluguel buscarAluguelPorVeiculo(Veiculo veiculo) throws AluguelNaoEncontradoException {
+        List<Aluguel> alugueis = aluguelRepositorio.buscarAluguelPorVeiculo(veiculo);
+        if (alugueis.isEmpty()) {
+            throw new AluguelNaoEncontradoException("Nenhum aluguel encontrado para o veículo informado.");
+        }
+        return alugueis.get(0);
+    }
+
+    @Override
+    public List<Aluguel> buscarAluguelPorPessoa(String identificador) {
+        // Implementação para buscar no repositório
+        return aluguelRepositorio.buscarAluguelPorPessoa(identificador);
+    }
+
+    @Override
+    public void alterarAluguel(Aluguel aluguel) throws AluguelNaoEncontradoException {
+        Optional<Aluguel> aluguelExistente = aluguelRepositorio.buscarAluguelPorVeiculo(aluguel.getVeiculo()).stream().findFirst();
+        if (!aluguelExistente.isPresent()) {
+            throw new AluguelNaoEncontradoException("Aluguel não encontrado para alteração.");
+        }
+        aluguelRepositorio.alterarAluguel(aluguel);
+    }
+
+    @Override
+    public void removerAluguel(Aluguel aluguel) throws AluguelNaoEncontradoException {
+        Optional<Aluguel> aluguelExistente = aluguelRepositorio.buscarAluguelPorVeiculo(aluguel.getVeiculo()).stream().findFirst();
+        if (!aluguelExistente.isPresent()) {
+            throw new AluguelNaoEncontradoException("Aluguel não encontrado para remoção.");
+        }
+        aluguelRepositorio.removerAluguel(aluguel);
     }
 }
