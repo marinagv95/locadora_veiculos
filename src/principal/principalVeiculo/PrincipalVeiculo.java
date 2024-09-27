@@ -22,6 +22,7 @@ public class PrincipalVeiculo {
 
     public PrincipalVeiculo(VeiculoServico<Veiculo> veiculoServico) {
         this.veiculoServico = veiculoServico;
+        this.leitura = new Scanner(System.in);
     }
 
     public void exibirMenu() {

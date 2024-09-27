@@ -18,6 +18,8 @@ public class MenuPrincipal {
             System.out.println(ANSI_YELLOW + "═══════════════════════════════════════════════" + ANSI_RESET);
             System.out.println(ANSI_WHITE + "             3️⃣  Gerenciar Agências" + ANSI_RESET);
             System.out.println(ANSI_YELLOW + "═══════════════════════════════════════════════" + ANSI_RESET);
+            System.out.println(ANSI_WHITE + "             3️⃣  4Gerenciar Aluguel" + ANSI_RESET);
+            System.out.println(ANSI_YELLOW + "═══════════════════════════════════════════════" + ANSI_RESET);
             System.out.println(ANSI_WHITE + "             0️⃣  Sair" + ANSI_RESET);
             System.out.println(ANSI_YELLOW + "═══════════════════════════════════════════════" + ANSI_RESET);
         }

@@ -12,6 +12,9 @@ public class Leitor {
     }
 
     public static String ler(Scanner entrada, String texto) {
+        if (entrada == null) {
+            System.err.println("Erro: O Scanner está nulo.");
+        }
         System.out.println(texto);
         return entrada.nextLine();
     }

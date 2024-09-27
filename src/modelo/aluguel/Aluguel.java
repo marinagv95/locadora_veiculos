@@ -15,6 +15,7 @@ public class Aluguel {
     private Agencia agenciaRetirada;
     private LocalDate dataInicio;
     private LocalTime horaInicio;
+    private int diasAlugados;
 
     public Aluguel(Veiculo veiculo, Pessoa pessoa, Agencia agenciaRetirada,
                    LocalDate dataInicio, LocalTime horaInicio) {
@@ -30,6 +31,7 @@ public class Aluguel {
     public Agencia getAgenciaRetirada() { return agenciaRetirada; }
     public LocalDate getDataInicio() { return dataInicio; }
     public LocalTime getHoraInicio() { return horaInicio; }
+    public int getDiasAlugados() {return diasAlugados;}
 
 
 

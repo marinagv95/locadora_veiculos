@@ -12,7 +12,7 @@ import visual.MenuPrincipal;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         Scanner leitura = new Scanner(System.in);
         MenuPrincipal menuPrincipal = new MenuPrincipal();
         VeiculoRepositorioImplementacao veiculoRepositorio = new VeiculoRepositorioImplementacao();
@@ -28,47 +28,50 @@ public class Main {
         PrincipalAgencia principalAgencia = new PrincipalAgencia(agenciaServico);
 
         int opcao = 0;
-        do {
-            menuPrincipal.menuPrincipal(); 
-            
-            boolean opcaoInvalida = true; 
+        try {
+            do {
+                menuPrincipal.menuPrincipal();
 
-            while (opcaoInvalida) {
-                System.out.print("Escolha uma opção: ");
-                if (leitura.hasNextInt()) { 
-                    opcao = leitura.nextInt();
-                    leitura.nextLine();  
+                boolean opcaoInvalida = true;
 
-                    switch (opcao) {
-                        case 1:
-                            principalVeiculo.exibirMenu();  
-                            opcaoInvalida = false;
-                            break;
-                        case 2:
-                            principalPessoa.exibirMenuPessoa();  
-                            opcaoInvalida = false;  
-                            break;
-                        case 3:
-                            principalAgencia.exibirMenuAgencia();  
-                            opcaoInvalida = false; 
-                            break;
-                        case 0:
-                            System.out.println("👋 Saindo... Até a próxima!"); 
-                            opcaoInvalida = false; 
-                            break;
-                        default:
-                            System.out.println("❌ Opção inválida. Tente novamente."); 
-                            break;
+                while (opcaoInvalida) {
+                    System.out.print("Escolha uma opção: ");
+                    if (leitura.hasNextInt()) {
+                        opcao = leitura.nextInt();
+                        leitura.nextLine();
+
+                        switch (opcao) {
+                            case 1:
+                                principalVeiculo.exibirMenu();
+                                opcaoInvalida = false;
+                                break;
+                            case 2:
+                                principalPessoa.exibirMenuPessoa();
+                                opcaoInvalida = false;
+                                break;
+                            case 3:
+                                principalAgencia.exibirMenuAgencia();
+                                opcaoInvalida = false;
+                                break;
+                            case 0:
+                                System.out.println("👋 Saindo... Até a próxima!");
+                                opcaoInvalida = false;
+                                break;
+                            default:
+                                System.out.println("❌ Opção inválida. Tente novamente.");
+                                break;
+                        }
+                    } else {
+                        System.out.println("❌ Entrada inválida. Digite um número.");
+                        leitura.nextLine(); // Limpa a entrada inválida
                     }
-                } else {
-                    System.out.println("❌ Entrada inválida. Digite um número.");
-                    leitura.nextLine(); 
                 }
-            }
 
-        } while (opcao != 0);
-
-        leitura.close(); 
-
+            } while (opcao != 0);
+        } catch (Exception e) {
+            System.err.println("Ocorreu um erro: " + e.getMessage());
+        } finally {
+            leitura.close(); // Certifique-se de fechar o Scanner
+        }
     }
 }

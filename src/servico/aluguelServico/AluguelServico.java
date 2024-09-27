@@ -9,5 +9,5 @@ public interface AluguelServico<T extends Aluguel> {
     public void excluir(T aluguel);
     public void editar(T aluguel) throws AluguelNaoEncontradoException;
     public T buscarPorPlaca(String placa) throws AluguelNaoEncontradoException,VeiculoNaoExistenteException;
-    public T buscarPorPessoa(String nomePessoa);
+    public T buscarPorPessoa(T identificador) throws AluguelNaoEncontradoException;
 }
