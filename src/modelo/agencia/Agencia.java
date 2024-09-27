@@ -15,6 +15,7 @@ public class Agencia {
         this.endereco = endereco;
     }
 
+
     private synchronized Long gerarIdUnico() {
         return ++contadorId;
     }

@@ -1,24 +1,22 @@
-
 import principal.principalAgencia.PrincipalAgencia;
-import principal.principalVeiculo.PrincipalVeiculo;
+import principal.principalAluguel.PrincipalAluguel;
+import principal.principalAluguel.PrincipalConsultaAluguel;
 import principal.principalPessoa.PrincipalPessoa;
+import principal.principalVeiculo.PrincipalVeiculo;
 import repositorio.agenciaRepositorio.AgenciaRepositorioImplementacao;
-import repositorio.veiculoRepositorio.VeiculoRepositorioImplementacao;
-
+import repositorio.aluguelRepositorio.AluguelRepositorioImplementacao;
 import repositorio.pessoaRepositorio.PessoaRepositorioImplementacao;
-
-
+import repositorio.veiculoRepositorio.VeiculoRepositorioImplementacao;
 import servico.agenciaServico.AgenciaServicoImplementacao;
+import servico.aluguelServico.AluguelServicoImplementacao;
 import servico.pessoaServico.PessoaServicoImplementacao;
-
 import servico.veiculoServico.VeiculoServicoImplementacao;
 import visual.MenuPrincipal;
 
 import java.util.Scanner;
 
 public class Main {
-
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         Scanner leitura = new Scanner(System.in);
         MenuPrincipal menuPrincipal = new MenuPrincipal();
         VeiculoRepositorioImplementacao veiculoRepositorio = new VeiculoRepositorioImplementacao();
@@ -33,48 +31,64 @@ public class Main {
         AgenciaServicoImplementacao agenciaServico = new AgenciaServicoImplementacao(agenciaRepositorio);
         PrincipalAgencia principalAgencia = new PrincipalAgencia(agenciaServico);
 
+        AluguelRepositorioImplementacao aluguelRepositorio = new AluguelRepositorioImplementacao();
+        AluguelServicoImplementacao aluguelServico = new AluguelServicoImplementacao(aluguelRepositorio);
+        PrincipalAluguel principalAluguel = new PrincipalAluguel(aluguelServico, veiculoServico, pessoaServico);
+        PrincipalConsultaAluguel principalConsultaAluguel = new PrincipalConsultaAluguel(aluguelServico, veiculoServico);
+
         int opcao = 0;
-        do {
-            menuPrincipal.menuPrincipal(); 
-            
-            boolean opcaoInvalida = true; 
+        try {
+            do {
+                menuPrincipal.menuPrincipal();
 
-            while (opcaoInvalida) {
-                System.out.print("Escolha uma opção: ");
-                if (leitura.hasNextInt()) { 
-                    opcao = leitura.nextInt();
-                    leitura.nextLine();  
+                boolean opcaoInvalida = true;
 
-                    switch (opcao) {
-                        case 1:
-                            principalVeiculo.exibirMenu();  
-                            opcaoInvalida = false;
-                            break;
-                        case 2:
-                            principalPessoa.exibirMenuPessoa();  
-                            opcaoInvalida = false;  
-                            break;
-                        case 3:
-                            principalAgencia.exibirMenuAgencia();  
-                            opcaoInvalida = false; 
-                            break;
-                        case 0:
-                            System.out.println("👋 Saindo... Até a próxima!"); 
-                            opcaoInvalida = false; 
-                            break;
-                        default:
-                            System.out.println("❌ Opção inválida. Tente novamente."); 
-                            break;
+                while (opcaoInvalida) {
+                    System.out.print("Escolha uma opção: ");
+                    if (leitura.hasNextInt()) {
+                        opcao = leitura.nextInt();
+                        leitura.nextLine();
+
+                        switch (opcao) {
+                            case 1:
+                                principalVeiculo.exibirMenu();
+                                opcaoInvalida = false;
+                                break;
+                            case 2:
+                                principalPessoa.exibirMenuPessoa();
+                                opcaoInvalida = false;
+                                break;
+                            case 3:
+                                principalAgencia.exibirMenuAgencia();
+                                opcaoInvalida = false;
+                                break;
+                            case 4:
+                                principalAluguel.exibirMenuAluguel();
+                                opcaoInvalida = false;
+                                break;
+                            case 5:
+                                principalConsultaAluguel.exibirMenuConsultaAluguel();
+                                opcaoInvalida = false;
+                                break;
+                            case 0:
+                                System.out.println("👋 Saindo... Até a próxima!");
+                                opcaoInvalida = false;
+                                break;
+                            default:
+                                System.out.println("❌ Opção inválida. Tente novamente.");
+                                break;
+                        }
+                    } else {
+                        System.out.println("❌ Entrada inválida. Digite um número.");
+                        leitura.nextLine();
                     }
-                } else {
-                    System.out.println("❌ Entrada inválida. Digite um número.");
-                    leitura.nextLine(); 
                 }
-            }
 
-        } while (opcao != 0);
-
-        leitura.close(); 
-
+            } while (opcao != 0);
+        } catch (Exception e) {
+            System.err.println("Ocorreu um erro: " + e.getMessage());
+        } finally {
+            leitura.close();
+        }
     }
 }
