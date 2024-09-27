@@ -54,47 +54,52 @@ public class PrincipalVeiculo {
     }
 
     private void cadastrarVeiculo() {
-        System.out.println("\n==== Escolha o tipo de veículo ====");
-        System.out.println("1. Caminhão");
-        System.out.println("2. Carro");
-        System.out.println("3. Moto");
-        System.out.print("Opção: ");
-        int tipoVeiculo = Integer.parseInt(Leitor.ler(leitura, "Opção: "));
-
-        Veiculo veiculo = null;
-
-        String placa = Leitor.ler(leitura, "Informe a placa do veículo: ");
-        Optional<Veiculo> veiculoExistente = veiculoServico.buscarVeiculoPorPlaca(placa);
-        if (veiculoExistente.isPresent()) {
-            Leitor.erro("❌ Erro: A placa " + placa + " já está cadastrada.");
-            return;
-        }
-
-        String marca = Leitor.ler(leitura, "Informe a marca do veículo: ");
-        String modelo = Leitor.ler(leitura, "Informe o modelo do veículo: ");
-        boolean disponivel = Boolean.parseBoolean(Leitor.ler(leitura, "O veículo está disponível? (true/false): "));
-        BigDecimal valorDiaria = new BigDecimal(Leitor.ler(leitura, "Informe o valor da diária (em R$): "));
-
-        switch (tipoVeiculo) {
-            case 1:
-                String capacidadeCarga = Leitor.ler(leitura, "Informe a capacidade de carga (em toneladas): ");
-                veiculo = new Caminhao(placa, modelo, marca, disponivel, valorDiaria, capacidadeCarga);
-                break;
-            case 2:
-                int numeroPortas = Integer.parseInt(Leitor.ler(leitura, "Informe o número de portas: "));
-                String tipoCombustivel = Leitor.ler(leitura, "Informe o tipo de combustível: ");
-                veiculo = new Carro(placa, modelo, marca, disponivel, numeroPortas, valorDiaria, tipoCombustivel);
-                break;
-            case 3:
-                String cilindrada = Leitor.ler(leitura, "Informe a cilindrada da moto: ");
-                veiculo = new Moto(placa, modelo, marca, disponivel, valorDiaria, cilindrada);
-                break;
-            default:
-                Leitor.erro("❌ Tipo de veículo inválido.");
-                return;
-        }
         try {
-            veiculoServico.cadastrarVeiculo(veiculo);
+            System.out.println("╔═══════════════════════════════════════╗");
+            System.out.println("║       ESCOLHA O TIPO DE VEÍCULO       ║");
+            System.out.println("╠═══════════════════════════════════════╣");
+            System.out.println("║   1. 🚛 Caminhão                      ║");
+            System.out.println("║   2. 🚗 Carro                         ║");
+            System.out.println("║   3. 🏍️ Moto                          ║");
+            System.out.println("╚═══════════════════════════════════════╝");
+            System.out.print("Opção: ");
+
+            int tipoVeiculo = Integer.parseInt(Leitor.ler(leitura, "Opção: "));
+
+            Veiculo veiculo = null;
+
+            String placa = Leitor.ler(leitura, "Informe a placa do veículo: ");
+            Optional<Veiculo> veiculoExistente = veiculoServico.buscarVeiculoPorPlaca(placa);
+            if (veiculoExistente.isPresent()) {
+                Leitor.erro("❌ Erro: A placa " + placa + " já está cadastrada.");
+                return;
+            }
+
+            String marca = Leitor.ler(leitura, "Informe a marca do veículo: ");
+            String modelo = Leitor.ler(leitura, "Informe o modelo do veículo: ");
+            boolean disponivel = Boolean.parseBoolean(Leitor.ler(leitura, "O veículo está disponível? (true/false): "));
+            BigDecimal valorDiaria = new BigDecimal(Leitor.ler(leitura, "Informe o valor da diária (em R$): "));
+
+            switch (tipoVeiculo) {
+                case 1:
+                    String capacidadeCarga = Leitor.ler(leitura, "Informe a capacidade de carga (em toneladas): ");
+                    veiculo = new Caminhao(placa, modelo, marca, disponivel, valorDiaria, capacidadeCarga);
+                    break;
+                case 2:
+                    int numeroPortas = Integer.parseInt(Leitor.ler(leitura, "Informe o número de portas: "));
+                    String tipoCombustivel = Leitor.ler(leitura, "Informe o tipo de combustível: ");
+                    veiculo = new Carro(placa, modelo, marca, disponivel, numeroPortas, valorDiaria, tipoCombustivel);
+                    break;
+                case 3:
+                    String cilindrada = Leitor.ler(leitura, "Informe a cilindrada da moto: ");
+                    veiculo = new Moto(placa, modelo, marca, disponivel, valorDiaria, cilindrada);
+                    break;
+                default:
+                    Leitor.erro("❌ Tipo de veículo inválido.");
+                    return; // Volta ao menu de veículos
+            }
+
+            veiculoServico.cadastrarVeiculo(veiculo); // Cadastro do veículo
             Leitor.escrever("✅ Veículo cadastrado com sucesso!");
         } catch (InputMismatchException e) {
             System.out.println("❌ Erro: Tipo de dado incorreto. Tente novamente.");
@@ -105,8 +110,11 @@ public class PrincipalVeiculo {
             System.out.println("❌ Erro: " + e.getMessage());
         } finally {
             Leitor.aguardarContinuacao(leitura);
+            //menuVeiculos.exibirMenuVeiculos();
         }
     }
+
+
 
     private void alterarVeiculo() {
         String placa = Leitor.ler(leitura, "Informe a placa do veículo que deseja alterar: ");
