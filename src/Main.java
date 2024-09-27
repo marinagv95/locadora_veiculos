@@ -63,7 +63,7 @@ public class Main {
                         }
                     } else {
                         System.out.println("❌ Entrada inválida. Digite um número.");
-                        leitura.nextLine(); // Limpa a entrada inválida
+                        leitura.nextLine();
                     }
                 }
 
@@ -71,7 +71,7 @@ public class Main {
         } catch (Exception e) {
             System.err.println("Ocorreu um erro: " + e.getMessage());
         } finally {
-            leitura.close(); // Certifique-se de fechar o Scanner
+            leitura.close();
         }
     }
 }

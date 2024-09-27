@@ -14,7 +14,7 @@ public class MenuPrincipal {
             System.out.println(ANSI_YELLOW + "═══════════════════════════════════════════════" + ANSI_RESET);
             System.out.println(ANSI_WHITE + "             1️⃣  Gerenciar Veículos" + ANSI_RESET);
             System.out.println(ANSI_YELLOW + "═══════════════════════════════════════════════" + ANSI_RESET);
-            System.out.println(ANSI_WHITE + "             2️⃣  Gerenciar Pessoas" + ANSI_RESET);
+            System.out.println(ANSI_WHITE + "             2️⃣  Gerenciar Clientes" + ANSI_RESET);
             System.out.println(ANSI_YELLOW + "═══════════════════════════════════════════════" + ANSI_RESET);
             System.out.println(ANSI_WHITE + "             3️⃣  Gerenciar Agências" + ANSI_RESET);
             System.out.println(ANSI_YELLOW + "═══════════════════════════════════════════════" + ANSI_RESET);

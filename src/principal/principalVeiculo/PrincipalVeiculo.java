@@ -96,21 +96,20 @@ public class PrincipalVeiculo {
                     break;
                 default:
                     Leitor.erro("❌ Tipo de veículo inválido.");
-                    return; // Volta ao menu de veículos
+                    return;
             }
 
-            veiculoServico.cadastrarVeiculo(veiculo); // Cadastro do veículo
+            veiculoServico.cadastrarVeiculo(veiculo);
             Leitor.escrever("✅ Veículo cadastrado com sucesso!");
         } catch (InputMismatchException e) {
-            System.out.println("❌ Erro: Tipo de dado incorreto. Tente novamente.");
+            Leitor.erro("❌ Erro: Tipo de dado incorreto. Tente novamente.");
             leitura.nextLine();
         } catch (PlacaDuplicadaException e) {
-            System.out.println("❌ Erro: " + e.getMessage());
+            Leitor.erro("❌ Erro: " + e.getMessage());
         } catch (IllegalArgumentException e) {
-            System.out.println("❌ Erro: " + e.getMessage());
+            Leitor.erro("❌ Erro: " + e.getMessage());
         } finally {
             Leitor.aguardarContinuacao(leitura);
-            //menuVeiculos.exibirMenuVeiculos();
         }
     }
 

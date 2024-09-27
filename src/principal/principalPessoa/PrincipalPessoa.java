@@ -3,6 +3,8 @@ package principal.principalPessoa;
 import exception.pessoaException.CNPJInvalidoException;
 import exception.pessoaException.CPFInvalidoException;
 import exception.pessoaException.EmailInvalidoException;
+import exception.pessoaException.PessoaNaoEncontradaException;
+import modelo.endereco.Endereco;
 import modelo.pessoa.Pessoa;
 import modelo.pessoa.PessoaFisica;
 import modelo.pessoa.PessoaJuridica;
@@ -10,6 +12,7 @@ import servico.pessoaServico.PessoaServico;
 import util.leitura.Leitor;
 import visual.MenuPessoa;
 
+import java.util.Optional;
 import java.util.Scanner;
 
 public class PrincipalPessoa {
@@ -54,44 +57,61 @@ public class PrincipalPessoa {
     }
 
 
-    private void cadastrarPessoa() throws CPFInvalidoException, CNPJInvalidoException, EmailInvalidoException {
-        try {
-            Leitor.escrever("\n==== Escolha o tipo de Pessoa ====");
-            Leitor.escrever("1. Pessoa Física");
-            Leitor.escrever("2. Pessoa Jurídica");
-            int tipoPessoa = Integer.parseInt(Leitor.ler(leitura, "Opção: "));
+    private void cadastrarPessoa() {
+            try {
+                Leitor.escrever("\n╔══════════════════════════════════╗");
+                Leitor.escrever("║     ESCOLHA O TIPO DE CLIENTE    ║");
+                Leitor.escrever("╠══════════════════════════════════╣");
+                Leitor.escrever("║  1. 👤 Pessoa Física             ║");
+                Leitor.escrever("║  2. 🏢 Pessoa Jurídica           ║");
+                Leitor.escrever("╚══════════════════════════════════╝");
+                int tipoPessoa = Integer.parseInt(Leitor.ler(leitura, "Opção: "));
 
-            Pessoa pessoa = null;
+                Pessoa pessoa = null;
 
-            String nome = Leitor.ler(leitura, "Informe o nome da pessoa: ");
-            String telefone = Leitor.ler(leitura, "Informe o telefone: ");
-            String email = Leitor.ler(leitura, "Informe o email: ");
+                String nome = Leitor.ler(leitura, "Informe o nome da pessoa: ");
+                String telefone = Leitor.ler(leitura, "Informe o telefone: ");
+                String email = Leitor.ler(leitura, "Informe o email: ");
 
-            if (tipoPessoa == 1) {
-                String cpf = Leitor.ler(leitura, "Informe o CPF: ");
-                pessoa = new PessoaFisica(nome, telefone, email, null, cpf);
-            } else if (tipoPessoa == 2) {
-                String cnpj = Leitor.ler(leitura, "Informe o CNPJ: ");
-                pessoa = new PessoaJuridica(nome, telefone, email, null, cnpj);
-            } else {
-                Leitor.erro("❌ Tipo de pessoa inválido.");
-                return;
+                String logradouro = Leitor.ler(leitura, "Informe o logradouro do endereço: ");
+                String numero = Leitor.ler(leitura, "Informe o número do endereço: ");
+                String cep = Leitor.ler(leitura, "Informe o CEP do endereço: ");
+                String bairro = Leitor.ler(leitura, "Informe o bairro do endereço: ");
+                String cidade = Leitor.ler(leitura, "Informe a cidade do endereço: ");
+                String estado = Leitor.ler(leitura, "Informe o estado do endereço: ");
+                Endereco endereco = new Endereco(logradouro, numero, cep, bairro, cidade, estado);
+
+                switch (tipoPessoa) {
+                    case 1:
+                        String cpf = Leitor.ler(leitura, "Informe o CPF: ");
+                        pessoa = new PessoaFisica(nome, telefone, email, endereco, cpf);
+                        break;
+                    case 2:
+                        String cnpj = Leitor.ler(leitura, "Informe o CNPJ: ");
+                        pessoa = new PessoaJuridica(nome, telefone, email, endereco, cnpj);
+                        break;
+                    default:
+                        Leitor.erro("❌ Tipo de pessoa inválido.");
+                        return;
+                }
+
+                pessoaServico.adicionar(pessoa);
+                Leitor.escrever("✅ Pessoa cadastrada com sucesso!");
+
+            } catch (CPFInvalidoException | CNPJInvalidoException | EmailInvalidoException e) {
+                Leitor.erro("❌ Erro ao cadastrar pessoa: " + e.getMessage());
+            } catch (NumberFormatException e) {
+                Leitor.erro("❌ Erro: Entrada inválida. Por favor, digite um número.");
+            } catch (Exception e) {
+                Leitor.erro("❌ Erro inesperado: " + e.getMessage());
+            } finally {
+                Leitor.aguardarContinuacao(leitura);
             }
-            pessoaServico.adicionar(pessoa);
-            Leitor.escrever("✅ Pessoa cadastrada com sucesso!");
-
-        } catch (CPFInvalidoException | CNPJInvalidoException | EmailInvalidoException e) {
-            Leitor.erro("❌ Erro ao cadastrar pessoa: " + e.getMessage());
-        } catch (NumberFormatException e) {
-            Leitor.erro("❌ Erro: Entrada inválida. Por favor, digite um número.");
-        } catch (Exception e) {
-            Leitor.erro("❌ Erro inesperado: " + e.getMessage());
-        } finally {
-            Leitor.aguardarContinuacao(leitura);
         }
-    }
 
-    private void alterarPessoa() {
+
+
+   private void alterarPessoa() {
         String identificador = Leitor.ler(leitura, "Informe o CPF ou CNPJ da pessoa que deseja alterar: ");
 
         try {
@@ -124,8 +144,8 @@ public class PrincipalPessoa {
     }
 
     private void buscarPessoaPorIdentificador() {
-        String identificador = Leitor.ler(leitura, "Informe o CPF ou CNPJ da pessoa que deseja buscar: ");
-
+        String identificador = Leitor.ler(leitura, "Informe o CPF ou CNPJ da pessoa que deseja buscar: ").trim();
+        System.out.println("Buscando pessoa com identificador: " + identificador);
         try {
             Pessoa pessoa = pessoaServico.buscarPorIdenficador(identificador);
 
@@ -137,13 +157,14 @@ public class PrincipalPessoa {
             }
         } catch (Exception e) {
             Leitor.erro("❌ Erro ao buscar pessoa: " + e.getMessage());
+        }finally {
+            Leitor.aguardarContinuacao(leitura);
         }
-        Leitor.aguardarContinuacao(leitura);
     }
-
 
     private void removerPessoa() {
         String identificador = Leitor.ler(leitura, "Informe o CPF ou CNPJ da pessoa que deseja remover: ");
+        System.out.println("Buscando pessoa com identificador: " + identificador);
         try {
             Pessoa pessoa = pessoaServico.buscarPorIdenficador(identificador);
 
@@ -163,8 +184,8 @@ public class PrincipalPessoa {
             }
         } catch (Exception e) {
             Leitor.erro("❌ Erro ao remover pessoa: " + e.getMessage());
+        }finally {
+            Leitor.aguardarContinuacao(leitura);
         }
-        Leitor.aguardarContinuacao(leitura);
     }
-
 }
