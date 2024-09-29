@@ -8,8 +8,12 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Aluguel {
+    private static Set<String> protocolosExistentes = new HashSet<>();
+    private String protocolo;
     private Veiculo veiculo;
     private Pessoa pessoa;
     private Agencia agenciaRetirada;
@@ -24,28 +28,43 @@ public class Aluguel {
         this.agenciaRetirada = agenciaRetirada;
         this.dataInicio = dataInicio;
         this.horaInicio = horaInicio;
+        this.diasAlugados = 0;
+        this.protocolo = gerarProtocolo();
     }
 
+    public String getProtocolo() {return protocolo;}
     public Veiculo getVeiculo() { return veiculo; }
     public Pessoa getPessoa() { return pessoa;}
     public Agencia getAgenciaRetirada() { return agenciaRetirada; }
     public LocalDate getDataInicio() { return dataInicio; }
     public LocalTime getHoraInicio() { return horaInicio; }
     public int getDiasAlugados() {return diasAlugados;}
+    public void setDiasAlugados(int diasAlugados) {
+        this.diasAlugados = diasAlugados;
+    }
 
+    public BigDecimal calcularCustoAluguel(BigDecimal precoPorDia) {
+        return precoPorDia.multiply(BigDecimal.valueOf(diasAlugados));
+    }
 
-    public void registrarDevolucao(LocalDate dataDevolucao) {
-        this.diasAlugados = (int) ChronoUnit.DAYS.between(this.dataInicio, dataDevolucao);
-        // Aqui você pode calcular o valor total, se necessário
+    private String gerarProtocolo() {
+        String novoProtocolo;
+        do {
+            novoProtocolo = "PROTOCOLO-" + System.currentTimeMillis();
+        } while (protocolosExistentes.contains(novoProtocolo));
+        protocolosExistentes.add(novoProtocolo);
+        return novoProtocolo;
     }
 
     @Override
     public String toString() {
         return "===== Dados do Aluguel =====\n" +
+                "Protocolo: " + protocolo + "\n" +
                 "Cliente: " + pessoa.getNomePessoa() + "\n" +
                 "Veículo: " + veiculo.getModelo() + "\n" +
                 "Data de Retirada: " + dataInicio + " às " + horaInicio + "\n" +
                 "Agência de Retirada: " + agenciaRetirada.getNomeAgencia() + "\n" +
+                "Dias Alugados: " + diasAlugados + "\n" +
                 "=================================";
     }
 }

@@ -13,20 +13,15 @@ import java.time.temporal.ChronoUnit;
 
 public class DevolucaoAluguel {
     private Aluguel aluguel;
-    private Veiculo veiculo; //tirar
     private Agencia agenciaDevolucao;
     private LocalDate dataFim;
     private LocalTime horaFim;
-    private int quantidadeDias;//deixar dinamico
-    private BigDecimal valorFinal; //dinamico  e criar valor da multa
 
     public DevolucaoAluguel(Aluguel aluguel, Agencia agenciaDevolucao, LocalDate dataFim, LocalTime horaFim) {
         this.aluguel = aluguel;
         this.agenciaDevolucao = agenciaDevolucao;
         this.dataFim = dataFim;
         this.horaFim = horaFim;
-        this.quantidadeDias = calcularQuantidadeDias();
-        this.valorFinal = calcularTotalAluguel();
     }
 
     private int calcularQuantidadeDias() {
@@ -34,6 +29,7 @@ public class DevolucaoAluguel {
     }
 
     public BigDecimal calcularTotalAluguel() {
+        int quantidadeDias = calcularQuantidadeDias();
         BigDecimal total = aluguel.getVeiculo().getValorDiaria().multiply(BigDecimal.valueOf(quantidadeDias));
 
         Pessoa cliente = aluguel.getPessoa();
@@ -45,69 +41,39 @@ public class DevolucaoAluguel {
         return total;
     }
 
-    public Aluguel getAluguel() {
-        return aluguel;
+    public BigDecimal calcularMulta() {
+        int quantidadeDias = calcularQuantidadeDias();
+        BigDecimal multaPorDia = BigDecimal.valueOf(50.00);
+        return quantidadeDias > 0 ? multaPorDia.multiply(BigDecimal.valueOf(quantidadeDias)) : BigDecimal.ZERO;
     }
 
-    public void setAluguel(Aluguel aluguel) {
-        this.aluguel = aluguel;
-    }
 
-    public Veiculo getVeiculo() {
-        return veiculo;
-    }
+    public Aluguel getAluguel() {return aluguel;}
 
-    public void setVeiculo(Veiculo veiculo) {
-        this.veiculo = veiculo;
-    }
+    public Agencia getAgenciaDevolucao() {return agenciaDevolucao;}
+    public void setAgenciaDevolucao(Agencia agenciaDevolucao) {this.agenciaDevolucao = agenciaDevolucao;}
 
-    public Agencia getAgenciaDevolucao() {
-        return agenciaDevolucao;
-    }
+    public LocalDate getDataFim() {return dataFim;}
+    public void setDataFim(LocalDate dataFim) {this.dataFim = dataFim;}
 
-    public void setAgenciaDevolucao(Agencia agenciaDevolucao) {
-        this.agenciaDevolucao = agenciaDevolucao;
-    }
+    public LocalTime getHoraFim() {return horaFim;}
+    public void setHoraFim(LocalTime horaFim) {this.horaFim = horaFim;}
 
-    public LocalDate getDataFim() {
-        return dataFim;
-    }
-
-    public void setDataFim(LocalDate dataFim) {
-        this.dataFim = dataFim;
-    }
-
-    public LocalTime getHoraFim() {
-        return horaFim;
-    }
-
-    public void setHoraFim(LocalTime horaFim) {
-        this.horaFim = horaFim;
-    }
-
-    public int getQuantidadeDias() {
-        return quantidadeDias;
-    }
-
-    public void setQuantidadeDias(int quantidadeDias) {
-        this.quantidadeDias = quantidadeDias;
-    }
-
-    public BigDecimal getValorFinal() {
-        return valorFinal;
-    }
-
-    public void setValorFinal(BigDecimal valorFinal) {
-        this.valorFinal = valorFinal;
-    }
 
     public String gerarComprovante() {
-        return "===== Comprovante de Aluguel =====\n" +
+        BigDecimal valorTotal = calcularTotalAluguel();
+        BigDecimal multa = calcularMulta();
+        BigDecimal valorFinal = valorTotal.add(multa);
+
+        return "===== Comprovante de Devolução =====\n" +
+                "Protocolo: " + aluguel.getProtocolo() + "\n" +
                 "Cliente: " + aluguel.getPessoa().getNomePessoa() + "\n" +
                 "Veículo: " + aluguel.getVeiculo().getModelo() + "\n" +
                 "Data de Retirada: " + aluguel.getDataInicio() + " às " + aluguel.getHoraInicio() + "\n" +
                 "Data de Devolução: " + dataFim + " às " + horaFim + "\n" +
-                "Valor Total: R$ " + valorFinal + "\n" +
+                "Valor Total: R$ " + valorTotal + "\n" +
+                "Multa: R$ " + multa + "\n" +
+                "Valor Final: R$ " + valorFinal + "\n" +
                 "Agência de Retirada: " + aluguel.getAgenciaRetirada().getNomeAgencia() + "\n" +
                 "Agência de Devolução: " + agenciaDevolucao.getNomeAgencia() + "\n" +
                 "=================================";

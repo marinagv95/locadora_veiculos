@@ -23,21 +23,4 @@ public class MenuAluguel {
 
         System.out.println(menu);
     }
-
-    public static void exibirMenuConsultarAluguel() {
-        String menu =
-                ANSI_YELLOW + "\n╔════════════════════════════════════════╗" + ANSI_RESET + "\n" +
-                        ANSI_YELLOW + "║" + ANSI_RESET + ANSI_CYAN + "  MENU DE CONSULTA ALUGUEIS             " + ANSI_RESET + ANSI_YELLOW + "║" + ANSI_RESET + "\n" +
-                        ANSI_YELLOW + "╠════════════════════════════════════════╣" + ANSI_RESET + "\n" +
-                        ANSI_YELLOW + "║" + ANSI_RESET + ANSI_WHITE + "  1. ➕ Buscar Alugueis por Veículo     " + ANSI_RESET + ANSI_YELLOW +"║" + ANSI_RESET + "\n" +
-                        ANSI_YELLOW + "║" + ANSI_RESET + ANSI_WHITE + "  2. ✏️ Buscar Alugueis por Pessoa      " + ANSI_RESET + ANSI_YELLOW +"║" + ANSI_RESET + "\n" +
-                        ANSI_YELLOW + "║" + ANSI_RESET + ANSI_WHITE + "  3. 🔍 Listar Todos os Alugueis        " + ANSI_RESET + ANSI_YELLOW +"║" + ANSI_RESET + "\n" +
-                        ANSI_YELLOW + "║" + ANSI_RESET + ANSI_WHITE + "  4. ✏️ Gerar Comprovantes              " + ANSI_RESET + ANSI_YELLOW +"║" + ANSI_RESET + "\n" +
-                        ANSI_YELLOW + "╠════════════════════════════════════════╣" + ANSI_RESET + "\n" +
-                        ANSI_YELLOW + "║" + ANSI_RESET + ANSI_GREEN + "  5. 🔙 Menu Principal                  " + ANSI_RESET + ANSI_YELLOW +"║" + ANSI_RESET + "\n" +
-                        ANSI_YELLOW + "╚════════════════════════════════════════╝" + ANSI_RESET + "\n";
-
-        System.out.println(menu);
-    }
-
 }
