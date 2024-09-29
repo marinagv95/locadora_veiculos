@@ -44,7 +44,7 @@ public class PrincipalAluguel {
         this.leitura = new Scanner(System.in);
     }
 
-    public void exibirMenuAluguel() {
+    public void exibirMenuAluguel() throws Exception {
         int opcao = 0;
         while (opcao != 5) {
             menuAluguel.exibirMenuAluguel();
@@ -181,6 +181,8 @@ public class PrincipalAluguel {
 
         int opcaoAgencia = 0;
         while (opcaoAgencia < 1 || opcaoAgencia > agencias.size()) {
+            System.out.println();
+            System.out.println("A locadora de retirada é obrigada ser diferente da devolução");
             System.out.print("Selecione o número da locadora para retirada: ");
             opcaoAgencia = leitura.nextInt();
             leitura.nextLine();
@@ -249,66 +251,61 @@ public class PrincipalAluguel {
         return agenciaSelecionada;
     }
 
+    private void gerarComprovanteAluguel(Aluguel aluguel) {
+        System.out.println(aluguel.toString());
+    }
+
 
     // ====== Realizar revolucao ======
-    private void realizarDevolucao() {
+    private void realizarDevolucao() throws Exception {
         try {
-            Aluguel aluguel = buscarAluguelParaDevolucao();
-            if (aluguel != null) {
-                Agencia agenciaSelecionada = escolherAgenciaDevolucao(aluguel.getAgenciaRetirada());
-                if (agenciaSelecionada != null) {
-                    LocalDate dataDevolucao = LocalDate.now();
-                    DevolucaoAluguel devolucao = new DevolucaoAluguel(aluguel, agenciaSelecionada, dataDevolucao);
+            String cpfCnpj = Leitor.ler(leitura, "Informe o CPF ou CNPJ do cliente: ").trim();
+            Pessoa cliente = pessoaServico.buscarPorIdenficador(cpfCnpj);
 
+            if (cliente != null) {
+                List<Aluguel> alugueis  = aluguelServico.buscarAlugueisPorPessoa(cliente);
+                if (alugueis != null && !alugueis.isEmpty()) {
+                    String entradaDataEntrega = Leitor.ler(leitura, "Informe a data da devolução do veículo (DD/MM/YYYY): ").trim();
+                    LocalDate dataEntrega = ValidarData.validarData(entradaDataEntrega);
+
+                    Aluguel aluguel = alugueis.get(0);
+                    Agencia agenciaSelecionada = agenciaServico.buscarPorCNPJ(devolucaoAluguel.getAgenciaDevolucao().getCnpj());
+
+                    DevolucaoAluguel devolucao = new DevolucaoAluguel(aluguel, agenciaSelecionada, dataEntrega);
                     BigDecimal multa = devolucao.calcularMulta();
-                    String comprovante = devolucao.gerarComprovante();
+                    BigDecimal valorAluguel = aluguel.calcularTotalAluguel();
+                    gerarComprovanteDevolucao(devolucao);
 
-                    Leitor.escrever(comprovante);
                     if (multa.compareTo(BigDecimal.ZERO) > 0) {
                         Leitor.escrever("🔴 A devolução está fora do prazo. Multa: R$ " + multa);
                     } else {
                         Leitor.escrever("✅ A devolução foi realizada dentro do prazo!");
                     }
+                } else {
+                    Leitor.erro("❌ Não há aluguel encontrado para o CPF ou CNPJ informado.");
                 }
+            } else {
+                Leitor.erro("❌ Cliente não encontrado com o identificador: " + cpfCnpj);
             }
         } catch (Exception e) {
+            e.printStackTrace();
             Leitor.erro("❌ Ocorreu um erro ao realizar a devolução: " + e.getMessage());
         }
     }
 
-
-    private Aluguel buscarAluguelParaDevolucao() {
-        String entrada = Leitor.ler(leitura, "Informe o protocolo do aluguel ou CPF/CNPJ do cliente para devolução: ").trim();
-        Aluguel aluguel = null;
+    private void gerarComprovanteDevolucao(DevolucaoAluguel devolucao) {
+        if (devolucao == null) {
+            System.out.println("Erro: A devolução deve ser válida.");
+            return;
+        }
 
         try {
-            aluguel = aluguelServico.buscarAluguelPorIdentificador(entrada);
-            if (aluguel != null) {
-                Leitor.escrever("Aluguel encontrado: " + aluguel);
-                return aluguel;
-            }
-            Leitor.erro("❌ Aluguel não encontrado com o protocolo ou CPF: " + entrada);
+            System.out.println("Gerando comprovante de devolução...");
+            String comprovante = devolucao.gerarComprovante();
+            System.out.println(comprovante);
         } catch (Exception e) {
-            Leitor.erro("❌ Erro ao buscar aluguel: " + e.getMessage());
-        } finally {
-            Leitor.aguardarContinuacao(leitura);
+            System.out.println("Erro ao gerar comprovante: " + e.getMessage());
         }
-        return null;
-    }
-
-
-
-    private void gerarComprovanteAluguel(Aluguel aluguel) {
-        System.out.println(aluguel.toString());
-    }
-
-    private void gerarComprovanteDevolucao(Aluguel aluguel, Agencia agenciaSelecionada, LocalDate dataDevolucao) {
-        if (devolucaoAluguel == null) {
-            devolucaoAluguel = new DevolucaoAluguel(aluguel, agenciaSelecionada, dataDevolucao);
-        }
-
-        System.out.println("Gerando comprovante de devolução...");
-        System.out.println(devolucaoAluguel.gerarComprovante());
     }
 
 

@@ -2,6 +2,8 @@ package modelo.aluguel;
 
 import modelo.agencia.Agencia;
 import modelo.pessoa.Pessoa;
+import modelo.pessoa.PessoaFisica;
+import modelo.pessoa.PessoaJuridica;
 import modelo.veiculo.Veiculo;
 
 import java.math.BigDecimal;
@@ -59,15 +61,30 @@ public class Aluguel {
         return novoProtocolo;
     }
 
+    public BigDecimal calcularTotalAluguel() {
+        if (this == null) {
+            throw new IllegalArgumentException("O aluguel não pode ser nulo.");
+        }
+
+        BigDecimal total = veiculo.getValorDiaria().multiply(BigDecimal.valueOf(diasAlugados));
+
+        if (pessoa instanceof PessoaFisica && diasAlugados > 5) {
+            total = total.multiply(BigDecimal.valueOf(0.95)); // 5% de desconto
+        } else if (pessoa instanceof PessoaJuridica && diasAlugados > 3) {
+            total = total.multiply(BigDecimal.valueOf(0.90)); // 10% de desconto
+        }
+
+        return total;
+    }
+
     @Override
     public String toString() {
         BigDecimal custoTotal = calcularCustoAluguel();
 
-        // Criação da borda superior
         StringBuilder sb = new StringBuilder();
-        sb.append("╔════════════════════════════════════════════╗\n");
-        sb.append("            Comprovante de Aluguel         ║\n");
-        sb.append("╠════════════════════════════════════════════╣\n");
+        sb.append("╔════════════════════════════════════════════════════════════════╗\n");
+        sb.append("                      Comprovante de Aluguel                     ║\n");
+        sb.append("╠════════════════════════════════════════════════════════════════╣\n");
         sb.append(" Protocolo: " + protocolo + "\n");
         sb.append(" Cliente: " + pessoa.getNomePessoa() + "\n");
         sb.append(" Veículo: " + veiculo.getModelo() + "\n");
@@ -77,7 +94,7 @@ public class Aluguel {
         sb.append(" Custo Total: R$ " + custoTotal + "\n");
         sb.append(" Data de Devolução: " + calcularDataDevolucao() + "\n");
         sb.append(" ⚠️ O valor pode ser modificado caso haja atraso na devolução!  \n");
-        sb.append("╚════════════════════════════════════════════╝");
+        sb.append("╚════════════════════════════════════════════════════════════════╝");
 
         return sb.toString();
     }

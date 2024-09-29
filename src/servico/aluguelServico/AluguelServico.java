@@ -2,8 +2,6 @@ package servico.aluguelServico;
 
 import exception.aluguelException.AluguelNaoEncontradoException;
 import exception.pessoaException.PessoaNaoEncontradaException;
-import exception.veiculoException.VeiculoNaoExistenteException;
-import modelo.agencia.Agencia;
 import modelo.aluguel.Aluguel;
 
 import modelo.aluguel.DevolucaoAluguel;
@@ -19,6 +17,5 @@ public interface AluguelServico<T extends Aluguel> {
    public List<T> listarAlugueis();
    public void devolverVeiculo(T aluguel, DevolucaoAluguel devolucao) throws Exception;
    public List<Veiculo> listarVeiculosDisponiveis();
-   public List<DevolucaoAluguel> buscarAlugueisPorPessoa(Pessoa pessoa);
-
+   public List<Aluguel> buscarAlugueisPorPessoa(Pessoa pessoa);
 }

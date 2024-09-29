@@ -74,13 +74,13 @@ public class PessoaServicoImplementacao<T extends Pessoa> implements PessoaServi
         return pessoaRepositorio.alterarPessoa(pessoa);
     }
 
-    @Override
-    public boolean possuiAluguelAtivo(Pessoa pessoa) {
-        List<DevolucaoAluguel> aluguels = aluguelServico.buscarAlugueisPorPessoa(pessoa);
-        LocalDate dataAtual = LocalDate.now();
-
-        return aluguels.stream().anyMatch(aluguel ->
-                aluguel.getDataFim() == null ||
-                        aluguel.getDataFim().isAfter(dataAtual));
-    }
+//    @Override
+//    public boolean possuiAluguelAtivo(Pessoa pessoa) {
+//        List<DevolucaoAluguel> aluguels = aluguelServico.buscarAlugueisPorPessoa(pessoa);
+//        LocalDate dataAtual = LocalDate.now();
+//
+//        return aluguels.stream().anyMatch(aluguel ->
+//                aluguel.getDataFim() == null ||
+//                        aluguel.getDataFim().isAfter(dataAtual));
+//    }
 }

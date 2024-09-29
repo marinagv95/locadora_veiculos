@@ -82,7 +82,7 @@ public class PessoaRepositorioImplementacao extends PessoaRepositorio<Pessoa> {
         Optional<Pessoa> optionalPessoa = buscarPorIdentificador(identificador);
         if (optionalPessoa.isPresent()) {
             bancoDados.remove(optionalPessoa.get());
-            System.out.println("Pessoa removida: " + optionalPessoa.get()); // Log da pessoa removida
+            System.out.println("Pessoa removida: " + optionalPessoa.get());
             return optionalPessoa.get();
         } else {
             throw new PessoaNaoEncontradaException("Pessoa não encontrada.");

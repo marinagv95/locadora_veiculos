@@ -75,17 +75,14 @@ public class AluguelServicoImplementacao <T extends Aluguel> implements AluguelS
     }
 
     @Override
-    public List<DevolucaoAluguel> buscarAlugueisPorPessoa(Pessoa pessoa) {
-        List<DevolucaoAluguel> alugueisPorPessoa = new ArrayList<>();
+    public List<Aluguel> buscarAlugueisPorPessoa(Pessoa pessoa) {
+        List<Aluguel> alugueisPorPessoa = new ArrayList<>();
 
-        for (DevolucaoAluguel aluguel : todosAlugueis) {
-            if (aluguel.getPessoa().equals(pessoa)) {
-                alugueisPorPessoa.add(aluguel);
+        for (DevolucaoAluguel devolucao : todosAlugueis) {
+            if (devolucao.getPessoa().equals(pessoa)) {
+                alugueisPorPessoa.add(devolucao.getAluguel());
             }
         }
-
         return alugueisPorPessoa;
     }
-
-
 }
