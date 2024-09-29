@@ -13,12 +13,12 @@ import java.time.temporal.ChronoUnit;
 
 public class DevolucaoAluguel {
     private Aluguel aluguel;
-    private Veiculo veiculo;
+    private Veiculo veiculo; //tirar
     private Agencia agenciaDevolucao;
     private LocalDate dataFim;
     private LocalTime horaFim;
-    private int quantidadeDias;
-    private BigDecimal valorFinal;
+    private int quantidadeDias;//deixar dinamico
+    private BigDecimal valorFinal; //dinamico  e criar valor da multa
 
     public DevolucaoAluguel(Aluguel aluguel, Agencia agenciaDevolucao, LocalDate dataFim, LocalTime horaFim) {
         this.aluguel = aluguel;

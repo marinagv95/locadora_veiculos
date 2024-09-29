@@ -40,7 +40,6 @@ public class Main {
         try {
             do {
                 menuPrincipal.menuPrincipal();
-
                 boolean opcaoInvalida = true;
 
                 while (opcaoInvalida) {

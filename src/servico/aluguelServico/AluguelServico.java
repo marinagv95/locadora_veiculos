@@ -5,7 +5,6 @@ import exception.veiculoException.VeiculoNaoExistenteException;
 import modelo.aluguel.Aluguel;
 
 import modelo.aluguel.DevolucaoAluguel;
-import modelo.pessoa.Pessoa;
 import modelo.veiculo.Veiculo;
 
 import java.util.List;
