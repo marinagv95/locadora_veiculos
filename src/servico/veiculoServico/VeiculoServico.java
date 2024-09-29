@@ -13,6 +13,7 @@ public interface VeiculoServico <T extends Veiculo> {
     public void removerVeiculo(String placao) throws VeiculoNaoExistenteException;
 
     public Optional<T> buscarVeiculoPorPlaca(String Placa);
-    List<T> listarVeiculos();
-    List<Veiculo> estaDisponivel();
+    public List<T> listarVeiculos();
+    public List<Veiculo> estaDisponivel();
+    public void marcarComoIndisponivel(String placa) throws VeiculoNaoExistenteException;
 }

@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
@@ -32,10 +33,8 @@ public class PrincipalAluguel {
     private DevolucaoAluguel devolucaoAluguel;
     private final Scanner leitura;
 
-    public PrincipalAluguel(AluguelServico aluguelServico,
-                            PessoaServico pessoaServico,
-                            AgenciaServico agenciaServico,
-                            VeiculoServico veiculoServico) {
+    public PrincipalAluguel(AluguelServico aluguelServico, PessoaServico pessoaServico,
+                            AgenciaServico agenciaServico, VeiculoServico veiculoServico) {
         this.aluguelServico = aluguelServico;
         this.pessoaServico = pessoaServico;
         this.agenciaServico = agenciaServico;
@@ -60,7 +59,7 @@ public class PrincipalAluguel {
                 case 2:
                     realizarDevolucao();
                     break;
-                case 3:
+                case 5:
                     System.out.println("🔙 Voltando ao menu principal...");
                     break;
                 default:
@@ -73,17 +72,27 @@ public class PrincipalAluguel {
         try {
             Pessoa pessoa = buscarClienteParaAlugar();
             if (pessoa != null) {
-                List<Veiculo> veiculosDisponiveis = listarVeiculosDisponiveisParaAlugar();
-                if (!veiculosDisponiveis.isEmpty()) {
-                    Veiculo veiculoSelecionado = selecionarVeiculoParaAlugar(veiculosDisponiveis);
+                Veiculo veiculoSelecionado = selecionarVeiculoParaAlugar();
+                if (veiculoSelecionado != null) {
                     Agencia agenciaSelecionada = escolherAgenciaParaRetirada();
-                    informarDadosDeRetirada(pessoa, veiculoSelecionado, agenciaSelecionada);
+                    if (agenciaSelecionada != null) {
+                        Agencia agenciaDevolucao = escolherAgenciaDevolucao(agenciaSelecionada);
+                        if (agenciaDevolucao != null) {
+                            informarDadosDeRetirada(pessoa, veiculoSelecionado, agenciaSelecionada);
+                            veiculoServico.marcarComoIndisponivel(veiculoSelecionado.getPlaca());
+                        } else {
+                            Leitor.erro("❌ Locadora de devolução não encontrada ou é a mesma da retirada!");
+                        }
+                    } else {
+                        Leitor.erro("❌ Locadora de retirada não encontrada!");
+                    }
                 }
             }
         } catch (Exception e) {
             Leitor.erro("❌ Ocorreu um erro ao efetuar o aluguel: " + e.getMessage());
         }
     }
+
 
     private Pessoa buscarClienteParaAlugar() {
         String identificador = Leitor.ler(leitura, "Informe o CPF ou CNPJ do cliente que deseja buscar: ").trim();
@@ -105,83 +114,88 @@ public class PrincipalAluguel {
     }
 
 
-    private List<Veiculo> listarVeiculosDisponiveisParaAlugar() {
+    private Veiculo selecionarVeiculoParaAlugar() {
         List<Veiculo> veiculosDisponiveis = veiculoServico.estaDisponivel();
-        if (veiculosDisponiveis.isEmpty()) {
-            Leitor.erro("❌ Não há veículos disponíveis para aluguel.");
-            return null;
-        }
-
-        System.out.println("Veículos disponíveis para aluguel:");
-        veiculosDisponiveis.forEach(veiculo ->
-                System.out.println(veiculo.getModelo() + " - " + veiculo.getPlaca())
-        );
-
-        String placa = Leitor.ler(leitura, "Informe a placa do veículo que deseja selecionar: ").trim();
-        System.out.println("Buscando veículo com placa: " + placa);
-
-        Optional<Veiculo> veiculoSelecionado = veiculoServico.buscarVeiculoPorPlaca(placa);
-
-        if (veiculoSelecionado.isEmpty()) {
-            Leitor.erro("❌ Veículo com a placa " + placa + " não encontrado.");
-            return null;
-        }
-
-        Veiculo veiculo = veiculoSelecionado.get();
-        if (!veiculosDisponiveis.contains(veiculo)) {
-            Leitor.erro("❌ O veículo " + veiculo.getModelo() + " - " + placa + " não está disponível para aluguel.");
-            return null;
-        }
-
-        return List.of(veiculo);
-    }
-
-    private Veiculo selecionarVeiculoParaAlugar(List<Veiculo> veiculosDisponiveis) {
-        System.out.println("Selecione um veículo para alugar:");
-        for (int i = 0; i < veiculosDisponiveis.size(); i++) {
-            Veiculo veiculo = veiculosDisponiveis.get(i);
-            System.out.println((i + 1) +
-                    ". Modelo: " + veiculo.getModelo() +
-                    " | Marca: " + veiculo.getMarca() +
-                    " | Valor Diária: R$ " + veiculo.getValorDiaria() +
-                    " | Placa: " + veiculo.getPlaca());
-        }
-
-        int opcaoVeiculo = 0;
-        while (opcaoVeiculo < 1 || opcaoVeiculo > veiculosDisponiveis.size()) {
-            System.out.println("Confirma esse veículo: ");
-            System.out.print("Se sim, confirme com a tecla (1): ");
-            opcaoVeiculo = leitura.nextInt();
-            leitura.nextLine();
-            if (opcaoVeiculo < 1 || opcaoVeiculo > veiculosDisponiveis.size()) {
-                Leitor.erro("❌ Opção inválida, por favor, selecione um número válido.");
+            if (veiculosDisponiveis.isEmpty()) {
+                Leitor.erro("❌ Não há veículos disponíveis para aluguel.");
+                return null;
             }
-        }
 
-        return veiculosDisponiveis.get(opcaoVeiculo - 1);
+            System.out.printf("%-5s %-20s %-20s %-15s %-10s %-10s%n", "Opção", "Modelo", "Marca", "Valor Diária", "Placa", "Disponível");
+            System.out.println("---------------------------------------------------------------------");
+
+            for (int i = 0; i < veiculosDisponiveis.size(); i++) {
+                Veiculo veiculo = veiculosDisponiveis.get(i);
+                String disponibilidade = veiculo.estaDisponivel() ? "Sim" : "Não";
+                System.out.printf("%-5d %-20s %-20s R$ %-12.2f %-10s %-10s%n",
+                        (i + 1),
+                        veiculo.getModelo(),
+                        veiculo.getMarca(),
+                        veiculo.getValorDiaria(),
+                        veiculo.getPlaca(),
+                        disponibilidade);
+            }
+
+            int opcaoVeiculo = 0;
+            while (opcaoVeiculo < 1 || opcaoVeiculo > veiculosDisponiveis.size()) {
+                System.out.print("Selecione o número do veículo que deseja alugar: ");
+                opcaoVeiculo = leitura.nextInt();
+                leitura.nextLine();
+
+                if (opcaoVeiculo < 1 || opcaoVeiculo > veiculosDisponiveis.size()) {
+                    Leitor.erro("❌ Opção inválida, por favor, selecione um número válido.");
+                }
+            }
+
+            Veiculo veiculoSelecionado = veiculosDisponiveis.get(opcaoVeiculo - 1);
+            System.out.printf("Você selecionou: %s - %s | Placa: %s. Deseja confirmar? (1 - Sim, 0 - Não): ",
+                    veiculoSelecionado.getModelo(),
+                    veiculoSelecionado.getMarca(),
+                    veiculoSelecionado.getPlaca());
+
+            int confirmacao = leitura.nextInt();
+            if (confirmacao != 1) {
+                Leitor.erro("❌ Aluguel cancelado.");
+                return null;
+            }
+
+            return veiculoSelecionado;
     }
+
 
 
     private Agencia escolherAgenciaParaRetirada() {
         List<Agencia> agencias = agenciaServico.buscarTodos();
-        System.out.println("Locadoras disponíveis para retirada:");
-        agencias.forEach(agencia -> System.out.println(agencia.getNomeAgencia()));
-
-        String nomeAgencia = Leitor.ler(leitura, "Informe o nome da locadora para retirada: ").trim();
-        Optional<Agencia> agenciaSelecionada = agencias.stream()
-                .filter(a -> a.getNomeAgencia().equalsIgnoreCase(nomeAgencia))
-                .findFirst();
-
-        if (agenciaSelecionada.isPresent()) {
-            return agenciaSelecionada.get();
-        } else {
-            Leitor.erro("❌ Locadora não encontrada!");
+        if (agencias.isEmpty()) {
+            Leitor.erro("❌ Não há locadoras disponíveis para retirada.");
             return null;
         }
+
+        System.out.println();
+        System.out.printf("%-5s %-30s%n", "Opção", "Nome da Locadora");
+        System.out.println("-------------------------------------------");
+        for (int i = 0; i < agencias.size(); i++) {
+            System.out.printf("%-5d %-30s%n", (i + 1), agencias.get(i).getNomeAgencia());
+        }
+        System.out.println();
+
+        int opcaoAgencia = 0;
+        while (opcaoAgencia < 1 || opcaoAgencia > agencias.size()) {
+            System.out.print("Selecione o número da locadora para retirada: ");
+            opcaoAgencia = leitura.nextInt();
+            leitura.nextLine();
+
+            if (opcaoAgencia < 1 || opcaoAgencia > agencias.size()) {
+                Leitor.erro("❌ Opção inválida, por favor, selecione um número válido.");
+            }
+        }
+        return agencias.get(opcaoAgencia - 1);
     }
+
 
     private void informarDadosDeRetirada(Pessoa pessoa, Veiculo veiculoSelecionado, Agencia agenciaSelecionada) {
         try {
+            System.out.println("🔔 Vamos registrar os dados de retirada do veículo.");
             String entradaData = Leitor.ler(leitura, "Informe a data de retirada (DD/MM/YYYY): ").trim();
             LocalDate dataInicio = ValidarData.validarData(entradaData);
             System.out.println("Data para retirada do Veículo: " + ValidarData.formatarData(dataInicio));
@@ -199,7 +213,6 @@ public class PrincipalAluguel {
                 Leitor.erro("❌ A quantidade de dias deve ser maior que 0 para permitir devolução.");
                 return;
             }
-
 
             LocalDate dataDevolucao = dataInicio.plusDays(diasAluguel);
             System.out.println("Data de devolução: " + dataDevolucao);
@@ -228,29 +241,16 @@ public class PrincipalAluguel {
     }
 
     private Agencia escolherAgenciaDevolucao(Agencia agenciaRetirada) {
-        List<Agencia> agencias = agenciaServico.buscarTodos();
-        System.out.println("Locadoras disponíveis para devolução:");
-        agencias.forEach(agencia -> System.out.println(agencia.getNomeAgencia()));
-
-        String nomeAgencia = Leitor.ler(leitura, "Informe o nome da locadora para devolução: ").trim();
-        Optional<Agencia> agenciaSelecionada = agencias.stream()
-                .filter(a -> a.getNomeAgencia().equalsIgnoreCase(nomeAgencia))
-                .findFirst();
-
-        if (agenciaSelecionada.isPresent()) {
-            Agencia agencia = agenciaSelecionada.get();
-            if (agencia.equals(agenciaRetirada)) {
-                Leitor.erro("❌ A agência de devolução não pode ser a mesma que a de retirada!");
-                return null;
-            }
-            return agencia;
-        } else {
-            Leitor.erro("❌ Locadora não encontrada!");
-            return null;
+        Agencia agenciaSelecionada = escolherAgenciaParaRetirada();
+        if (agenciaSelecionada != null && agenciaSelecionada.equals(agenciaRetirada)) {
+            Leitor.erro("❌ A locadora de devolução não pode ser a mesma da retirada!");
+            return escolherAgenciaDevolucao(agenciaRetirada);
         }
+        return agenciaSelecionada;
     }
 
-// ====== Realizar revolucao ======
+
+    // ====== Realizar revolucao ======
     private void realizarDevolucao() {
         try {
             Aluguel aluguel = buscarAluguelParaDevolucao();
@@ -258,14 +258,17 @@ public class PrincipalAluguel {
                 Agencia agenciaSelecionada = escolherAgenciaDevolucao(aluguel.getAgenciaRetirada());
                 if (agenciaSelecionada != null) {
                     LocalDate dataDevolucao = LocalDate.now();
-
                     DevolucaoAluguel devolucao = new DevolucaoAluguel(aluguel, agenciaSelecionada, dataDevolucao);
 
                     BigDecimal multa = devolucao.calcularMulta();
                     String comprovante = devolucao.gerarComprovante();
 
                     Leitor.escrever(comprovante);
-                    Leitor.escrever("✅ Devolução realizada com sucesso!");
+                    if (multa.compareTo(BigDecimal.ZERO) > 0) {
+                        Leitor.escrever("🔴 A devolução está fora do prazo. Multa: R$ " + multa);
+                    } else {
+                        Leitor.escrever("✅ A devolução foi realizada dentro do prazo!");
+                    }
                 }
             }
         } catch (Exception e) {
@@ -273,20 +276,15 @@ public class PrincipalAluguel {
         }
     }
 
+
     private Aluguel buscarAluguelParaDevolucao() {
-        String entrada = Leitor.ler(leitura, "Informe o protocolo do aluguel ou CPF do cliente para devolução: ").trim();
+        String entrada = Leitor.ler(leitura, "Informe o protocolo do aluguel ou CPF/CNPJ do cliente para devolução: ").trim();
         Aluguel aluguel = null;
 
         try {
             aluguel = aluguelServico.buscarAluguelPorIdentificador(entrada);
             if (aluguel != null) {
-                Leitor.escrever("Aluguel encontrado pelo protocolo: " + aluguel);
-                return aluguel;
-            }
-
-            aluguel = aluguelServico.buscarAluguelPorIdentificador(entrada);
-            if (aluguel != null) {
-                Leitor.escrever("Aluguel encontrado pelo CPF: " + aluguel);
+                Leitor.escrever("Aluguel encontrado: " + aluguel);
                 return aluguel;
             }
             Leitor.erro("❌ Aluguel não encontrado com o protocolo ou CPF: " + entrada);
@@ -295,7 +293,6 @@ public class PrincipalAluguel {
         } finally {
             Leitor.aguardarContinuacao(leitura);
         }
-
         return null;
     }
 
