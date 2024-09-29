@@ -50,7 +50,7 @@ public class VeiculoServicoImplementacao<T extends Veiculo> implements VeiculoSe
     }
 
     @Override
-    public boolean estaDisponivel(String placa) {
-        return veiculoRepositorio.estaDisponivel(placa);
+    public List<Veiculo> estaDisponivel() {
+        return veiculoRepositorio.estaDisponivel();
     }
 }

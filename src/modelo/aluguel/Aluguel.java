@@ -7,7 +7,6 @@ import modelo.veiculo.Veiculo;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -43,8 +42,12 @@ public class Aluguel {
         this.diasAlugados = diasAlugados;
     }
 
-    public BigDecimal calcularCustoAluguel(BigDecimal precoPorDia) {
-        return precoPorDia.multiply(BigDecimal.valueOf(diasAlugados));
+    public BigDecimal calcularCustoAluguel() {
+        return veiculo.getValorDiaria().multiply(BigDecimal.valueOf(diasAlugados));
+    }
+
+    public LocalDate calcularDataDevolucao() {
+        return dataInicio.plusDays(diasAlugados);
     }
 
     private String gerarProtocolo() {
@@ -58,13 +61,26 @@ public class Aluguel {
 
     @Override
     public String toString() {
-        return "===== Dados do Aluguel =====\n" +
-                "Protocolo: " + protocolo + "\n" +
-                "Cliente: " + pessoa.getNomePessoa() + "\n" +
-                "Veículo: " + veiculo.getModelo() + "\n" +
-                "Data de Retirada: " + dataInicio + " às " + horaInicio + "\n" +
-                "Agência de Retirada: " + agenciaRetirada.getNomeAgencia() + "\n" +
-                "Dias Alugados: " + diasAlugados + "\n" +
-                "=================================";
+        BigDecimal custoTotal = calcularCustoAluguel();
+
+        // Criação da borda superior
+        StringBuilder sb = new StringBuilder();
+        sb.append("╔════════════════════════════════════════════╗\n");
+        sb.append("            Comprovante de Aluguel         ║\n");
+        sb.append("╠════════════════════════════════════════════╣\n");
+        sb.append(" Protocolo: " + protocolo + "\n");
+        sb.append(" Cliente: " + pessoa.getNomePessoa() + "\n");
+        sb.append(" Veículo: " + veiculo.getModelo() + "\n");
+        sb.append(" Data de Retirada: " + dataInicio + " às " + horaInicio + "\n");
+        sb.append(" Agência de Retirada: " + agenciaRetirada.getNomeAgencia() + "\n");
+        sb.append(" Dias Alugados: " + diasAlugados + "\n");
+        sb.append(" Custo Total: R$ " + custoTotal + "\n");
+        sb.append(" Data de Devolução: " + calcularDataDevolucao() + "\n");
+        sb.append(" ⚠️ O valor pode ser modificado caso haja atraso na devolução!  \n");
+        sb.append("╚════════════════════════════════════════════╝");
+
+        return sb.toString();
     }
+
+
 }

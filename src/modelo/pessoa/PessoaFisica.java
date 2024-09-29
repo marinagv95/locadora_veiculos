@@ -23,7 +23,7 @@ public class PessoaFisica extends Pessoa {
 
     @Override
     public String toString() {
-        return "╔══════════════════════════════════════════════╗\n" +
+        return " ╔══════════════════════════════════════════════╗\n" +
                 "║            P E S S O A   F Í S I C A         ║\n" +
                 "╠══════════════════════════════════════════════╣\n" +
                 "  Nome:         " + nomePessoa + "\n" +

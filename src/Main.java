@@ -1,14 +1,19 @@
-import exception.pessoaException.CNPJInvalidoException;
-import exception.pessoaException.CPFInvalidoException;
-import exception.pessoaException.EmailInvalidoException;
+import modelo.agencia.Agencia;
+import modelo.aluguel.Aluguel;
+import modelo.aluguel.DevolucaoAluguel;
+import modelo.pessoa.Pessoa;
+import modelo.veiculo.Veiculo;
 import principal.principalAgencia.PrincipalAgencia;
 import principal.principalAluguel.PrincipalAluguel;
-import principal.principalAluguel.PrincipalConsultaAluguel;
 import principal.principalPessoa.PrincipalPessoa;
 import principal.principalVeiculo.PrincipalVeiculo;
+import repositorio.agenciaRepositorio.AgenciaRepositorio;
 import repositorio.agenciaRepositorio.AgenciaRepositorioImplementacao;
+import repositorio.aluguelRepositorio.AluguelRepositorio;
 import repositorio.aluguelRepositorio.AluguelRepositorioImplementacao;
+import repositorio.pessoaRepositorio.PessoaRepositorio;
 import repositorio.pessoaRepositorio.PessoaRepositorioImplementacao;
+import repositorio.veiculoRepositorio.VeiculoRepositorio;
 import repositorio.veiculoRepositorio.VeiculoRepositorioImplementacao;
 import servico.agenciaServico.AgenciaServicoImplementacao;
 import servico.aluguelServico.AluguelServicoImplementacao;
@@ -23,22 +28,23 @@ public class Main {
         Scanner leitura = new Scanner(System.in);
         MenuPrincipal menuPrincipal = new MenuPrincipal();
 
-        VeiculoRepositorioImplementacao veiculoRepositorio = new VeiculoRepositorioImplementacao();
+        VeiculoRepositorio<Veiculo> veiculoRepositorio = new VeiculoRepositorioImplementacao();
         VeiculoServicoImplementacao veiculoServico = new VeiculoServicoImplementacao(veiculoRepositorio);
         PrincipalVeiculo principalVeiculo = new PrincipalVeiculo(veiculoServico);
 
-        PessoaRepositorioImplementacao pessoaRepositorio = new PessoaRepositorioImplementacao();
+        PessoaRepositorio<Pessoa> pessoaRepositorio = new PessoaRepositorioImplementacao();
         PessoaServicoImplementacao pessoaServico = new PessoaServicoImplementacao(pessoaRepositorio);
         PrincipalPessoa principalPessoa = new PrincipalPessoa(pessoaServico);
 
-        AgenciaRepositorioImplementacao agenciaRepositorio = new AgenciaRepositorioImplementacao();
+        AgenciaRepositorio<Agencia> agenciaRepositorio = new AgenciaRepositorioImplementacao();
         AgenciaServicoImplementacao agenciaServico = new AgenciaServicoImplementacao(agenciaRepositorio);
         PrincipalAgencia principalAgencia = new PrincipalAgencia(agenciaServico);
 
-        AluguelRepositorioImplementacao aluguelRepositorio = new AluguelRepositorioImplementacao();
-        AluguelServicoImplementacao aluguelServico = new AluguelServicoImplementacao(aluguelRepositorio);
-        PrincipalAluguel principalAluguel = new PrincipalAluguel(aluguelServico, veiculoServico, pessoaServico);
-        PrincipalConsultaAluguel principalConsultaAluguel = new PrincipalConsultaAluguel(aluguelServico, veiculoServico);
+        DevolucaoAluguel devolucaoAluguel = new DevolucaoAluguel();
+        AluguelRepositorio<Aluguel> aluguelRepositorio = new AluguelRepositorioImplementacao();
+        AluguelServicoImplementacao aluguelServico = new AluguelServicoImplementacao(pessoaServico, veiculoServico, agenciaServico, aluguelRepositorio);
+        PrincipalAluguel principalAluguel = new PrincipalAluguel(aluguelServico, pessoaServico, agenciaServico, veiculoServico);
+
 
         int opcao = -1;
         try {

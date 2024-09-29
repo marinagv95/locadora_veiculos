@@ -41,7 +41,7 @@ public class Carro extends Veiculo {
                 "  Placa:                " + getPlaca() + "\n" +
                 "  Modelo:               " + getModelo() + "\n" +
                 "  Marca:                " + getMarca() + "\n" +
-                "  Disponível:           " + (getDisponivel() ? "Sim" : "Não") + "\n" +
+                "  Disponível:           " + (estaDisponivel() ? "Sim" : "Não") + "\n" +
                 "  Valor da Diária:      R$ " + String.format("%.2f", getValorDiaria()) + "\n" +
                 "  Número de Portas:     " + numeroPortas + "\n" +
                 "  Tipo de Combustível:  " + tipoCombustivel + "\n" +

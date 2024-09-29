@@ -24,7 +24,7 @@ public class PessoaJuridica extends Pessoa {
 
     @Override
     public String toString() {
-        return "╔══════════════════════════════════════════════╗\n" +
+        return " ╔══════════════════════════════════════════════╗\n" +
                 "║          P E S S O A   J U R Í D I C A       ║\n" +
                 "╠══════════════════════════════════════════════╣\n" +
                 "  Nome:         " + nomePessoa + "\n" +

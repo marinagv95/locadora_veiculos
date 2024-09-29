@@ -14,5 +14,5 @@ public interface VeiculoServico <T extends Veiculo> {
 
     public Optional<T> buscarVeiculoPorPlaca(String Placa);
     List<T> listarVeiculos();
-    boolean estaDisponivel(String placa);
+    List<Veiculo> estaDisponivel();
 }

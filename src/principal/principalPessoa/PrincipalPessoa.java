@@ -57,7 +57,7 @@ public class PrincipalPessoa {
     }
 
 
-    private void cadastrarPessoa() {
+    public void cadastrarPessoa() {
             try {
                 Leitor.escrever("\n╔══════════════════════════════════╗");
                 Leitor.escrever("║     ESCOLHA O TIPO DE CLIENTE    ║");

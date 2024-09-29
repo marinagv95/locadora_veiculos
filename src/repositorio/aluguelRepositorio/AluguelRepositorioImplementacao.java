@@ -1,127 +1,79 @@
 package repositorio.aluguelRepositorio;
 
+import exception.pessoaException.PessoaNaoEncontradaException;
 import modelo.agencia.Agencia;
 import modelo.aluguel.Aluguel;
 import modelo.pessoa.Pessoa;
-import modelo.pessoa.PessoaFisica;
-import modelo.pessoa.PessoaJuridica;
 import modelo.veiculo.Veiculo;
+import repositorio.agenciaRepositorio.AgenciaRepositorio;
+import repositorio.pessoaRepositorio.PessoaRepositorio;
+import repositorio.veiculoRepositorio.VeiculoRepositorio;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class AluguelRepositorioImplementacao <T extends Aluguel> extends AluguelRepositorio<T> {
 
     public List<T> bancoDados;
-    private List<Veiculo> veiculos;
-    private List<Pessoa> pessoas;
-    private List<Agencia> agencias;
+    private VeiculoRepositorio<Veiculo> veiculoRepositorio;
+    private PessoaRepositorio<Pessoa> pessoaRepositorio;
+    private AgenciaRepositorio<Agencia> agenciaRepositorio;
 
     public AluguelRepositorioImplementacao() {
         this.bancoDados = new ArrayList<>();
-        this.bancoDados = new ArrayList<>();
-        this.veiculos = new ArrayList<>();
-        this.pessoas = new ArrayList<>();
-        this.agencias = new ArrayList<>();
+        this.veiculoRepositorio = veiculoRepositorio;
+        this.pessoaRepositorio = pessoaRepositorio;
+        this.agenciaRepositorio = agenciaRepositorio;
     }
 
 
     @Override
-    public Pessoa buscarPessoa(String identificador) {
-        for (Pessoa pessoa : pessoas) {
-            if (pessoa instanceof PessoaFisica && ((PessoaFisica) pessoa).getCpf().equals(identificador)) {
-                return pessoa;
-            } else if (pessoa instanceof PessoaJuridica && ((PessoaJuridica) pessoa).getCnpj().equals(identificador)) {
-                return pessoa;
+    public List<T> alugueis() {
+        return new ArrayList<>(bancoDados);
+    }
+
+    @Override
+    public T salvarAluguel(Aluguel aluguel) throws Exception {
+        bancoDados.add((T) aluguel);
+        return (T) aluguel;
+    }
+
+    @Override
+    public void removerAluguel(T aluguel) throws Exception {
+        bancoDados.remove(aluguel);
+    }
+
+    @Override
+    public Optional<T> buscarPorIdentificador(String identificador) throws PessoaNaoEncontradaException {
+        Optional<Pessoa> pessoaOpt = pessoaRepositorio.buscarPorIdentificador(identificador);
+        if (pessoaOpt.isPresent()) {
+            return bancoDados.stream()
+                    .filter(aluguel -> aluguel.getPessoa().equals(pessoaOpt.get()))
+                    .findFirst();
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<Veiculo> buscarVeiculoDisponivel(String placa) {
+        Optional<Veiculo> veiculoOpt = veiculoRepositorio.buscarPorPlaca(placa);
+        if (veiculoOpt.isPresent()) {
+            Veiculo veiculo = veiculoOpt.get();
+            if (veiculo.estaDisponivel()) {
+                return veiculoOpt;
             }
         }
-        return null;
+        return Optional.empty();
     }
 
     @Override
-    public void adicionarVeiculo(Veiculo veiculo) {
-        veiculos.add(veiculo);
+    public Optional<Pessoa> buscarCliente(String identificador) throws PessoaNaoEncontradaException {
+        return pessoaRepositorio.buscarPorIdentificador(identificador);
     }
 
     @Override
-    public List<Veiculo> listarVeiculosDisponiveis() {
-        List<Veiculo> veiculosDisponiveis = new ArrayList<>();
-        for (Veiculo veiculo : veiculos) {
-            if (veiculo.getDisponivel()) {
-                veiculosDisponiveis.add(veiculo);
-            }
-        }
-        return veiculosDisponiveis;
-    }
-
-    @Override
-    public void buscarAgencia(Agencia agencia) {
-        if (!agencias.contains(agencia)) {
-            agencias.add(agencia);
-        }
-    }
-
-    @Override
-    public T adicionarAluguel(T aluguel) {
-        bancoDados.add(aluguel);
-        return aluguel;
-    }
-
-    @Override
-    public List<T> listarAlugueis() {
-        return bancoDados;
-    }
-
-    @Override
-    public void adicionarPessoa(Pessoa pessoa) {
-        pessoas.add(pessoa);
-    }
-
-    @Override
-    public void alterarAluguel(T aluguel) {
-        Pessoa pessoa = buscarPessoa(aluguel.getPessoa() instanceof PessoaFisica ?
-                ((PessoaFisica) aluguel.getPessoa()).getCpf() :
-                ((PessoaJuridica) aluguel.getPessoa()).getCnpj());
-
-        if (pessoa != null) {
-            for (int i = 0; i < bancoDados.size(); i++) {
-                T alug = bancoDados.get(i);
-                if (alug.getPessoa() instanceof PessoaFisica &&
-                        pessoa instanceof PessoaFisica &&
-                        ((PessoaFisica) alug.getPessoa()).getCpf().equals(((PessoaFisica) pessoa).getCpf())) {
-                    bancoDados.set(i, aluguel);
-                    break;
-                } else if (alug.getPessoa() instanceof PessoaJuridica &&
-                        pessoa instanceof PessoaJuridica &&
-                        ((PessoaJuridica) alug.getPessoa()).getCnpj().equals(((PessoaJuridica) pessoa).getCnpj())) {
-                    bancoDados.set(i, aluguel);
-                    break;
-                }
-            }
-        }
-    }
-
-    @Override
-    public void removerAluguel(T aluguel) {
-        Pessoa pessoa = buscarPessoa(aluguel.getPessoa() instanceof PessoaFisica ?
-                ((PessoaFisica) aluguel.getPessoa()).getCpf() :
-                ((PessoaJuridica) aluguel.getPessoa()).getCnpj());
-
-        if (pessoa != null) {
-            for (int i = 0; i < bancoDados.size(); i++) {
-                T alug = bancoDados.get(i);
-                if (alug.getPessoa() instanceof PessoaFisica &&
-                        pessoa instanceof PessoaFisica &&
-                        ((PessoaFisica) alug.getPessoa()).getCpf().equals(((PessoaFisica) pessoa).getCpf())) {
-                    bancoDados.remove(i);
-                    break;
-                } else if (alug.getPessoa() instanceof PessoaJuridica &&
-                        pessoa instanceof PessoaJuridica &&
-                        ((PessoaJuridica) alug.getPessoa()).getCnpj().equals(((PessoaJuridica) pessoa).getCnpj())) {
-                    bancoDados.remove(i);
-                    break;
-                }
-            }
-        }
+    public List<Agencia> buscarAgenciasDisponiveis() {
+        return agenciaRepositorio.listar();
     }
 }

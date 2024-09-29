@@ -134,7 +134,7 @@ public class PrincipalVeiculo {
         System.out.printf(" ║ Placa:          %s%n", veiculo.getPlaca());
         System.out.printf(" ║ Marca:          %s%n", veiculo.getMarca());
         System.out.printf(" ║ Modelo:         %s%n", veiculo.getModelo());
-        System.out.printf(" ║ Disponível:      %s%n", (veiculo.getDisponivel() ? "Sim" : "Não"));
+        System.out.printf(" ║ Disponível:      %s%n", (veiculo.estaDisponivel() ? "Sim" : "Não"));
         System.out.printf(" ║ Valor da diária: R$ %.2f%n", veiculo.getValorDiaria());
         System.out.println("╚═══════════════════════════════════════╝");
 

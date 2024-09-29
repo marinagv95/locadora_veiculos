@@ -1,6 +1,7 @@
 package modelo.veiculo;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public class Veiculo {
     protected String placa;
@@ -13,7 +14,7 @@ public class Veiculo {
         this.placa = placa;
         this.modelo = modelo;
         this.marca = marca;
-        this.disponivel = true;
+        this.disponivel = disponivel;
         this.valorDiaria = valorDiaria;
     }
 
@@ -40,8 +41,7 @@ public class Veiculo {
 
     public String getMarca() {return marca;}
     public void setMarca(String marca) {this.marca = marca;}
-
-    public Boolean getDisponivel() {return disponivel;}
+    
     public void setDisponivel(Boolean disponivel) {this.disponivel = disponivel;}
 
     public BigDecimal getValorDiaria() {return valorDiaria;}

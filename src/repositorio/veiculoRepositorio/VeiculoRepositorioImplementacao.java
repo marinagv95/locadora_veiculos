@@ -5,6 +5,7 @@ import exception.veiculoException.VeiculoNaoExistenteException;
 import modelo.veiculo.Veiculo;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,9 +36,8 @@ public class VeiculoRepositorioImplementacao<T extends Veiculo> extends VeiculoR
         Optional<T> optionalVeiculo = this.buscarPorPlaca(veiculo.getPlaca());
         if(optionalVeiculo.isPresent()) {
             T veiculoBD = optionalVeiculo.get();
-            // Atualizando os dados do veículo
             int index = this.bancoDados.indexOf(veiculoBD);
-            veiculoBD.setDisponivel(veiculo.getDisponivel());
+            veiculoBD.setDisponivel(veiculo.estaDisponivel());
             veiculoBD.setMarca(veiculo.getMarca());
             veiculoBD.setModelo(veiculo.getModelo());
 
@@ -66,12 +66,15 @@ public class VeiculoRepositorioImplementacao<T extends Veiculo> extends VeiculoR
     }
 
     @Override
-    public boolean estaDisponivel(String placa) {
+    public List<Veiculo> estaDisponivel() {
+        List<Veiculo> veiculosDisponiveis = new ArrayList<>();
+
         for (T veiculo : bancoDados) {
-            if (veiculo.getPlaca().equalsIgnoreCase(placa)) {
-                return veiculo.getDisponivel();
+            if (veiculo.estaDisponivel()) {
+                veiculosDisponiveis.add(veiculo);
             }
         }
-        return false;
+
+        return veiculosDisponiveis;
     }
 }
