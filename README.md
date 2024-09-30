@@ -8,7 +8,7 @@ O sistema visa facilitar a administração de locações, devoluções e consult
 
 ## Tecnologias Utilizadas
 
-- **Java**: Linguagem de programação utilizada para o desenvolvimento. (Versão 22)
+- **Java SDK 21**: Linguagem de programação utilizada para o desenvolvimento.
 - **IDE** "IntelliJ
 
 ## Funcionalidades
