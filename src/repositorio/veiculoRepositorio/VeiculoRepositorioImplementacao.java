@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class VeiculoRepositorioImplementacao<T extends Veiculo> extends VeiculoRepositorio<T> {
 
@@ -67,14 +68,8 @@ public class VeiculoRepositorioImplementacao<T extends Veiculo> extends VeiculoR
 
     @Override
     public List<Veiculo> estaDisponivel() {
-        List<Veiculo> veiculosDisponiveis = new ArrayList<>();
-
-        for (T veiculo : bancoDados) {
-            if (veiculo.estaDisponivel()) {
-                veiculosDisponiveis.add(veiculo);
-            }
-        }
-
-        return veiculosDisponiveis;
+        return this.bancoDados.stream()
+                .filter(Veiculo::estaDisponivel)
+                .collect(Collectors.toList());
     }
 }
