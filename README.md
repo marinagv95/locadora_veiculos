@@ -79,6 +79,23 @@ Para utilizar este projeto, clone o repositório e execute a aplicação em seu 
 ## Contribuições
 Contribuições são bem-vindas! Sinta-se à vontade para enviar um pull request ou abrir uma issue para discutir melhorias.
 
+## Alunos:
+
+<a href="https://github.com/allanaavila">
+    <img src="https://avatars.githubusercontent.com/allanaavila" alt="Allana Ávila" width="100" />
+</a>
+
+<a href="https://github.com/dev-luizotavio">
+    <img src="https://avatars.githubusercontent.com/dev-luizotavio" alt="Luiz Otávio Ferreira" width="100" />
+</a>
+
+<a href="https://github.com/toscanomatheus">
+    <img src="https://avatars.githubusercontent.com/toscanomatheus" alt="Matheus Toscano Vidal" width="100" />
+</a>
+
+<a href="https://github.com/marinagv95">
+    <img src="https://avatars.githubusercontent.com/marinagv95" alt="Marina Guimarães Vieira" width="100" />
+</a>
 
 
 
