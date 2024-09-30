@@ -10,13 +10,16 @@ public class PessoaFisica extends Pessoa {
 
     public PessoaFisica(String nomePessoa, String telefone, String email, Endereco endereco, String cpf) throws CPFInvalidoException, EmailInvalidoException {
         super(nomePessoa, telefone, email, endereco);
-        setCpf(cpf);
+        setCpf(cpf); // Valida e define o CPF
     }
 
-    public String getCpf() {return cpf;}
+    public String getCpf() {
+        return cpf;
+    }
+
     public void setCpf(String cpf) throws CPFInvalidoException {
         if (!ValidarCPF.validarCPF(cpf)) {
-            throw new CPFInvalidoException();
+            throw new CPFInvalidoException("CPF inválido.");
         }
         this.cpf = cpf;
     }

@@ -139,19 +139,19 @@ public class PrincipalAgencia {
 
     private void buscarAgenciaPorNomeOuLogradouro() {
         try {
-        String termoBusca = Leitor.ler(leitura, "Informe parte do nome ou endereço da locadora que deseja buscar: ").toLowerCase();
+            String termoBusca = Leitor.ler(leitura, "Informe parte do nome ou endereço da locadora que deseja buscar: ").toLowerCase();
 
-        List<Agencia> agenciasEncontradas = agenciaServico.buscarTodos().stream()
-                .filter(agencia -> agencia.getNomeAgencia().toLowerCase().contains(termoBusca) ||
-                        agencia.getEndereco().getLogradouro().toLowerCase().contains(termoBusca))
-                .toList();
+            List<Agencia> agenciasEncontradas = agenciaServico.buscarTodos().stream()
+                    .filter(agencia -> agencia.getNomeAgencia().toLowerCase().contains(termoBusca) ||
+                            agencia.getEndereco().getLogradouro().toLowerCase().contains(termoBusca))
+                    .toList();
 
-        if (agenciasEncontradas.isEmpty()) {
-            Leitor.erro("❌ Nenhuma locadora encontrada com o critério de busca.");
-        } else {
-            Leitor.escrever("✅ Locadora encontradas:");
-            agenciasEncontradas.forEach(agencia -> Leitor.escrever(agencia.toString()));
-        }
+            if (agenciasEncontradas.isEmpty()) {
+                Leitor.erro("❌ Nenhuma locadora encontrada com o critério de busca.");
+            } else {
+                Leitor.escrever("✅ Locadora encontradas:");
+                agenciasEncontradas.forEach(agencia -> Leitor.escrever(agencia.toString()));
+            }
         } catch (Exception e) {
             System.out.println("❌ Erro ao buscar locadoras: " + e.getMessage());
         } finally {
