@@ -79,7 +79,7 @@ Para utilizar este projeto, clone o repositório e execute a aplicação em seu 
 ## Contribuições
 Contribuições são bem-vindas! Sinta-se à vontade para enviar um pull request ou abrir uma issue para discutir melhorias.
 
-## Alunos:
+## Alunos
 
 <a href="https://github.com/allanaavila">
     <img src="https://avatars.githubusercontent.com/allanaavila" alt="Allana Ávila" width="100" />
