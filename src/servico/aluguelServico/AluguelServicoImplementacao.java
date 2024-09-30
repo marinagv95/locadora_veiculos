@@ -57,7 +57,6 @@ public class AluguelServicoImplementacao <T extends Aluguel> implements AluguelS
         }
 
         Veiculo veiculo = aluguel.getVeiculo();
-
         veiculo.setDisponivel(true);
         devolucao.getAgenciaDevolucao();
         aluguelRepositorio.salvarAluguel(aluguel);
@@ -76,13 +75,8 @@ public class AluguelServicoImplementacao <T extends Aluguel> implements AluguelS
 
     @Override
     public List<Aluguel> buscarAlugueisPorPessoa(Pessoa pessoa) {
-        List<Aluguel> alugueisPorPessoa = new ArrayList<>();
-
-        for (DevolucaoAluguel devolucao : todosAlugueis) {
-            if (devolucao.getPessoa().equals(pessoa)) {
-                alugueisPorPessoa.add(devolucao.getAluguel());
-            }
-        }
-        return alugueisPorPessoa;
+        return aluguelRepositorio.alugueis().stream()
+                .filter(aluguel -> aluguel.getPessoa().equals(pessoa))
+                .collect(Collectors.toList());
     }
 }

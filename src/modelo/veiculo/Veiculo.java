@@ -7,10 +7,10 @@ public class Veiculo {
     protected String placa;
     protected String modelo;
     protected String marca;
-    protected Boolean disponivel;
+    protected boolean disponivel;
     protected BigDecimal valorDiaria;
 
-    public Veiculo(String placa, String modelo, String marca, Boolean disponivel, BigDecimal valorDiaria) {
+    public Veiculo(String placa, String modelo, String marca, boolean disponivel, BigDecimal valorDiaria) {
         this.placa = placa;
         this.modelo = modelo;
         this.marca = marca;
@@ -42,7 +42,7 @@ public class Veiculo {
     public String getMarca() {return marca;}
     public void setMarca(String marca) {this.marca = marca;}
     
-    public void setDisponivel(Boolean disponivel) {this.disponivel = disponivel;}
+    public void setDisponivel(boolean disponivel) {this.disponivel = disponivel;}
 
     public BigDecimal getValorDiaria() {return valorDiaria;}
     public void setValorDiaria(BigDecimal valorDiaria) {this.valorDiaria = valorDiaria;}

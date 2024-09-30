@@ -4,9 +4,14 @@ import modelo.agencia.Agencia;
 import modelo.pessoa.Pessoa;
 import modelo.pessoa.PessoaFisica;
 import modelo.pessoa.PessoaJuridica;
+import modelo.veiculo.Caminhao;
+import modelo.veiculo.Carro;
+import modelo.veiculo.Moto;
 import modelo.veiculo.Veiculo;
+import util.aluguelUtil.ValidarData;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashSet;
@@ -80,24 +85,31 @@ public class Aluguel {
     @Override
     public String toString() {
         BigDecimal custoTotal = calcularCustoAluguel();
+        DecimalFormat df = new DecimalFormat("#,##0.00");
 
         StringBuilder sb = new StringBuilder();
         sb.append("╔════════════════════════════════════════════════════════════════╗\n");
         sb.append("                      Comprovante de Aluguel                     ║\n");
         sb.append("╠════════════════════════════════════════════════════════════════╣\n");
-        sb.append(" Protocolo: " + protocolo + "\n");
-        sb.append(" Cliente: " + pessoa.getNomePessoa() + "\n");
-        sb.append(" Veículo: " + veiculo.getModelo() + "\n");
-        sb.append(" Data de Retirada: " + dataInicio + " às " + horaInicio + "\n");
-        sb.append(" Agência de Retirada: " + agenciaRetirada.getNomeAgencia() + "\n");
-        sb.append(" Dias Alugados: " + diasAlugados + "\n");
-        sb.append(" Custo Total: R$ " + custoTotal + "\n");
-        sb.append(" Data de Devolução: " + calcularDataDevolucao() + "\n");
+        sb.append(" Protocolo: ").append(protocolo).append("\n");
+        sb.append(" Cliente: ").append(pessoa.getNomePessoa()).append(" (")
+                .append(pessoa instanceof PessoaFisica ? "Pessoa Física" : "Pessoa Jurídica").append(")\n");
+        sb.append(" Veículo: ").append(veiculo.getModelo()).append(" Marca: ").append(veiculo.getMarca()).append(" (")
+                .append(veiculo instanceof Carro ? "Carro" :
+                        veiculo instanceof Moto ? "Moto" :
+                                veiculo instanceof Caminhao ? "Caminhão" : "Outro Veículo").append(")\n");
+        sb.append(" Placa do Veículo: ").append(veiculo.getPlaca()).append("\n");
+        sb.append(" Data de Retirada: ").append(ValidarData.formatarData(dataInicio)).append(" às ").append(horaInicio).append("\n");
+        sb.append(" Agência de Retirada: ").append(agenciaRetirada.getNomeAgencia()).append("\n");
+        sb.append(" Dias Alugados: ").append(diasAlugados).append("\n");
+        sb.append(" Custo Total: R$ ").append(df.format(custoTotal)).append("\n");
+        sb.append(" Data de Devolução: ").append(calcularDataDevolucao()).append("\n");
         sb.append(" ⚠️ O valor pode ser modificado caso haja atraso na devolução!  \n");
         sb.append("╚════════════════════════════════════════════════════════════════╝");
 
         return sb.toString();
     }
+
 
 
 }

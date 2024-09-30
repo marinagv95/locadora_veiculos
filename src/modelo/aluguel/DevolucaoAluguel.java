@@ -4,9 +4,14 @@ import modelo.agencia.Agencia;
 import modelo.pessoa.Pessoa;
 import modelo.pessoa.PessoaFisica;
 import modelo.pessoa.PessoaJuridica;
+import modelo.veiculo.Caminhao;
+import modelo.veiculo.Carro;
+import modelo.veiculo.Moto;
 import modelo.veiculo.Veiculo;
+import util.aluguelUtil.ValidarData;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
@@ -70,22 +75,27 @@ public class DevolucaoAluguel {
         BigDecimal valorTotal = aluguel.calcularTotalAluguel();
         BigDecimal multa = calcularMulta();
         BigDecimal valorFinal = valorTotal.add(multa);
+        DecimalFormat df = new DecimalFormat("#,##0.00");
 
         StringBuilder comprovante = new StringBuilder();
-        comprovante.append(" ╔═════════════════════════════════════════════════════════════╗\n")
+        comprovante.append("╔═════════════════════════════════════════════════════════════╗\n")
                     .append("                    Comprovante de Devolução                  ║\n")
                     .append("╠═════════════════════════════════════════════════════════════╣\n")
-                    .append(" Protocolo: ").append(aluguel.getProtocolo()).append("\n")
-                    .append(" Cliente: ").append(aluguel.getPessoa().getNomePessoa()).append("\n")
-                    .append(" Tipo de Cliente: ").append(aluguel.getPessoa() instanceof PessoaFisica ? "Pessoa Física" : "Pessoa Jurídica").append("\n")
-                    .append(" Veículo: ").append(aluguel.getVeiculo().getModelo()).append("\n")
-                    .append(" Data de Retirada: ").append(aluguel.getDataInicio()).append(" às ").append(aluguel.getHoraInicio()).append("\n")
-                    .append(" Data de Devolução: ").append(dataFim).append("\n")
-                    .append(" Valor Total (com desconto): R$ ").append(valorTotal).append("\n")
-                    .append(" Multa por atraso: R$ ").append(multa).append("\n")
-                    .append(" Valor Final: R$ ").append(valorFinal).append("\n")
-                    .append(" Agência de Retirada: ").append(aluguel.getAgenciaRetirada().getNomeAgencia()).append("\n")
-                    .append(" Agência de Devolução: ").append(agenciaDevolucao.getNomeAgencia()).append("\n")
+                          .append(" Protocolo: ").append(aluguel.getProtocolo()).append("\n")
+                          .append(" Cliente: ").append(aluguel.getPessoa().getNomePessoa()).append("\n")
+                          .append(" Tipo de Cliente: ").append(aluguel.getPessoa() instanceof PessoaFisica ? "Pessoa Física" : "Pessoa Jurídica").append("\n")
+                          .append(" Veículo: ").append(aluguel.getVeiculo().getMarca()).append(" ").append(aluguel.getVeiculo().getModelo()).append(" (")
+                                .append(aluguel.getVeiculo() instanceof Carro ? "Carro" :
+                                aluguel.getVeiculo() instanceof Moto ? "Moto" :
+                                aluguel.getVeiculo() instanceof Caminhao ? "Caminhão" : "Outro Veículo").append(")\n")
+                          .append(" Placa do Veículo: ").append(aluguel.getVeiculo().getPlaca()).append("\n")
+                          .append(" Data de Retirada: ").append(ValidarData.formatarData(aluguel.getDataInicio())).append(" às ").append(aluguel.getHoraInicio()).append("\n")
+                          .append(" Data de Devolução: ").append(ValidarData.formatarData(dataFim)).append("\n")
+                          .append(" Valor Total (com desconto): R$ ").append(df.format(valorTotal)).append("\n")
+                          .append(" Multa por atraso: R$ ").append(df.format(multa)).append("\n")
+                          .append(" Valor Final: R$ ").append(df.format(valorFinal)).append("\n")
+                          .append(" Agência de Retirada: ").append(aluguel.getAgenciaRetirada().getNomeAgencia()).append("\n")
+                          .append(" Agência de Devolução: ").append(agenciaDevolucao.getNomeAgencia()).append("\n")
                     .append("╚═════════════════════════════════════════════════════════════╝");
 
         return comprovante.toString();
