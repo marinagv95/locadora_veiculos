@@ -14,11 +14,15 @@ O sistema visa facilitar a administração de locações, devoluções e consult
 ## Funcionalidades
 
 - **Cadastro de Veículos**: Adicione novos veículos ao sistema.
-- **Cadastro de Clientes**: Registre clientes que podem alugar veículos.
 - **Aluguel de Veículos**: Realize a locação de veículos para clientes.
 - **Devolução de Veículos**: Gerencie a devolução de veículos alugados.
 - **Listagem de Veículos**: Consulte todos os veículos disponíveis no sistema.
+- **Cadastro de Clientes**: Registre clientes que podem alugar veículos.
 - **Listagem de Clientes**: Consulte todos os clientes cadastrados.
+- **Cadastro de Locadoras**: Registre locadoras para realizar aluguéis de veículos.
+- **Listagem de Locadoras**: Consulte todas as locadoras cadastradas.
+- **Gerar comprovate de aluguel**: Gere um comprovante para a locação de veículos.
+- **Gerar comprovante de devolução**: Gere um comprovante para a devolução de veículos.
 
 ## Estrutura do Projeto
 
