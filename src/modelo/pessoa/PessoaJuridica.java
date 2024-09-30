@@ -10,14 +10,16 @@ public class PessoaJuridica extends Pessoa {
 
     public PessoaJuridica(String nomePessoa, String telefone, String email, Endereco endereco, String cnpj) throws CNPJInvalidoException, EmailInvalidoException {
         super(nomePessoa, telefone, email, endereco);
-        setCnpj(cnpj);
+        setCnpj(cnpj); // Valida e define o CNPJ
     }
 
+    public String getCnpj() {
+        return cnpj;
+    }
 
-    public String getCnpj() {return cnpj;}
     public void setCnpj(String cnpj) throws CNPJInvalidoException {
         if (!ValidarCNPJ.validarCNPJ(cnpj)) {
-            throw new CNPJInvalidoException();
+            throw new CNPJInvalidoException("CNPJ inválido.");
         }
         this.cnpj = cnpj;
     }

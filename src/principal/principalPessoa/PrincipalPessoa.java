@@ -58,60 +58,60 @@ public class PrincipalPessoa {
 
 
     public void cadastrarPessoa() {
-            try {
-                Leitor.escrever("\n╔══════════════════════════════════╗");
-                Leitor.escrever("║     ESCOLHA O TIPO DE CLIENTE    ║");
-                Leitor.escrever("╠══════════════════════════════════╣");
-                Leitor.escrever("║  1. 👤 Pessoa Física             ║");
-                Leitor.escrever("║  2. 🏢 Pessoa Jurídica           ║");
-                Leitor.escrever("╚══════════════════════════════════╝");
-                int tipoPessoa = Integer.parseInt(Leitor.ler(leitura, "Opção: "));
+        try {
+            Leitor.escrever("\n╔══════════════════════════════════╗");
+            Leitor.escrever("║     ESCOLHA O TIPO DE CLIENTE    ║");
+            Leitor.escrever("╠══════════════════════════════════╣");
+            Leitor.escrever("║  1. 👤 Pessoa Física             ║");
+            Leitor.escrever("║  2. 🏢 Pessoa Jurídica           ║");
+            Leitor.escrever("╚══════════════════════════════════╝");
+            int tipoPessoa = Integer.parseInt(Leitor.ler(leitura, "Opção: "));
 
-                Pessoa pessoa = null;
+            Pessoa pessoa = null;
 
-                String nome = Leitor.ler(leitura, "Informe o nome da pessoa: ");
-                String telefone = Leitor.ler(leitura, "Informe o telefone: ");
-                String email = Leitor.ler(leitura, "Informe o email: ");
+            String nome = Leitor.ler(leitura, "Informe o nome da pessoa: ");
+            String telefone = Leitor.ler(leitura, "Informe o telefone: ");
+            String email = Leitor.ler(leitura, "Informe o email: ");
 
-                String logradouro = Leitor.ler(leitura, "Informe o logradouro do endereço: ");
-                String numero = Leitor.ler(leitura, "Informe o número do endereço: ");
-                String cep = Leitor.ler(leitura, "Informe o CEP do endereço: ");
-                String bairro = Leitor.ler(leitura, "Informe o bairro do endereço: ");
-                String cidade = Leitor.ler(leitura, "Informe a cidade do endereço: ");
-                String estado = Leitor.ler(leitura, "Informe o estado do endereço: ");
-                Endereco endereco = new Endereco(logradouro, numero, cep, bairro, cidade, estado);
+            String logradouro = Leitor.ler(leitura, "Informe o logradouro do endereço: ");
+            String numero = Leitor.ler(leitura, "Informe o número do endereço: ");
+            String cep = Leitor.ler(leitura, "Informe o CEP do endereço: ");
+            String bairro = Leitor.ler(leitura, "Informe o bairro do endereço: ");
+            String cidade = Leitor.ler(leitura, "Informe a cidade do endereço: ");
+            String estado = Leitor.ler(leitura, "Informe o estado do endereço: ");
+            Endereco endereco = new Endereco(logradouro, numero, cep, bairro, cidade, estado);
 
-                switch (tipoPessoa) {
-                    case 1:
-                        String cpf = Leitor.ler(leitura, "Informe o CPF: ");
-                        pessoa = new PessoaFisica(nome, telefone, email, endereco, cpf);
-                        break;
-                    case 2:
-                        String cnpj = Leitor.ler(leitura, "Informe o CNPJ: ");
-                        pessoa = new PessoaJuridica(nome, telefone, email, endereco, cnpj);
-                        break;
-                    default:
-                        Leitor.erro("❌ Tipo de pessoa inválido.");
-                        return;
-                }
-
-                pessoaServico.adicionar(pessoa);
-                Leitor.escrever("✅ Pessoa cadastrada com sucesso!");
-
-            } catch (CPFInvalidoException | CNPJInvalidoException | EmailInvalidoException e) {
-                Leitor.erro("❌ Erro ao cadastrar pessoa: " + e.getMessage());
-            } catch (NumberFormatException e) {
-                Leitor.erro("❌ Erro: Entrada inválida. Por favor, digite um número.");
-            } catch (Exception e) {
-                Leitor.erro("❌ Erro inesperado: " + e.getMessage());
-            } finally {
-                Leitor.aguardarContinuacao(leitura);
+            switch (tipoPessoa) {
+                case 1:
+                    String cpf = Leitor.ler(leitura, "Informe o CPF: ");
+                    pessoa = new PessoaFisica(nome, telefone, email, endereco, cpf);
+                    break;
+                case 2:
+                    String cnpj = Leitor.ler(leitura, "Informe o CNPJ: ");
+                    pessoa = new PessoaJuridica(nome, telefone, email, endereco, cnpj);
+                    break;
+                default:
+                    Leitor.erro("❌ Tipo de pessoa inválido.");
+                    return;
             }
+
+            pessoaServico.adicionar(pessoa);
+            Leitor.escrever("✅ Pessoa cadastrada com sucesso!");
+
+        } catch (CPFInvalidoException | CNPJInvalidoException | EmailInvalidoException e) {
+            Leitor.erro("❌ Erro ao cadastrar pessoa: " + e.getMessage());
+        } catch (NumberFormatException e) {
+            Leitor.erro("❌ Erro: Entrada inválida. Por favor, digite um número.");
+        } catch (Exception e) {
+            Leitor.erro("❌ Erro inesperado: " + e.getMessage());
+        } finally {
+            Leitor.aguardarContinuacao(leitura);
         }
+    }
 
 
 
-   private void alterarPessoa() {
+    private void alterarPessoa() {
         String identificador = Leitor.ler(leitura, "Informe o CPF ou CNPJ da pessoa que deseja alterar: ");
 
         try {
