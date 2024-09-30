@@ -1,7 +1,7 @@
 package servico.aluguelServico;
 
 import exception.aluguelException.AluguelNaoEncontradoException;
-import exception.veiculoException.VeiculoNaoExistenteException;
+import exception.pessoaException.PessoaNaoEncontradaException;
 import modelo.aluguel.Aluguel;
 
 import modelo.aluguel.DevolucaoAluguel;
@@ -12,11 +12,10 @@ import java.util.List;
 
 
 public interface AluguelServico<T extends Aluguel> {
-    public void alugarVeiculo(T aluguel) throws VeiculoNaoExistenteException;
-    public void retiradaVeiculo(T aluguel) throws AluguelNaoEncontradoException;
-    public void devolverVeiculo(DevolucaoAluguel devolucaoAluguel) throws AluguelNaoEncontradoException;
-    public T buscarAluguelPorVeiculo(Veiculo veiculo) throws AluguelNaoEncontradoException;
-    List<Aluguel> buscarAluguelPorPessoa(String identificador);
-    public void alterarAluguel(T aluguel) throws AluguelNaoEncontradoException;
-    public void removerAluguel(T aluguel) throws AluguelNaoEncontradoException;
+   public void cadastrarAluguel(T aluguel) throws Exception;
+   public T buscarAluguelPorIdentificador(String identificador) throws AluguelNaoEncontradoException, PessoaNaoEncontradaException;
+   public List<T> listarAlugueis();
+   public void devolverVeiculo(T aluguel, DevolucaoAluguel devolucao) throws Exception;
+   public List<Veiculo> listarVeiculosDisponiveis();
+   public List<Aluguel> buscarAlugueisPorPessoa(Pessoa pessoa);
 }

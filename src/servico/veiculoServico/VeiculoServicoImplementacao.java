@@ -50,7 +50,18 @@ public class VeiculoServicoImplementacao<T extends Veiculo> implements VeiculoSe
     }
 
     @Override
-    public boolean estaDisponivel(String placa) {
-        return veiculoRepositorio.estaDisponivel(placa);
+    public List<Veiculo> estaDisponivel() {
+        return veiculoRepositorio.estaDisponivel();
+    }
+
+    @Override
+    public void marcarComoIndisponivel(String placa) throws VeiculoNaoExistenteException {
+        Optional<T> veiculoOptional = buscarVeiculoPorPlaca(placa);
+        if (veiculoOptional.isPresent()) {
+            T veiculo = veiculoOptional.get();
+            veiculo.setDisponivel(false);
+        } else {
+            throw new VeiculoNaoExistenteException("Veículo com a placa " + placa + " não encontrado.");
+        }
     }
 }

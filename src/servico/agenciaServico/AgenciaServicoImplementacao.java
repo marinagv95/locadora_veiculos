@@ -28,20 +28,20 @@ public class AgenciaServicoImplementacao implements AgenciaServico<Agencia> {
     @Override
     public Agencia atualizar(Agencia agencia) {
         Optional<Agencia> agenciaExistente = agenciaRepositorio.listar().stream()
-                .filter(a -> a.getIdAgencia().equals(agencia.getIdAgencia()))
+                .filter(a -> a.getCnpj().equals(agencia.getCnpj()))
                 .findFirst();
 
         if (agenciaExistente.isPresent()) {
             return agenciaRepositorio.atualizar(agencia);
         } else {
-            throw new IllegalArgumentException("Agência não encontrada para atualização.");
+            throw new IllegalArgumentException("Locadora não encontrada para atualização.");
         }
     }
 
     @Override
     public void remover(Agencia agencia) {
         Optional<Agencia> agenciaExistente = agenciaRepositorio.listar().stream()
-                .filter(a -> a.getIdAgencia().equals(agencia.getIdAgencia()))
+                .filter(a -> a.getCnpj().equals(agencia.getCnpj()))
                 .findFirst();
 
         if (agenciaExistente.isPresent()) {
@@ -52,12 +52,10 @@ public class AgenciaServicoImplementacao implements AgenciaServico<Agencia> {
     }
 
     @Override
-    public Agencia buscarPorId(Long id) {
-        return agenciaRepositorio.listar().stream()
-                .filter(a -> a.getIdAgencia().equals(id))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Agência não encontrada."));
+    public Agencia buscarPorCNPJ(String cnpj) {
+        return agenciaRepositorio.buscarPorCNPJ(cnpj);
     }
+
 
     @Override
     public List<Agencia> buscarTodos() {

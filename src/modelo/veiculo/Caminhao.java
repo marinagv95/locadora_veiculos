@@ -23,7 +23,7 @@ public class Caminhao extends Veiculo{
                 "  Placa:                " + getPlaca() + "\n" +
                 "  Modelo:               " + getModelo() + "\n" +
                 "  Marca:                " + getMarca() + "\n" +
-                "  Disponível:           " + (getDisponivel() ? "Sim" : "Não") + "\n" +
+                "  Disponível:           " + (estaDisponivel() ? "Sim" : "Não") + "\n" +
                 "  Valor da Diária:      R$ " + String.format("%.2f", getValorDiaria()) + "\n" +
                 "  Capacidade de Carga:  " + capacidadeCarga + " toneladas\n" +
                 "╚══════════════════════════════════════════════╝";

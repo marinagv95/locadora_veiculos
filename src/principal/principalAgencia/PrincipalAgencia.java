@@ -5,6 +5,7 @@ import modelo.agencia.Agencia;
 import modelo.endereco.Endereco;
 import servico.agenciaServico.AgenciaServico;
 import util.leitura.Leitor;
+import util.pessoaUtil.ValidarCNPJ;
 import visual.MenuAgencia;
 
 import java.util.InputMismatchException;
@@ -52,76 +53,68 @@ public class PrincipalAgencia {
     }
 
     private void cadastrarAgencia() {
-        Leitor.escrever("\n==== Cadastro de Agência ====");
-        String nome = Leitor.ler(leitura, "Informe o nome da agência: ");
-        String logradouro = Leitor.ler(leitura, "Informe o logradouro da agência: ");
-        String numero = Leitor.ler(leitura, "Informe o número da agência: ");
-        String bairro = Leitor.ler(leitura, "Informe o bairro da agência: ");
-        String cidade = Leitor.ler(leitura, "Informe a cidade da agência: ");
-        String estado = Leitor.ler(leitura, "Informe o estado da agência: ");
-        String cep = Leitor.ler(leitura, "Informe o CEP da agência: ");
+        Leitor.escrever("\n==== Cadastro de Locadora ====");
+        String cnpj = Leitor.ler(leitura, "Informe o CNPJ da locadora: ");
+        String nome = Leitor.ler(leitura, "Informe o nome da locadora: ");
+        String cep = Leitor.ler(leitura, "Informe o CEP da locadora: ");
+        String logradouro = Leitor.ler(leitura, "Informe o endereço da locadora: ");
+        String numero = Leitor.ler(leitura, "Informe o número da locadora: ");
+        String bairro = Leitor.ler(leitura, "Informe o bairro da locadora: ");
+        String cidade = Leitor.ler(leitura, "Informe a cidade da locadora: ");
+        String estado = Leitor.ler(leitura, "Informe o estado da locadora: ");
 
         try {
-            Endereco endereco = new Endereco(logradouro, numero, cep, bairro, cidade, estado);
-
-            List<Agencia> agencias = agenciaServico.buscarTodos();
-            for (Agencia ag : agencias) {
-                if (ag.getNomeAgencia().equalsIgnoreCase(nome)) {
-                    System.out.println("❌ Erro ao cadastrar agência: Agência com o nome '" + nome + "' já existe.");
-                    return;
-                }
-                if (ag.getEndereco().getCEP().equals(cep)) {
-                    System.out.println("❌ Erro ao cadastrar agência: Agência com o CEP '" + cep + "' já existe.");
-                    return;
-                }
+            if (!ValidarCNPJ.validarCNPJ(cnpj)) {
+                throw new IllegalArgumentException("CNPJ inválido.");
             }
+            Endereco endereco = new Endereco(logradouro, numero, cep, bairro, cidade, estado);
+            Agencia agencia = new Agencia(cnpj, nome, endereco);
 
-            Agencia agencia = new Agencia(nome, endereco);
             agenciaServico.cadastrar(agencia);
-
-            System.out.println("✅ Agência cadastrada com sucesso!");
+            System.out.println("✅ Locadora cadastrada com sucesso!");
         } catch (CEPInvalidoException e) {
-            System.out.println("❌ Erro ao cadastrar agência: CEP inválido.");
+            System.out.println("❌ Erro ao cadastrar locadora: CEP inválido.");
         } catch (Exception e) {
-            System.out.println("❌ Erro ao cadastrar agência: " + e.getMessage());
-        } finally {
+            System.out.println("❌ Erro ao cadastrar locadora: " + e.getMessage());
+        }
+        finally {
             Leitor.aguardarContinuacao(leitura);
         }
     }
 
-
     private void alterarAgencia() {
-        Long id = Long.parseLong(Leitor.ler(leitura, "Informe o ID da agência que deseja alterar: "));
+        String cnpj = Leitor.ler(leitura, "Informe o CNPJ da locadora que deseja alterar: ");
 
         try {
-            Agencia agencia = agenciaServico.buscarPorId(id);
+            Agencia agencia = agenciaServico.buscarPorCNPJ(cnpj);
             if (agencia == null) {
-                Leitor.erro("❌ Agência com ID " + id + " não encontrada.");
+                Leitor.erro("❌ Locadora com CNPJ " + cnpj + " não encontrada.");
                 Leitor.aguardarContinuacao(leitura);
                 return;
             }
 
-            Leitor.escrever("Agência atual:");
+            Leitor.escrever("Locadora atual:");
             Leitor.escrever(agencia.toString());
 
-            String novoNome = Leitor.ler(leitura, "Informe o novo nome da agência: ");
-            String logradouro = Leitor.ler(leitura, "Informe o novo logradouro da agência: ");
-            String numero = Leitor.ler(leitura, "Informe o novo número da agência: ");
-            String bairro = Leitor.ler(leitura, "Informe o novo bairro da agência: ");
-            String cidade = Leitor.ler(leitura, "Informe a nova cidade da agência: ");
-            String estado = Leitor.ler(leitura, "Informe o novo estado da agência: ");
-            String novoCEP = Leitor.ler(leitura, "Informe o novo CEP da agência: ");
+
+            String novoNome = Leitor.ler(leitura, "Informe o novo nome da locadora: ");
+            String novoCEP = Leitor.ler(leitura, "Informe o novo CEP da locadora: ");
+            String logradouro = Leitor.ler(leitura, "Informe o novo endereço da locadora: ");
+            String numero = Leitor.ler(leitura, "Informe o novo número da locadora: ");
+            String bairro = Leitor.ler(leitura, "Informe o novo bairro da locadora: ");
+            String cidade = Leitor.ler(leitura, "Informe a nova cidade da locadora: ");
+            String estado = Leitor.ler(leitura, "Informe o novo estado da locadora: ");
 
 
             List<Agencia> agencias = agenciaServico.buscarTodos();
             for (Agencia ag : agencias) {
-                if (!ag.getIdAgencia().equals(agencia.getIdAgencia())) {
+                if (!ag.getCnpj().equals(agencia.getCnpj())) {
                     if (ag.getNomeAgencia().equalsIgnoreCase(novoNome)) {
-                        Leitor.erro("❌ Erro: Outra agência com o nome '" + novoNome + "' já existe.");
+                        Leitor.erro("❌ Erro: Outra locadora com o nome '" + novoNome + "' já existe.");
                         return;
                     }
                     if (ag.getEndereco().getCEP().equals(novoCEP)) {
-                        Leitor.erro("❌ Erro: Outra agência com o CEP '" + novoCEP + "' já existe.");
+                        Leitor.erro("❌ Erro: Outra locadora com o CEP '" + novoCEP + "' já existe.");
                         return;
                     }
                 }
@@ -132,20 +125,21 @@ public class PrincipalAgencia {
             agencia.setEndereco(novoEndereco);
 
             agenciaServico.atualizar(agencia);
-            Leitor.escrever("✅ Agência alterada com sucesso!");
+            Leitor.escrever("✅ Locadora alterada com sucesso!");
         } catch (CEPInvalidoException e) {
-            Leitor.erro("❌ Erro ao alterar agência: CEP inválido.");
+            Leitor.erro("❌ Erro ao alterar locadora: CEP inválido.");
         } catch (Exception e) {
-            Leitor.erro("❌ Erro ao alterar agência: " + e.getMessage());
+            Leitor.erro("❌ Erro ao alterar locadora: " + e.getMessage());
         } finally {
             Leitor.aguardarContinuacao(leitura);
         }
     }
 
 
+
     private void buscarAgenciaPorNomeOuLogradouro() {
         try {
-            String termoBusca = Leitor.ler(leitura, "Informe parte do nome ou logradouro da agência que deseja buscar: ").toLowerCase();
+            String termoBusca = Leitor.ler(leitura, "Informe parte do nome ou endereço da locadora que deseja buscar: ").toLowerCase();
 
             List<Agencia> agenciasEncontradas = agenciaServico.buscarTodos().stream()
                     .filter(agencia -> agencia.getNomeAgencia().toLowerCase().contains(termoBusca) ||
@@ -153,13 +147,13 @@ public class PrincipalAgencia {
                     .toList();
 
             if (agenciasEncontradas.isEmpty()) {
-                Leitor.erro("❌ Nenhuma agência encontrada com o critério de busca.");
+                Leitor.erro("❌ Nenhuma locadora encontrada com o critério de busca.");
             } else {
-                Leitor.escrever("✅ Agências encontradas:");
+                Leitor.escrever("✅ Locadora encontradas:");
                 agenciasEncontradas.forEach(agencia -> Leitor.escrever(agencia.toString()));
             }
         } catch (Exception e) {
-            System.out.println("❌ Erro ao buscar agências: " + e.getMessage());
+            System.out.println("❌ Erro ao buscar locadoras: " + e.getMessage());
         } finally {
             Leitor.aguardarContinuacao(leitura);
         }
@@ -167,23 +161,23 @@ public class PrincipalAgencia {
 
 
     private void removerAgenciaPorID() {
-        Long id = Long.parseLong(Leitor.ler(leitura, "Informe o ID da agência que deseja remover: "));
+        String cnpj = Leitor.ler(leitura, "Informe o CNPJ da locadora que deseja remover: ");
 
         try {
-            Agencia agencia = agenciaServico.buscarPorId(id);
+            Agencia agencia = agenciaServico.buscarPorCNPJ(cnpj);
             if (agencia == null) {
-                Leitor.erro("❌ Agência com ID " + id + " não encontrada.");
+                Leitor.erro("❌ Locadora com CNPJ " + cnpj + " não encontrada.");
                 return;
             }
 
-            Leitor.escrever("Agência encontrada:");
+            Leitor.escrever("Locadora encontrada:");
             Leitor.escrever(agencia.toString());
 
-            String confirmacao = Leitor.ler(leitura, "Tem certeza que deseja remover esta agência? (S/N): ");
+            String confirmacao = Leitor.ler(leitura, "Tem certeza que deseja remover esta locadora? (Sim/Nao): ");
 
-            if (confirmacao.equalsIgnoreCase("S")) {
+            if (confirmacao.equalsIgnoreCase("Sim")) {
                 agenciaServico.remover(agencia);
-                Leitor.escrever("✅ Agência removida com sucesso!");
+                Leitor.escrever("✅ Locadora removida com sucesso!");
             } else {
                 Leitor.escrever("❌ Operação de remoção cancelada.");
             }
@@ -191,7 +185,7 @@ public class PrincipalAgencia {
             System.out.println("❌ Erro: Entrada inválida. Por favor, insira um número válido.");
             leitura.nextLine();
         } catch (Exception e) {
-            System.out.println("❌ Erro ao remover agência: " + e.getMessage());
+            System.out.println("❌ Erro ao remover locadora: " + e.getMessage());
         } finally {
             Leitor.aguardarContinuacao(leitura);
         }

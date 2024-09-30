@@ -1,83 +1,84 @@
 package servico.aluguelServico;
 
 import exception.aluguelException.AluguelNaoEncontradoException;
-import exception.veiculoException.VeiculoNaoExistenteException;
+import exception.pessoaException.PessoaNaoEncontradaException;
+import modelo.agencia.Agencia;
 import modelo.aluguel.Aluguel;
 import modelo.aluguel.DevolucaoAluguel;
+import modelo.pessoa.Pessoa;
 import modelo.veiculo.Veiculo;
 import repositorio.aluguelRepositorio.AluguelRepositorio;
+import servico.agenciaServico.AgenciaServico;
+import servico.pessoaServico.PessoaServico;
 import servico.veiculoServico.VeiculoServico;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
-public class AluguelServicoImplementacao <T extends Aluguel> implements AluguelServico<Aluguel> {
+public class AluguelServicoImplementacao <T extends Aluguel> implements AluguelServico<T> {
 
-    private AluguelRepositorio<Aluguel> aluguelRepositorio;
-    private VeiculoServico<Veiculo> veiculoServico;
+    private final PessoaServico<Pessoa> pessoaServico;
+    private final VeiculoServico<Veiculo> veiculoServico;
+    private final AgenciaServico<Agencia> agenciaServico;
+    private final AluguelRepositorio<T> aluguelRepositorio;
+    private List<DevolucaoAluguel> todosAlugueis;
 
-    public AluguelServicoImplementacao(AluguelRepositorio<Aluguel> aluguelRepositorio) {
-        this.aluguelRepositorio = aluguelRepositorio;
+
+    public AluguelServicoImplementacao(PessoaServico<Pessoa> pessoaServico, VeiculoServico<Veiculo> veiculoServico,
+                                       AgenciaServico<Agencia> agenciaServico, AluguelRepositorio<T> aluguelRepositorio) {
+        this.pessoaServico = pessoaServico;
         this.veiculoServico = veiculoServico;
+        this.agenciaServico = agenciaServico;
+        this.aluguelRepositorio = aluguelRepositorio;
+        this.todosAlugueis = new ArrayList<>();
     }
 
+    @Override
+    public void cadastrarAluguel(T aluguel) throws Exception {
+        aluguelRepositorio.salvarAluguel(aluguel);
+    }
 
     @Override
-    public void alugarVeiculo(Aluguel aluguel) throws VeiculoNaoExistenteException {
+    public T buscarAluguelPorIdentificador(String identificador) throws AluguelNaoEncontradoException, PessoaNaoEncontradaException {
+        return aluguelRepositorio.buscarPorIdentificador(identificador).orElseThrow(()
+                -> new AluguelNaoEncontradoException("Aluguel não encontrado!"));
+    }
+
+    @Override
+    public List<T> listarAlugueis() {
+        return aluguelRepositorio.alugueis();
+    }
+
+    @Override
+    public void devolverVeiculo(T aluguel, DevolucaoAluguel devolucao) throws Exception {
+        if (aluguel == null) {
+            throw new IllegalArgumentException("Aluguel não pode ser nulo.");
+        }
+
         Veiculo veiculo = aluguel.getVeiculo();
-        if (!veiculoServico.estaDisponivel(String.valueOf(veiculo))) {
-            throw new VeiculoNaoExistenteException("Veículo não disponível para aluguel.");
-        }
-        aluguelRepositorio.adicionarAluguel(aluguel);
+
+        veiculo.setDisponivel(true);
+        devolucao.getAgenciaDevolucao();
+        aluguelRepositorio.salvarAluguel(aluguel);
     }
 
     @Override
-    public void retiradaVeiculo(Aluguel aluguel) throws AluguelNaoEncontradoException {
-        Optional<Aluguel> aluguelExistente = aluguelRepositorio.buscarAluguelPorVeiculo(aluguel.getVeiculo()).stream().findFirst();
-        if (!aluguelExistente.isPresent()) {
-            throw new AluguelNaoEncontradoException("Aluguel não encontrado para retirada.");
-        }
+    public List<Veiculo> listarVeiculosDisponiveis() {
+        List<Veiculo> todosVeiculos = veiculoServico.listarVeiculos();
+
+        List<Veiculo> veiculosDisponiveis = todosVeiculos.stream()
+                .filter(Veiculo::estaDisponivel)
+                .collect(Collectors.toList());
+
+        return veiculosDisponiveis;
     }
 
     @Override
-    public void devolverVeiculo(DevolucaoAluguel devolucaoAluguel) throws AluguelNaoEncontradoException {
-        Optional<Aluguel> aluguelOptional = aluguelRepositorio.buscarAluguelPorVeiculo(devolucaoAluguel.getVeiculo()).stream().findFirst();
-        if (!aluguelOptional.isPresent()) {
-            throw new AluguelNaoEncontradoException("Aluguel não encontrado para devolução.");
-        }
-        aluguelRepositorio.removerAluguel(aluguelOptional.get());
+    public List<Aluguel> buscarAlugueisPorPessoa(Pessoa pessoa) {
+        return aluguelRepositorio.alugueis().stream()
+                .filter(aluguel -> aluguel.getPessoa().equals(pessoa))
+                .collect(Collectors.toList());
     }
 
-    @Override
-    public Aluguel buscarAluguelPorVeiculo(Veiculo veiculo) throws AluguelNaoEncontradoException {
-        List<Aluguel> alugueis = aluguelRepositorio.buscarAluguelPorVeiculo(veiculo);
-        if (alugueis.isEmpty()) {
-            throw new AluguelNaoEncontradoException("Nenhum aluguel encontrado para o veículo informado.");
-        }
-        return alugueis.get(0);
-    }
-
-    @Override
-    public List<Aluguel> buscarAluguelPorPessoa(String identificador) {
-        // Implementação para buscar no repositório
-        return aluguelRepositorio.buscarAluguelPorPessoa(identificador);
-    }
-
-    @Override
-    public void alterarAluguel(Aluguel aluguel) throws AluguelNaoEncontradoException {
-        Optional<Aluguel> aluguelExistente = aluguelRepositorio.buscarAluguelPorVeiculo(aluguel.getVeiculo()).stream().findFirst();
-        if (!aluguelExistente.isPresent()) {
-            throw new AluguelNaoEncontradoException("Aluguel não encontrado para alteração.");
-        }
-        aluguelRepositorio.alterarAluguel(aluguel);
-    }
-
-    @Override
-    public void removerAluguel(Aluguel aluguel) throws AluguelNaoEncontradoException {
-        Optional<Aluguel> aluguelExistente = aluguelRepositorio.buscarAluguelPorVeiculo(aluguel.getVeiculo()).stream().findFirst();
-        if (!aluguelExistente.isPresent()) {
-            throw new AluguelNaoEncontradoException("Aluguel não encontrado para remoção.");
-        }
-        aluguelRepositorio.removerAluguel(aluguel);
-    }
 }

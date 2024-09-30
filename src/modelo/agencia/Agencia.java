@@ -3,21 +3,15 @@ package modelo.agencia;
 import modelo.endereco.Endereco;
 
 public class Agencia {
-    private static long contadorId = 0;
 
-    private Long idAgencia;
+    private String cnpj;
     private String nomeAgencia;
     private Endereco endereco;
 
-    public Agencia(String nomeAgencia, Endereco endereco) {
-        this.idAgencia = gerarIdUnico();
+    public Agencia(String cnpj, String nomeAgencia, Endereco endereco) {
+        this.cnpj = cnpj;
         this.nomeAgencia = nomeAgencia;
         this.endereco = endereco;
-    }
-
-
-    private synchronized Long gerarIdUnico() {
-        return ++contadorId;
     }
 
 
@@ -27,15 +21,15 @@ public class Agencia {
     public Endereco getEndereco() {return endereco;}
     public void setEndereco(Endereco endereco) {this.endereco = endereco;}
 
-    public Long getIdAgencia() {return idAgencia;}
+    public String getCnpj() {return cnpj;}
+    public void setCnpj(String cnpj) {this.cnpj = cnpj;}
 
     @Override
     public String toString() {
-
         return "╔══════════════════════════════════════════╗\n" +
                 "║             A G E N C I A                ║\n" +
                 "╠══════════════════════════════════════════╣\n" +
-                "║ ID da Agência:    " + idAgencia + "\n" +
+                "║ CNPJ:    " + cnpj + "\n" +
                 "║ Nome da Agência:  " + nomeAgencia + "\n" +
                 "╠══════════════════════════════════════════╣\n" +
                 "║             E N D E R E Ç O              ║\n" +
@@ -49,5 +43,6 @@ public class Agencia {
                 "╚══════════════════════════════════════════╝";
     }
 
-}
 
+
+}

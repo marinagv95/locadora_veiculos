@@ -1,18 +1,21 @@
 package repositorio.aluguelRepositorio;
 
+import exception.pessoaException.PessoaNaoEncontradaException;
+import modelo.agencia.Agencia;
 import modelo.aluguel.Aluguel;
 import modelo.pessoa.Pessoa;
 import modelo.veiculo.Veiculo;
 
-
 import java.util.List;
+import java.util.Optional;
 
 
 public abstract class AluguelRepositorio<T extends Aluguel> {
-    public abstract void adicionarAluguel(T aluguel);
-    public abstract void removerAluguel(T aluguel);
-    public abstract List<Aluguel> buscarAluguelPorVeiculo(Veiculo veiculo);
-    public abstract List<Aluguel> buscarAluguelPorPessoa(String identificador);
-    public abstract List<T> listarAlugueis();
-    public abstract void alterarAluguel(T aluguel);
+    public abstract List<T> alugueis();
+    public abstract T salvarAluguel(Aluguel aluguel) throws Exception;
+    public abstract void removerAluguel(T aluguel) throws Exception;
+    public abstract Optional<T> buscarPorIdentificador(String identificador) throws PessoaNaoEncontradaException;
+    public abstract Optional<Veiculo> buscarVeiculoDisponivel(String placa);
+    public abstract Optional<Pessoa> buscarCliente(String identificador) throws PessoaNaoEncontradaException;
+    public abstract List<Agencia> buscarAgenciasDisponiveis();
 }

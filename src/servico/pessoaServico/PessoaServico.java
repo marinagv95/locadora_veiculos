@@ -16,7 +16,5 @@ public interface PessoaServico <T extends Pessoa> {
     public Optional<PessoaJuridica> buscarPorCnpj(String cnpj) throws PessoaNaoEncontradaException;
     public List<T> listarTodos();
     public T alterarPessoa(T pessoa) throws PessoaNaoEncontradaException;
-
-
+    //public boolean possuiAluguelAtivo(Pessoa pessoa);
 }
-
