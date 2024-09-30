@@ -122,7 +122,7 @@ public class PrincipalAluguel {
         }
 
         System.out.printf("%-5s %-20s %-20s %-15s %-10s %-10s%n", "Opção", "Modelo", "Marca", "Valor Diária", "Placa", "Disponível");
-        System.out.println("---------------------------------------------------------------------");
+        System.out.println("----------------------------------------------------------------------------------");
 
         for (int i = 0; i < veiculosDisponiveis.size(); i++) {
             Veiculo veiculo = veiculosDisponiveis.get(i);
@@ -135,6 +135,7 @@ public class PrincipalAluguel {
                     veiculo.getPlaca(),
                     disponibilidade);
         }
+        System.out.println("----------------------------------------------------------------------------------");
 
         int opcaoVeiculo = 0;
         while (opcaoVeiculo < 1 || opcaoVeiculo > veiculosDisponiveis.size()) {
@@ -171,17 +172,22 @@ public class PrincipalAluguel {
         }
 
         System.out.println();
-        System.out.printf("%-5s %-30s%n", "Opção", "Nome da Locadora");
-        System.out.println("-------------------------------------------");
+        System.out.printf("%-5s %-30s %-20s %-20s%n", "Opção", "Nome da Locadora", "Cidade", "Estado");
+        System.out.println("---------------------------------------------------------");
         for (int i = 0; i < agencias.size(); i++) {
-            System.out.printf("%-5d %-30s%n", (i + 1), agencias.get(i).getNomeAgencia());
+            System.out.printf("%-5d %-30s %-20s %-20s%n",
+                    (i + 1),
+                    agencias.get(i).getNomeAgencia(),
+                    agencias.get(i).getEndereco().getCidade(),
+                    agencias.get(i).getEndereco().getEstado());
         }
         System.out.println();
 
+
         int opcaoAgencia = 0;
+        System.out.println("🔔 A locadora de retirada é obrigada ser diferente da devolução");
         while (opcaoAgencia < 1 || opcaoAgencia > agencias.size()) {
             System.out.println();
-            System.out.println("A locadora de retirada é obrigada ser diferente da devolução");
             System.out.print("Selecione o número da locadora para retirada: ");
             opcaoAgencia = leitura.nextInt();
             leitura.nextLine();
@@ -250,19 +256,25 @@ public class PrincipalAluguel {
         }
 
         System.out.println();
-        System.out.printf("%-5s %-30s%n", "Opção", "Nome da Locadora");
-        System.out.println("-------------------------------------------");
+        System.out.printf("%-5s %-30s %-20s %-20s%n", "Opção", "Nome da Locadora", "Cidade", "Estado");
+        System.out.println("---------------------------------------------------------------");
         for (int i = 0; i < agencias.size(); i++) {
-            System.out.printf("%-5d %-30s%n", (i + 1), agencias.get(i).getNomeAgencia());
+            System.out.printf("%-5d %-30s %-20s %-20s%n",
+                    (i + 1),
+                    agencias.get(i).getNomeAgencia(),
+                    agencias.get(i).getEndereco().getCidade(),
+                    agencias.get(i).getEndereco().getEstado());
         }
         System.out.println();
 
+
         int opcaoAgencia = 0;
+        System.out.println("🔔 A locadora de devolução deve ser diferente da retirada.");
         while (opcaoAgencia < 1 || opcaoAgencia > agencias.size()) {
-            System.out.println("A locadora de devolução deve ser diferente da retirada.");
             System.out.print("Selecione o número da locadora para devolução: ");
             opcaoAgencia = leitura.nextInt();
             leitura.nextLine();
+            System.out.println("-------------------------------------------");
 
             if (opcaoAgencia < 1 || opcaoAgencia > agencias.size()) {
                 Leitor.erro("❌ Opção inválida, por favor, selecione um número válido.");
@@ -309,10 +321,6 @@ public class PrincipalAluguel {
                     BigDecimal valorAluguel = aluguel.calcularTotalAluguel();
 
                     gerarComprovanteDevolucao(devolucao);
-                    Veiculo veiculo = aluguel.getVeiculo();
-                    veiculo.estaDisponivel();
-                    veiculoServico.alterarVeiculo(veiculo);
-
 
                     if (multa.compareTo(BigDecimal.ZERO) > 0) {
                         Leitor.escrever("🔴 A devolução está fora do prazo. Multa: R$ " + multa);
@@ -349,6 +357,5 @@ public class PrincipalAluguel {
             System.out.println("Erro ao gerar comprovante: " + e.getMessage());
         }
     }
-
 
 }
