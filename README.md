@@ -9,7 +9,23 @@ O sistema visa facilitar a administração de locações, devoluções e consult
 ## Tecnologias Utilizadas
 
 - **Java SDK 21**: Linguagem de programação utilizada para o desenvolvimento.
-- **IDE** "IntelliJ
+- **IDE** IntelliJ
+
+## Como Usar
+
+Para utilizar este projeto, clone o repositório e execute a aplicação em seu ambiente de desenvolvimento preferido.
+
+## Como Executar o Projeto
+
+1. **Clone o repositório**:
+   ```bash
+   git clone https://github.com/allanaavila/locadora_veiculos.git
+2. **Navegue até o diretório do projeto:**
+   ```bash
+   cd locadora_veiculos
+
+3. **Abra o projeto na sua IDE (IntelliJ IDEA).**
+4. **Compile e execute a aplicação.**
 
 ## Funcionalidades
 
@@ -23,6 +39,26 @@ O sistema visa facilitar a administração de locações, devoluções e consult
 - **Listagem de Locadoras**: Consulte todas as locadoras cadastradas.
 - **Gerar comprovate de aluguel**: Gere um comprovante para a locação de veículos.
 - **Gerar comprovante de devolução**: Gere um comprovante para a devolução de veículos.
+
+## Interfaces interativas
+
+### Menu Principal
+![menuPrincipal](imagens/menuPrincipal.png)
+
+### Menu Locadora
+![menuLocadora](imagens/menuLocadora.png)
+
+### Menu Veículos
+![menuVeiculos](imagens/menuVeiculo.png)
+
+### Menu Cliente
+![menuCliente](imagens/menuCliente.png)
+
+### Menu Agencia
+![menuAgencia](imagens/menuAgencia.png)
+
+### Menu Aluguel
+![menuAluguela](imagens/menuAluguel.png)
 
 ## Estrutura do Projeto
 
@@ -45,12 +81,14 @@ locadora_veiculos/
 │   │   │   ├── principal/        # Classe Principal
 │   │   ├── resources/           # Recursos (configurações, etc.)
 ````
+### Diagrama de Classes
+![diagramaClasses](imagens/diagramaDeClasses.png)
 
 ## Princípios SOLID
 
 Neste projeto, foram aplicados os princípios SOLID para garantir uma arquitetura limpa e manutenível:
 
-1. **S - Single Responsibility Principle (Princípio da Responsabilidade Única)**: Cada classe tem uma única responsabilidade, facilitando a manutenção e evolução do código.
+1. **S - Single Responsibility Principle (Princípio da Responsabilidade Única)**: Cada classe e método tem uma única responsabilidade, facilitando a manutenção e evolução do código.
    
 2. **O - Open/Closed Principle (Princípio do Aberto/Fechado)**: As classes estão abertas para extensão, mas fechadas para modificação, permitindo que novas funcionalidades sejam adicionadas sem alterar o código existente.
    
@@ -60,21 +98,7 @@ Neste projeto, foram aplicados os princípios SOLID para garantir uma arquitetur
    
 5. **D - Dependency Inversion Principle (Princípio da Inversão de Dependência)**: Os módulos de alto nível não devem depender de módulos de baixo nível; ambos devem depender de abstrações. Isso foi implementado através do uso de interfaces e injeção de dependência.
 
-## Como Usar
 
-Para utilizar este projeto, clone o repositório e execute a aplicação em seu ambiente de desenvolvimento preferido.
-
-## Como Executar o Projeto
-
-1. **Clone o repositório**:
-   ```bash
-   git clone https://github.com/allanaavila/locadora_veiculos.git
-2. **Navegue até o diretório do projeto:**
-   ```bash
-   cd locadora_veiculos
-
-3. **Abra o projeto na sua IDE (IntelliJ IDEA).**
-4. **Compile e execute a aplicação.**
 
 ## Contribuições
 Contribuições são bem-vindas! Sinta-se à vontade para enviar um pull request ou abrir uma issue para discutir melhorias.
