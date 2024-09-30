@@ -80,4 +80,5 @@ public class AluguelServicoImplementacao <T extends Aluguel> implements AluguelS
                 .filter(aluguel -> aluguel.getPessoa().equals(pessoa))
                 .collect(Collectors.toList());
     }
+
 }

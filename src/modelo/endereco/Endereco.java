@@ -43,4 +43,16 @@ public class Endereco {
     public String getEstado() {return estado;}
     public void setEstado(String estado) {this.estado = estado;}
 
+
+    @Override
+    public String toString() {
+        return "Logradouro: " + logradouro + "\n" +
+                "Número: " + (numero != null ? numero : "Não informado") + "\n" +
+                "CEP: " + cep + "\n" +
+                "Bairro: " + bairro + "\n" +
+                "Cidade: " + cidade + "\n" +
+                "Estado: " + estado;
+    }
+
+
 }

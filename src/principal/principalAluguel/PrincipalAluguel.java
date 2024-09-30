@@ -122,7 +122,9 @@ public class PrincipalAluguel {
         }
 
         System.out.printf("%-5s %-20s %-20s %-15s %-10s %-10s%n", "Opção", "Modelo", "Marca", "Valor Diária", "Placa", "Disponível");
+
         System.out.println("----------------------------------------------------------------------------------");
+
 
         for (int i = 0; i < veiculosDisponiveis.size(); i++) {
             Veiculo veiculo = veiculosDisponiveis.get(i);
@@ -135,7 +137,9 @@ public class PrincipalAluguel {
                     veiculo.getPlaca(),
                     disponibilidade);
         }
+
         System.out.println("----------------------------------------------------------------------------------");
+
 
         int opcaoVeiculo = 0;
         while (opcaoVeiculo < 1 || opcaoVeiculo > veiculosDisponiveis.size()) {
@@ -304,13 +308,12 @@ public class PrincipalAluguel {
             if (cliente != null) {
                 List<Aluguel> alugueis = aluguelServico.buscarAlugueisPorPessoa(cliente);
                 if (alugueis != null && !alugueis.isEmpty()) {
-
                     String entradaDataEntrega = Leitor.ler(leitura, "Informe a data da devolução do veículo (DD/MM/YYYY): ").trim();
                     LocalDate dataEntrega = ValidarData.validarData(entradaDataEntrega);
 
                     Aluguel aluguel = alugueis.get(0);
-
                     Agencia agenciaDevolucao = escolherAgenciaDevolucao(aluguel.getAgenciaRetirada());
+
                     if (agenciaDevolucao == null) {
                         Leitor.erro("❌ Agência de devolução não encontrada.");
                         return;
@@ -318,6 +321,8 @@ public class PrincipalAluguel {
 
                     DevolucaoAluguel devolucao = new DevolucaoAluguel(aluguel, agenciaDevolucao, dataEntrega);
                     BigDecimal multa = devolucao.calcularMulta();
+
+
                     aluguel.getVeiculo().devolverVeiculo();
 
                     gerarComprovanteDevolucao(devolucao);
@@ -341,6 +346,7 @@ public class PrincipalAluguel {
             Leitor.erro("❌ Ocorreu um erro ao realizar a devolução: " + e.getMessage());
         }
     }
+
 
 
     private void gerarComprovanteDevolucao(DevolucaoAluguel devolucao) {

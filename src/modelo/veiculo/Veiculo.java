@@ -47,4 +47,16 @@ public class Veiculo {
     public BigDecimal getValorDiaria() {return valorDiaria;}
     public void setValorDiaria(BigDecimal valorDiaria) {this.valorDiaria = valorDiaria;}
 
+
+    @Override
+    public String toString() {
+        return "===== Detalhes do Veículo =====\n" +
+                "Placa: " + placa + "\n" +
+                "Modelo: " + modelo + "\n" +
+                "Marca: " + marca + "\n" +
+                "Disponível: " + (disponivel ? "Sim" : "Não") + "\n" +
+                "Valor da Diária: R$ " + valorDiaria + "\n" +
+                "===============================";
+    }
+
 }
