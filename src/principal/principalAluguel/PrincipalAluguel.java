@@ -318,7 +318,7 @@ public class PrincipalAluguel {
 
                     DevolucaoAluguel devolucao = new DevolucaoAluguel(aluguel, agenciaDevolucao, dataEntrega);
                     BigDecimal multa = devolucao.calcularMulta();
-                    BigDecimal valorAluguel = aluguel.calcularTotalAluguel();
+                    aluguel.getVeiculo().devolverVeiculo();
 
                     gerarComprovanteDevolucao(devolucao);
 

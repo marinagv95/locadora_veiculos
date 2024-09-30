@@ -58,6 +58,7 @@ public class AluguelServicoImplementacao <T extends Aluguel> implements AluguelS
 
         Veiculo veiculo = aluguel.getVeiculo();
         veiculo.setDisponivel(true);
+        veiculoServico.alterarVeiculo(veiculo);
         devolucao.getAgenciaDevolucao();
         aluguelRepositorio.salvarAluguel(aluguel);
     }

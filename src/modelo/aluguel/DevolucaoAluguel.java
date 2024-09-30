@@ -100,4 +100,9 @@ public class DevolucaoAluguel {
 
         return comprovante.toString();
     }
+
+    public void processarDevolucao() {
+        aluguel.getVeiculo().devolverVeiculo();
+        gerarComprovante();
+    }
 }
