@@ -28,12 +28,18 @@ locadora_veiculos/
 │   ├── main/
 │   │   ├── java/
 │   │   │   ├── modelo/          # Modelos de dados
+│   │   │   │   ├── agencia/     # Modelos relacionados à agência
+│   │   │   │   ├── aluguel/     # Modelos relacionados ao aluguel
+│   │   │   │   ├── endereco/    # Modelos relacionados ao endereço
+│   │   │   │   ├── pessoa/      # Modelos relacionados à pessoa
+│   │   │   │   ├── veiculo/     # Modelos relacionados ao veículo
 │   │   │   ├── repositorio/     # Repositórios de dados
 │   │   │   ├── servico/         # Lógica de negócio (contém a classe Main e métodos)
 │   │   │   ├── exception/       # Exceções personalizadas
 │   │   │   ├── util/            # Classes utilitárias
 │   │   │   ├── visual/          # Classes de visualização (UI)
 │   │   │   ├── principal/        # Classe Principal
+│   │   ├── resources/           # Recursos (configurações, etc.)
 ````
 
 ## Princípios SOLID
