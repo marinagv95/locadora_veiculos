@@ -34,7 +34,7 @@ locadora_veiculos/
 │   │   │   │   ├── pessoa/      # Modelos relacionados à pessoa
 │   │   │   │   ├── veiculo/     # Modelos relacionados ao veículo
 │   │   │   ├── repositorio/     # Repositórios de dados
-│   │   │   ├── servico/         # Lógica de negócio (contém a classe Main e métodos)
+│   │   │   ├── servico/         # Lógica de negócio 
 │   │   │   ├── exception/       # Exceções personalizadas
 │   │   │   ├── util/            # Classes utilitárias
 │   │   │   ├── visual/          # Classes de visualização (UI)
