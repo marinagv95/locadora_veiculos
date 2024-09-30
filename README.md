@@ -22,19 +22,19 @@ O sistema visa facilitar a administração de locações, devoluções e consult
 
 ## Estrutura do Projeto
 
-A estrutura do projeto segue o padrão MVC (Model-View-Controller):
+```bash
 locadora_veiculos/
 ├── src/
 │   ├── main/
 │   │   ├── java/
 │   │   │   ├── modelo/          # Modelos de dados
 │   │   │   ├── repositorio/     # Repositórios de dados
-│   │   │   ├── servico/         # Lógica de negócio
-│   │   │   ├── controlador/      # Controladores
-│   │   ├── java/                # Testes unitários
-
-
-
+│   │   │   ├── servico/         # Lógica de negócio (contém a classe Main e métodos)
+│   │   │   ├── exception/       # Exceções personalizadas
+│   │   │   ├── util/            # Classes utilitárias
+│   │   │   ├── visual/          # Classes de visualização (UI)
+│   │   │   ├── principal/        # Classe Principal
+````
 
 ## Princípios SOLID
 
